@@ -6,11 +6,12 @@ import PostsListForm from './components/PostsListForm';
 const RouterComponent = () => {
   return (
     <Router sceneStyle={{ paddingTop: 65 }}>
-      <Scene key="auth">
-        <Scene key="login" component={LoginForm} title="Авторизация" />
-      </Scene>
-
       <Scene key="main">
+        <Scene
+          key="login"
+          component={LoginForm}
+          title="Авторизация"
+        />
         <Scene
           key="postsList"
           component={PostsListForm}
