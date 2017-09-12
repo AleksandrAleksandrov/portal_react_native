@@ -33,7 +33,7 @@ export const loginUser = (email, password) => (dispatch) => {
     password
   }).then((response) => {
   console.log(response);
-  dispatch(loginUserSuccess(response.data))
+  dispatch(loginUserSuccess(response.data));
 })
 .catch((error) => {
   console.log(error);
@@ -47,6 +47,7 @@ const loginUserFail = (dispatch) => {
 const loginUserSuccess = (user) => {
   console.log(user);
   AsyncStorage.setItem(TOKEN, user.key);
+  Actions.main();
   return {
     type: LOGIN_USER_SECCESS,
     payload: user

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Text, AsyncStorage } from 'react-native';
+import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import { emailChanged, passwordChanged, loginUser } from '../actions';
 import { Card, CardSection, Input, Button, Spinner } from './common';
@@ -7,7 +8,7 @@ import { Card, CardSection, Input, Button, Spinner } from './common';
 class LoginForm extends Component {
    componentWillMount() {
     AsyncStorage.getItem('token').then((settingsStr) => {
-    console.warn(settingsStr);
+      Actions.main();
   }).catch((error) => {
     console.warn(error);
   });
@@ -23,7 +24,6 @@ class LoginForm extends Component {
 
   onButtonPress() {
     const { email, password } = this.props;
-    console.warn('Email: ' + email);
     this.props.dispatch(loginUser(email, password));
   }
 

@@ -1,4 +1,5 @@
 import { create } from 'apisauce';
+import { AsyncStorage } from 'react-native';
 
 const REQUEST_URL = 'https://www.portal.light-it.net';
 
@@ -10,6 +11,12 @@ const api = create({
   },
   timeout: 10000,
 });
+
+export const getToken = () => {
+  AsyncStorage.getItem('token').then((settingsStr) => {
+    return settingsStr;
+  });
+};
 
 export const setTokenToHeaders = (token) => {
   if (token) {
@@ -107,3 +114,19 @@ export const postLogin = data => new Promise((resolve, reject) => {
     reject(error);
   });
 });
+
+export const getPosts = () => {
+  return new Promise((resolve, reject) => {
+    setTokenToHeaders('5163522b2705364cc2a60e54a426159a8c8422b4');
+    api.get('/api/user_messages/')
+    .then((response) => {
+      if (response.ok) {
+        // console.warn("getPosts response", response);
+        resolve(response.data.results);
+      }
+    })
+    .catch((error) => {
+      console.warn(error);
+    });
+  });
+};
