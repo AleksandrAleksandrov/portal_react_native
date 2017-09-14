@@ -6,12 +6,13 @@ import { emailChanged, passwordChanged, loginUser } from '../actions';
 import { Card, CardSection, Input, Button, Spinner } from './common';
 
 class LoginForm extends Component {
-   componentWillMount() {
+  componentWillMount() {
     AsyncStorage.getItem('token').then((settingsStr) => {
       Actions.main();
-  }).catch((error) => {
-    console.warn(error);
-  });
+      
+    }).catch((error) => {
+      console.warn(error);
+    });
 }
 
   onEmailChanged(text) {

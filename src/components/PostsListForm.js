@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
-import { AsyncStorage, Text, View, ListView } from 'react-native';
+import { AsyncStorage, ListView } from 'react-native';
 import { connect } from 'react-redux';
 import { getPosts } from '../actions';
-import { Button } from './common';
 import PostItem from './PostItem';
 
 class PostsListForm extends Component {
   componentWillMount() {
-      this.getPosts();
+    this.getPosts();
   }
 
   getPosts() {
@@ -21,11 +20,6 @@ class PostsListForm extends Component {
   }
 
   state = { results: [] };
-
-  // renderPost() {
-  //   return (
-  //   this.state.results.map(message => (<PostItem key={message.id} message={message} />)));
-  // }
 
   renderRow(post) {
     return <PostItem post={post} />;
@@ -44,8 +38,8 @@ class PostsListForm extends Component {
 }
 
 const ds = new ListView.DataSource({
-      rowHasChanged: (r1, r2) => r1 !== r2
-    });
+  rowHasChanged: (r1, r2) => r1 !== r2,
+});
 
 const mapStateToProps = (state) => {
   return { postsList: state.postsList.results };

@@ -4,6 +4,8 @@ import { createStore, applyMiddleware } from 'redux';
 import ReduxThunk from 'redux-thunk';
 import reducers from './reducers';
 import Router from './Router';
+import Post, { Message } from './models/Post';
+import Realm from 'realm';
 
 class App extends Component {
   render() {

@@ -3,7 +3,7 @@ import {
 } from '../actions/types';
 
 const INITIAL_STATE = {
-  results: []
+  results: [] //posts list
 };
 
 export default (state = INITIAL_STATE, action) => {

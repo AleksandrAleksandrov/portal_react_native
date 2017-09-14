@@ -3,15 +3,16 @@ import {
   PASSWORD_CHANGED,
   LOGIN_USER,
   LOGIN_USER_SECCESS,
-  LOGIN_USER_FAIL
+  LOGIN_USER_FAIL,
 } from '../actions/types';
 
 const INITIAL_STATE = {
   email: '',
   password: '',
   user: null,
-  loading: false,
-  token: null
+  loading: false, // authorization in progress
+  token: null,
+  error: '',
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -28,6 +29,5 @@ export default (state = INITIAL_STATE, action) => {
       return { ...state, error: 'Authentication Failed.', password: '', loading: false };
     default:
       return state;
-
   }
 };

@@ -1,8 +1,6 @@
 import { Actions } from 'react-native-router-flux';
 import { AsyncStorage } from 'react-native';
-import axios from 'axios';
 import {
-  URL,
   EMAIL_CHANGED,
   PASSWORD_CHANGED,
   LOGIN_USER,

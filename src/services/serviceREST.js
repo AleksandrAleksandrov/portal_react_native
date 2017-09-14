@@ -121,7 +121,6 @@ export const getPosts = () => {
     api.get('/api/user_messages/')
     .then((response) => {
       if (response.ok) {
-        // console.warn("getPosts response", response);
         resolve(response.data.results);
       }
     })
