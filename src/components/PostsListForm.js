@@ -3,31 +3,33 @@ import { AsyncStorage, ListView } from 'react-native';
 import { connect } from 'react-redux';
 import { getPosts } from '../actions';
 import PostItem from './PostItem';
+import { Spinner } from './common/Spinner';
 
 class PostsListForm extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { results: [] };
+  }
+
   componentWillMount() {
     this.getPosts();
   }
 
   getPosts() {
-    this.props.dispatch(getPosts());
+    const { getPosts } = this.props;
+    getPosts();
   }
 
-  getToken() {
-    AsyncStorage.getItem('token').then((settingsStr) => {
-      return settingsStr;
-    });
-  }
-
-  state = { results: [] };
-
-  renderRow(post) {
-    return <PostItem post={post} />;
-  }
+  renderRow = (post) => (<PostItem post={post} />);
 
   render() {
-    const {postsList} = this.props;
+    const { postsList, postsAreLoading } = this.props;
+
+    if (postsAreLoading) {
+      return <Spinner size="small" />;
+    }
     return (
+
       <ListView
         enableEmptySections
         dataSource={ds.cloneWithRows(postsList ? postsList : [])}
@@ -41,8 +43,14 @@ const ds = new ListView.DataSource({
   rowHasChanged: (r1, r2) => r1 !== r2,
 });
 
-const mapStateToProps = (state) => {
-  return { postsList: state.postsList.results };
-};
+const mapStateToProps = state => ({
+  postsList: state.postsList.results,
+  postsAreLoading: state.postsList.postsAreLoading,
+});
 
-export default connect(mapStateToProps)(PostsListForm);
+const mapDispatchToProps = dispatch => ({
+  dispatch,
+  getPosts: () => { dispatch(getPosts()); },
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(PostsListForm);

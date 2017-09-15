@@ -1,19 +1,52 @@
 import React, { Component } from 'react';
 import { Text, View, TouchableWithoutFeedback } from 'react-native';
 import { Actions } from 'react-native-router-flux';
-import { CardSection, PostIcon } from './common';
-import Icon from 'react-native-vector-icons/dist/FontAwesome';
-import Moment from 'moment';
+import { CardSection, PostIcon, TextCustom, PostHeader, PostFooter } from './common';
+
+const styles = {
+  titleTextStyle: {
+    marginTop: 5,
+    flex: 1,
+  },
+  bodyTextStyle: {
+    fontSize: 32,
+    margin: 10,
+  },
+  rootViewStyle: {
+    flex: 1,
+  },
+  headerViewStyle: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  textViewWrapper: {
+    flexDirection: 'row',
+    flex: 4,
+  },
+  starViewWrapper: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    flex: 1,
+  },
+  authorViewWrapper: {
+    flexDirection: 'row',
+    marginTop: 10,
+  },
+  authorView: {
+    flex: 1,
+  },
+  dateViewWrapper: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    flexDirection: 'row',
+  },
+};
 
 class PostItem extends Component {
-
-
-getStart(is_favorite) {
-  if (is_favorite)
-    return <Icon name="star" style={styles.startStyle} />;
-  else
-    return <Icon name="star-o" style={styles.startStyle} />;
-}
+  constructor() {
+    super();
+    this.onPostPress = this.onPostPress.bind(this);
+  }
 
   onPostPress() {
     Actions.post({ post: this.props.post });
@@ -21,54 +54,32 @@ getStart(is_favorite) {
 
   render() {
     const { is_favorite } = this.props.post;
-    const { title, text, message_type, create_dt, author } = this.props.post.message; // able to crash
+    const { title, text, message_type, create_dt, author, comments_count } = this.props.post.message; // able to crash
     return (
-      <TouchableWithoutFeedback onPress={this.onPostPress.bind(this)}>
+      <TouchableWithoutFeedback onPress={this.onPostPress}>
         <View>
-        <CardSection >
-          <View style={{ flex: 1 }}>
-          <View style={{ flexDirection: 'row', justifyContent: 'space-between'}}>
-            <View style={{ flexDirection: 'row', flex: 4 }}>
-              {PostIcon.getPostIcon(message_type)}
-              <Text
-                style={{ marginTop: 5, flex: 1 }}
-                numberOfLines={3}
-              >
-                {title}
-              </Text>
-            </View>
-            <View style={{ flexDirection: 'row', justifyContent: 'flex-end', flex: 1 }}>
-              {this.getStart(is_favorite)}
-            </View>
-          </View>
-            <View>
-              <Text numberOfLines={4} >{text}</Text>
-            </View>
-            <View style={{ flexDirection: 'row', marginTop: 10 }}>
-              <View style={{ flex: 1 }}>
-                <Text>{author ? author.first_name : ''} {author ? author.last_name : ''}</Text>
+          <CardSection >
+            <View style={styles.rootViewStyle}>
+            <PostHeader
+              messageType={message_type}
+              title={title}
+              isFavorite={is_favorite}
+            />
+              <View>
+                <TextCustom type={'t2_regular'} numberOfLines={4} >{text}</TextCustom>
               </View>
-              <View style={{ flex: 1, justifyContent: 'flex-end' }}>
-                <Text>{Moment(create_dt).format('kk:mm DD MMM YYYY')}</Text>
-              </View>
+              <PostFooter 
+                author={author}
+                createDate={create_dt}
+                commentsCount={comments_count}
+                showComments
+              />
             </View>
-          </View>
-        </CardSection>
-      </View>
+          </CardSection>
+        </View>
       </TouchableWithoutFeedback>
-  );
-}
-}
-
-const styles = {
-  iconStyle: {
-    fontSize: 32,
-    margin: 10,
-  },
-  startStyle: {
-    fontSize: 32,
-    margin: 10,
+    );
   }
-};
+}
 
 export default PostItem;

@@ -1,6 +1,6 @@
 import React, { Component, PropTypes as PT } from 'react';
 import { Text, View } from 'react-native';
-import { CardSection, PostIcon } from './common';
+import { CardSection, PostHeader, PostFooter } from './common';
 import Post from '../models/Post';
 
 class PostForm extends Component {
@@ -32,18 +32,33 @@ class PostForm extends Component {
 
   render() {
     const { post } = this.props;
-    const r = Post.objects('Post').filtered(`id == ${this.props.post.id}`);
-    console.warn(r[0]);
+    const { is_favorite } = post;
+    const { title, text, message_type, create_dt, author, comments_count } = post.message; // able to crash
+
+    // const r = Post.objects('Post').filtered(`id == ${post.id}`); // r[0].message.text get message's text 
 
     return (
       <CardSection>
-      <View style={{ flexDirection: 'column', flex: 4 }}>
-        {PostIcon.getPostIcon(r[0].message.message_type)}
-        <Text>{ r[0].message.text } </Text>
-      </View>
+        <View style={{ flexDirection: 'column', flex: 4 }}>
+          <PostHeader
+            messageType={message_type}
+            title={title}
+            isFavorite={is_favorite}
+          />
+          <Text>{text}</Text>
+          <PostFooter
+            author={author}
+            createDate={create_dt}
+            commentsCount={comments_count}
+          />
+        </View>
       </CardSection>
     );
   }
 }
+
+const styles = {
+  
+};
 
 export default PostForm;

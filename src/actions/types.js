@@ -6,3 +6,4 @@ export const LOGIN_USER_FAIL = 'login_user_fail';
 export const TOKEN = 'token';
 
 export const POSTS_FETCH_SUCCESS = 'posts_fetch_success';
+export const SET_POSTS_ARE_LOADING = 'set_posts_are_loading';

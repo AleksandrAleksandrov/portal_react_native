@@ -6,3 +6,6 @@ export * from './Input';
 export * from './Spinner';
 export * from './Confirm';
 export * from './PostIcon';
+export * from './TextCustom';
+export * from './PostHeader';
+export * from './PostFooter';

@@ -31,6 +31,11 @@
   rootViewController.view = rootView;
   self.window.rootViewController = rootViewController;
   [self.window makeKeyAndVisible];
+  for (NSString *fontFamilyName in [UIFont familyNames]) {
+    for (NSString *fontName in [UIFont fontNamesForFamilyName:fontFamilyName]) {
+      NSLog(@"Family: %@    Font: %@", fontFamilyName, fontName);
+    }
+  }
   return YES;
 }
 

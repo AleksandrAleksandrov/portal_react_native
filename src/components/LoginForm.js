@@ -5,15 +5,22 @@ import { connect } from 'react-redux';
 import { emailChanged, passwordChanged, loginUser } from '../actions';
 import { Card, CardSection, Input, Button, Spinner } from './common';
 
+const styles = {
+  errorTextStyle: {
+    fontSize: 20,
+    alignSelf: 'center',
+    color: 'red',
+  },
+};
+
 class LoginForm extends Component {
   componentWillMount() {
     AsyncStorage.getItem('token').then((settingsStr) => {
       Actions.main();
-      
     }).catch((error) => {
       console.warn(error);
     });
-}
+  }
 
   onEmailChanged(text) {
     this.props.dispatch(emailChanged(text));
@@ -45,37 +52,29 @@ class LoginForm extends Component {
             value={this.props.email}
           />
         </CardSection>
-      <CardSection>
-        <Input
-          secureTextEntry
-          label="Пароль"
-          placeholder="Пароль"
-          onChangeText={this.onPasswordChanged.bind(this)}
-          value={this.props.password}
-        />
-      </CardSection>
-      <CardSection>
-        <Button onPress={this.onButtonPress.bind(this)}>
-          Войти
-        </Button>
-      </CardSection>
-      <CardSection>
-        <Text>
-          {this.props.user && this.props.user.key}
-        </Text>
-      </CardSection>
+        <CardSection>
+          <Input
+            secureTextEntry
+            label="Пароль"
+            placeholder="Пароль"
+            onChangeText={this.onPasswordChanged.bind(this)}
+            value={this.props.password}
+          />
+        </CardSection>
+        <CardSection>
+          <Button onPress={this.onButtonPress.bind(this)}>
+            Войти
+          </Button>
+        </CardSection>
+        <CardSection>
+          <Text>
+            {this.props.user && this.props.user.key}
+          </Text>
+        </CardSection>
       </Card>
     );
   }
 }
-
-const styles = {
-  errorTextStyle: {
-    fontSize: 20,
-    alignSelf: 'center',
-    color: 'red'
-  }
-};
 
 const mapStateToProps = ({ auth }) => {
   const { email, password, error, loading, user } = auth;

@@ -4,7 +4,12 @@ import Icon from 'react-native-vector-icons/dist/FontAwesome';
 const styles = {
   iconStyle: {
     fontSize: 32,
-    margin: 10,
+  },
+  startStyle: {
+    fontSize: 32,
+  },
+  commmentStyle: {
+    fontSize: 15,
   },
 };
 
@@ -30,8 +35,22 @@ const getPostIcon = (messageType) => {
   return (<Icon name={name} style={styles.iconStyle} />);
 };
 
+const getStart = (isFavorite) => {
+  if (isFavorite) {
+    return <Icon name="star" style={styles.startStyle} />;
+  }
+
+  return <Icon name="star-o" style={styles.startStyle} />;
+};
+
+const getCommentsIcon = () => {
+  return <Icon name="comments-o" style={styles.commmentStyle} />;
+};
+
 const PostIcon = {
   getPostIcon,
+  getStart,
+  getCommentsIcon,
 };
 
 export { PostIcon };
