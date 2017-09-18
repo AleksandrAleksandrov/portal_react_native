@@ -13,7 +13,7 @@ import * as serviceREST from '../services/serviceREST';
 export const emailChanged = (text) => {
   return {
     type: EMAIL_CHANGED,
-    payload: text
+    payload: text,
   };
 };
 
@@ -43,9 +43,8 @@ const loginUserFail = (dispatch) => {
 };
 
 const loginUserSuccess = (user) => {
-  console.log(user);
   AsyncStorage.setItem(TOKEN, user.key);
-  Actions.main();
+  Actions.postsList();
   return {
     type: LOGIN_USER_SECCESS,
     payload: user

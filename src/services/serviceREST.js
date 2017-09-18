@@ -1,5 +1,5 @@
 import { create } from 'apisauce';
-import { AsyncStorage } from 'react-native';
+import { setToken, getToken } from './StorageHelper';
 
 const REQUEST_URL = 'https://www.portal.light-it.net';
 
@@ -11,12 +11,6 @@ const api = create({
   },
   timeout: 10000,
 });
-
-export const getToken = () => {
-  AsyncStorage.getItem('token').then((settingsStr) => {
-    return settingsStr;
-  });
-};
 
 export const setTokenToHeaders = (token) => {
   if (token) {
@@ -104,7 +98,7 @@ export const postLogin = data => new Promise((resolve, reject) => {
   api.post('/api/auth/login/', data)
   .then((response) => {
     if (response.ok) {
-      // setTokenToHeaders(response.data.token);
+      setToken(response.data.user.token);
       resolve(response);
     }
     resolve(response);
@@ -117,15 +111,18 @@ export const postLogin = data => new Promise((resolve, reject) => {
 
 export const getPosts = () => {
   return new Promise((resolve, reject) => {
-    setTokenToHeaders('5163522b2705364cc2a60e54a426159a8c8422b4');
-    api.get('/api/user_messages/')
-    .then((response) => {
-      if (response.ok) {
-        resolve(response.data.results);
-      }
-    })
-    .catch((error) => {
+    getToken()
+    .then((data) => {
+      setTokenToHeaders(data);
+      api.get('/api/user_messages/')
+      .then((response) => {
+        if (response.ok) {
+          resolve(response.data.results);
+        }
+      })
+    . catch((error) => {
       console.warn(error);
+    });
     });
   });
 };

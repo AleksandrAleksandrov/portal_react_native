@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { AsyncStorage, ListView } from 'react-native';
+import { ListView } from 'react-native';
 import { connect } from 'react-redux';
 import { getPosts } from '../actions';
 import PostItem from './PostItem';

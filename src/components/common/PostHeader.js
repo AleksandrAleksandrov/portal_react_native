@@ -5,7 +5,7 @@ import { PostIcon } from './PostIcon';
 
 const styles = {
   titleTextStyle: {
-    marginTop: 5,
+    marginLeft: 15,
     flex: 1,
   },
   bodyTextStyle: {
@@ -22,11 +22,13 @@ const styles = {
   textViewWrapper: {
     flexDirection: 'row',
     flex: 4,
+    margin: 10,
   },
   starViewWrapper: {
     flexDirection: 'row',
     justifyContent: 'flex-end',
     flex: 1,
+    margin: 10,
   },
   authorViewWrapper: {
     flexDirection: 'row',
@@ -45,20 +47,20 @@ const styles = {
 const PostHeader = ({ messageType, title, isFavorite }) => {
   return (
     <View style={styles.headerViewStyle}>
-        <View style={styles.textViewWrapper}>
-          {PostIcon.getPostIcon(messageType)}
-          <TextCustom
-            type={'t1_light'}
-            style={styles.titleTextStyle}
-            numberOfLines={3}
-          >
-            {title}
-          </TextCustom>
-        </View>
-        <View style={styles.starViewWrapper}>
-          {PostIcon.getStart(isFavorite)}
-        </View>
+      <View style={styles.textViewWrapper}>
+        {PostIcon.getPostIcon(messageType)}
+        <TextCustom
+          type={'t1_light'}
+          style={styles.titleTextStyle}
+          numberOfLines={3}
+        >
+          {title}
+        </TextCustom>
       </View>
+      <View style={styles.starViewWrapper}>
+        {PostIcon.getStart(isFavorite)}
+      </View>
+    </View>
   );
 };
 

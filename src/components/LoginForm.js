@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, AsyncStorage } from 'react-native';
+import { Text } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import { emailChanged, passwordChanged, loginUser } from '../actions';
@@ -15,11 +15,7 @@ const styles = {
 
 class LoginForm extends Component {
   componentWillMount() {
-    AsyncStorage.getItem('token').then((settingsStr) => {
-      Actions.main();
-    }).catch((error) => {
-      console.warn(error);
-    });
+    
   }
 
   onEmailChanged(text) {
@@ -33,12 +29,6 @@ class LoginForm extends Component {
   onButtonPress() {
     const { email, password } = this.props;
     this.props.dispatch(loginUser(email, password));
-  }
-
-  getToken() {
-    AsyncStorage.getItem('token').then((settingsStr) => {
-    return settingsStr;
-  });
   }
 
   render() {
