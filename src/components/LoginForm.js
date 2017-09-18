@@ -1,9 +1,17 @@
 import React, { Component } from 'react';
-import { Text } from 'react-native';
+import { View, Text } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import { emailChanged, passwordChanged, loginUser } from '../actions';
-import { Card, CardSection, Input, Button, Spinner } from './common';
+import { Card, CardSection, Input, Button, Spinner, TextCustom, CustomInput, CustomPasswordInput } from './common';
+// import { MKButton, MKColor } from 'react-native-material-kit';
+const MK = require('react-native-material-kit');
+
+const {
+  MKButton,
+  MKColor,
+  MKTextField,
+} = MK;
 
 const styles = {
   errorTextStyle: {
@@ -11,7 +19,21 @@ const styles = {
     alignSelf: 'center',
     color: 'red',
   },
+  viewStyle: {
+    padding: 5,
+    backgroundColor: '#fff',
+    justifyContent: 'flex-start',
+    flexDirection: 'row',
+    position: 'relative',
+  },
 };
+
+const ColoredRaisedButton = new MKButton.coloredButton()
+  .withText('BUTTON')
+  .withOnPress(() => {
+    this.onButtonPress.bind(this);
+  })
+  .build();
 
 class LoginForm extends Component {
   componentWillMount() {
@@ -22,46 +44,52 @@ class LoginForm extends Component {
     this.props.dispatch(emailChanged(text));
   }
 
-  onPasswordChanged(text) {
+  onPasswordChanged = (text) => {
     this.props.dispatch(passwordChanged(text));
-  }
+  };
 
-  onButtonPress() {
+  onButtonPress = () => {
+    console.warn('click');
     const { email, password } = this.props;
     this.props.dispatch(loginUser(email, password));
   }
 
   render() {
     return (
-      <Card>
-        <CardSection>
-          <Input
-            label="Email"
+      <View>
+
+        <View style={styles.viewStyle}>
+          <CustomInput
+            style={{ flex: 1 }}
             placeholder="email@mail.com"
-            onChangeText={this.onEmailChanged.bind(this)}
-            value={this.props.email}
+            secureTextEntry={false}
           />
-        </CardSection>
-        <CardSection>
-          <Input
-            secureTextEntry
-            label="Пароль"
-            placeholder="Пароль"
-            onChangeText={this.onPasswordChanged.bind(this)}
-            value={this.props.password}
+        </View>
+
+        <View style={styles.viewStyle}>
+          <CustomInput
+            style={{ flex: 1 }}
+            placeholder="password"
+            secureTextEntry={true}
           />
-        </CardSection>
-        <CardSection>
-          <Button onPress={this.onButtonPress.bind(this)}>
-            Войти
-          </Button>
-        </CardSection>
-        <CardSection>
+        </View>
+
+        <View style={styles.viewStyle}>
+          <View style={styles.col}>
+            <ColoredRaisedButton onPress={this.onButtonPress}>
+              <Text>Войти</Text>
+            </ColoredRaisedButton>
+            <Text style={styles.legendLabel}>Accent colored</Text>
+          </View>
+        </View>
+
+        <View style={styles.viewStyle}>
           <Text>
             {this.props.user && this.props.user.key}
           </Text>
-        </CardSection>
-      </Card>
+        </View>
+
+      </View>
     );
   }
 }
