@@ -4,12 +4,15 @@ import {
   LOGIN_USER,
   LOGIN_USER_SECCESS,
   LOGIN_USER_FAIL,
+  SET_TOKEN,
 } from '../actions/types';
 
 const INITIAL_STATE = {
   email: '',
   password: '',
   user: null,
+  firstName: null,
+  lastName: null,
   loading: false, // authorization in progress
   token: null,
   error: '',
@@ -24,9 +27,11 @@ export default (state = INITIAL_STATE, action) => {
     case LOGIN_USER:
       return { ...state, loading: true, error: '' };
     case LOGIN_USER_SECCESS:
-      return { ...state, ...INITIAL_STATE, user: action.payload };
+      return { ...state, ...INITIAL_STATE, user: action.payload, token: action.token };
     case LOGIN_USER_FAIL:
-      return { ...state, error: 'Authentication Failed.', password: '', loading: false };
+      return { ...state, error: action.payload, password: '', loading: false };
+    case SET_TOKEN:
+      return { ...state, ...INITIAL_STATE, token: action.payload };
     default:
       return state;
   }

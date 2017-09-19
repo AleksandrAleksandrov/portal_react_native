@@ -1,14 +1,16 @@
 import React, { Component } from 'react';
-import { ListView } from 'react-native';
+import { AsyncStorage, ListView, Text, View } from 'react-native';
 import { connect } from 'react-redux';
-import { getPosts } from '../actions';
+import { getPosts, setToken } from '../actions';
 import PostItem from './PostItem';
 import { Spinner } from './common/Spinner';
+import * as serviceREST from '../services/serviceREST';
 
 class PostsListForm extends Component {
   constructor(props) {
     super(props);
     this.state = { results: [] };
+    // console.warn(this.state.token);
   }
 
   componentWillMount() {
@@ -17,24 +19,33 @@ class PostsListForm extends Component {
 
   getPosts() {
     const { getPosts } = this.props;
-    getPosts();
+    getPosts(null);
   }
 
   renderRow = (post) => (<PostItem post={post} />);
 
+  pagin = () => {
+    if (!this.props.postsAreLoading && this.props.nextPage != null) {
+      this.props.getPosts(this.props.nextPage);
+    }
+  }
+
   render() {
     const { postsList, postsAreLoading } = this.props;
 
-    if (postsAreLoading) {
-      return <Spinner size="small" />;
-    }
+    // if (postsAreLoading) {
+    //   return <Spinner size="small" />;
+    // }
     return (
-
-      <ListView
-        enableEmptySections
-        dataSource={ds.cloneWithRows(postsList ? postsList : [])}
-        renderRow={this.renderRow}
-      />
+      <View>
+        <ListView
+          enableEmptySections
+          onEndReachedThreshold={100}
+          dataSource={ds.cloneWithRows(postsList ? postsList : [])}
+          renderRow={this.renderRow}
+          onEndReached={this.pagin}
+        />
+      </View>
     );
   }
 }
@@ -44,13 +55,15 @@ const ds = new ListView.DataSource({
 });
 
 const mapStateToProps = state => ({
+  token: state.auth.token,
   postsList: state.postsList.results,
+  nextPage: state.postsList.nextPage,
   postsAreLoading: state.postsList.postsAreLoading,
 });
 
 const mapDispatchToProps = dispatch => ({
   dispatch,
-  getPosts: () => { dispatch(getPosts()); },
+  getPosts: (url) => { dispatch(getPosts(url)); },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(PostsListForm);

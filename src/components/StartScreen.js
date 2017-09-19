@@ -1,14 +1,21 @@
 import { Component } from 'react';
 import { Actions } from 'react-native-router-flux';
+import { connect } from 'react-redux';
 import { getToken } from '../services/StorageHelper';
+import { setTokenToState } from '../actions';
+import * as serviceREST from '../services/serviceREST';
 
 class StartScreen extends Component {
   componentWillMount() {
+    // Rename to getTokenfrom Storrage
     getToken()
     .then((data) => {
       if (data === null) {
         Actions.login();
       } else {
+        // SET USER TO REDUX
+        this.props.dispatch(setTokenToState(data));
+        serviceREST.setTokenToHeaders(data);
         Actions.postsList();
       }
     })
@@ -24,4 +31,15 @@ class StartScreen extends Component {
   }
 }
 
-export default StartScreen;
+const mapStateToProps = state => ({
+  // postsList: state.postsList.results,
+  // postsAreLoading: state.postsList.postsAreLoading,
+});
+
+const mapDispatchToProps = dispatch => ({
+  dispatch,
+  // getPosts: (url) => { dispatch(getPosts(url)); },
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(StartScreen);
+

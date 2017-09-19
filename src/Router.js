@@ -36,7 +36,6 @@ const RouterComponent = () => (
         panHandlers={null}
         animation={'fade'}
         type={'replace'}
-        duration={1000}
       />
       <Scene
         key="post"

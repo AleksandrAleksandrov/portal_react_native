@@ -16,6 +16,7 @@
 		"react-native-fa-icons": "^3.0.0",
 		"react-native-fontawesome": "^5.7.0",
 		"react-native-material-kit": "^0.4.1",
+		"react-native-paginated-listview": "^1.0.2",
 		"react-native-router-flux": "^3.41.0",
 		"react-native-vector-icons": "^4.3.0",
 		"react-redux": "^5.0.6",

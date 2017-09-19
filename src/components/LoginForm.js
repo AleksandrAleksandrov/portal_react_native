@@ -28,68 +28,52 @@ const styles = {
   },
 };
 
-const ColoredRaisedButton = new MKButton.coloredButton()
-  .withText('BUTTON')
-  .withOnPress(() => {
-    this.onButtonPress.bind(this);
-  })
-  .build();
 
 class LoginForm extends Component {
-  componentWillMount() {
-    
-  }
-
   onEmailChanged(text) {
     this.props.dispatch(emailChanged(text));
   }
 
-  onPasswordChanged = (text) => {
+  onPasswordChanged(text) {
     this.props.dispatch(passwordChanged(text));
-  };
+  }
 
-  onButtonPress = () => {
-    console.warn('click');
+  onButtonPress() {
     const { email, password } = this.props;
     this.props.dispatch(loginUser(email, password));
   }
 
   render() {
     return (
-      <View>
-
-        <View style={styles.viewStyle}>
-          <CustomInput
-            style={{ flex: 1 }}
+      <Card>
+        <CardSection>
+          <Input
+            label="Email"
             placeholder="email@mail.com"
-            secureTextEntry={false}
+            onChangeText={this.onEmailChanged.bind(this)}
+            value={this.props.email}
           />
-        </View>
-
-        <View style={styles.viewStyle}>
-          <CustomInput
-            style={{ flex: 1 }}
-            placeholder="password"
-            secureTextEntry={true}
+        </CardSection>
+        <CardSection>
+          <Input
+            secureTextEntry
+            label="Пароль"
+            placeholder="Пароль"
+            onChangeText={this.onPasswordChanged.bind(this)}
+            value={this.props.password}
           />
-        </View>
-
-        <View style={styles.viewStyle}>
-          <View style={styles.col}>
-            <ColoredRaisedButton onPress={this.onButtonPress}>
-              <Text>Войти</Text>
-            </ColoredRaisedButton>
-            <Text style={styles.legendLabel}>Accent colored</Text>
-          </View>
-        </View>
-
-        <View style={styles.viewStyle}>
+        </CardSection>
+        <CardSection>
+          <Button onPress={this.onButtonPress.bind(this)}>
+            Войти
+          </Button>
+        </CardSection>
+        <CardSection>
           <Text>
-            {this.props.user && this.props.user.key}
+            {this.props.error}
           </Text>
-        </View>
-
-      </View>
+        </CardSection>
+      </Card>
     );
   }
 }

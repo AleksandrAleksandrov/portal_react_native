@@ -1,6 +1,7 @@
 import { AsyncStorage } from 'react-native';
 
 const TOKEN = 'token';
+const NEXT_PAGE = 'next_page';
 
 export const getToken = () => {
   return new Promise((resolve, reject) => {
@@ -11,13 +12,18 @@ export const getToken = () => {
 };
 
 export async function setToken(token) {
-
   await AsyncStorage.setItem(TOKEN, token);
-  getToken()
-    .then((data) => {
+}
 
-    })
-    .catch((error) => {
-      console.warn(error);
-    });
+export const getNextPage = () => {
+  return new Promise((resolve, reject) => {
+    AsyncStorage.getItem(NEXT_PAGE)
+      .then((nextPageString) => {
+        resolve(nextPageString);
+      });
+  });
+};
+
+export async function setNextPost(nextPage) {
+  await AsyncStorage.setItem(NEXT_PAGE, nextPage);
 }
