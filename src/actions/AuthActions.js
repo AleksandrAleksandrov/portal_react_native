@@ -44,6 +44,9 @@ export const setTokenToState = payload => (dispatch) => {
 };
 
 export const loginUser = (email, password) => (dispatch) => {
+  dispatch({
+    type: LOGIN_USER,
+  });
   serviceREST.postLogin({
     email,
     password,

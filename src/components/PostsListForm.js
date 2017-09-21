@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { getPosts, setToken } from '../actions';
 import PostItem from './PostItem';
 import { Spinner } from './common/Spinner';
+import { SmallSpinner } from './common/SmallSpinner';
 import * as serviceREST from '../services/serviceREST';
 
 class PostsListForm extends Component {
@@ -23,6 +24,13 @@ class PostsListForm extends Component {
   }
 
   renderRow = (post) => (<PostItem post={post} />);
+  renderLastRow = () => {
+    if (!this.props.postsAreLoading || !this.props.postsList.length) {
+      return <View />;
+    }
+    
+    return (<SmallSpinner size="large" />);
+  };
 
   pagin = () => {
     if (!this.props.postsAreLoading && this.props.nextPage != null) {
@@ -44,6 +52,7 @@ class PostsListForm extends Component {
           dataSource={ds.cloneWithRows(postsList ? postsList : [])}
           renderRow={this.renderRow}
           onEndReached={this.pagin}
+          renderFooter={this.renderLastRow}
         />
       </View>
     );

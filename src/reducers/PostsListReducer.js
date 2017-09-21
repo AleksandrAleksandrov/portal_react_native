@@ -22,7 +22,7 @@ export default (state = INITIAL_STATE, action) => {
     case ADD_MORE_POSTS_SUCCESS:
       return {
         ...state,
-        results: state.results.concat(action.payload),
+        results: [...state.results, ...action.payload],
         nextPage: action.nextPage,
         postsAreLoading: false,
       };

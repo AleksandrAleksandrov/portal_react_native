@@ -38,7 +38,7 @@ const setNextPage = (data) => {
 
 // startfrom and count for pagination
 export const getPosts = (url) => (dispatch) => {
-
+  // console.warn('url', url);
   dispatch(setPostsAreLoading());
 
   // if (!url) {

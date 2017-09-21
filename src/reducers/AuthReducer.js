@@ -21,17 +21,42 @@ const INITIAL_STATE = {
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case EMAIL_CHANGED:
-      return { ...state, email: action.payload };
+      return {
+        ...state,
+        email: action.payload,
+      };
     case PASSWORD_CHANGED:
-      return { ...state, password: action.payload };
+      return {
+        ...state,
+        password: action.payload,
+      };
     case LOGIN_USER:
-      return { ...state, loading: true, error: '' };
+      return {
+        ...state,
+        loading: true,
+        error: '',
+      };
     case LOGIN_USER_SECCESS:
-      return { ...state, ...INITIAL_STATE, user: action.payload, token: action.token };
+      return {
+        ...state,
+        ...INITIAL_STATE,
+        user: action.payload,
+        token: action.token,
+        loading: false,
+      };
     case LOGIN_USER_FAIL:
-      return { ...state, error: action.payload, password: '', loading: false };
+      return {
+        ...state,
+        error: action.payload,
+        password: '',
+        loading: false,
+      };
     case SET_TOKEN:
-      return { ...state, ...INITIAL_STATE, token: action.payload };
+      return {
+        ...state,
+        ...INITIAL_STATE,
+        token: action.payload,
+      };
     default:
       return state;
   }

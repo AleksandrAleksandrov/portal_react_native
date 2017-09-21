@@ -86,7 +86,7 @@ export const postLogin = data => new Promise((resolve, reject) => {
       setTokenToHeaders(response.data.user.token);
       resolve(response);
     } else {
-      console.warn(response.data.detail);
+      // console.warn(response.data.detail);
       reject(response.data.detail);
     }
   })
@@ -103,7 +103,6 @@ const loginUserFail = (dispatch) => {
 export const getPosts = (url) => {
   return new Promise((resolve, reject) => {
     if (url != null) {
-      console.warn('url', url);
       api.get(url)
       .then((response) => {
         if (response.ok) {

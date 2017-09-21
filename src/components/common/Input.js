@@ -1,5 +1,6 @@
 import React from 'react';
 import { TextInput, View, Text } from 'react-native';
+import { Field, reduxForm } from 'redux-form';
 
 const styles = {
   inputStyle: {

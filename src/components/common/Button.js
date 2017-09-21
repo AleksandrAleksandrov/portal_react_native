@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, TouchableOpacity } from 'react-native';
+import { Text, TouchableHighlight } from 'react-native';
 
 const styles = {
   textStyle: {
@@ -9,6 +9,9 @@ const styles = {
     fontWeight: '600',
     paddingTop: 10,
     paddingBottom: 10,
+  },
+  buttonDisabledStyle: {
+    opacity: 0.5,
   },
   buttonStyle: {
     flex: 1,
@@ -22,15 +25,15 @@ const styles = {
   },
 };
 
-const Button = ({ onPress, children }) => {
-  const { buttonStyle, textStyle } = styles;
+const Button = ({ onPress, children, enabled }) => {
+  const { buttonStyle, textStyle, buttonDisabledStyle } = styles;
 
   return (
-    <TouchableOpacity onPress={onPress} style={buttonStyle}>
+    <TouchableHighlight underlayColor="white" onPress={onPress} style={[buttonStyle, (!enabled && buttonDisabledStyle)]} disabled={!enabled}>
       <Text style={textStyle}>
         {children}
       </Text>
-    </TouchableOpacity>
+    </TouchableHighlight>
   );
 };
 

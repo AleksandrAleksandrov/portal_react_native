@@ -11,3 +11,5 @@ export * from './PostHeader';
 export * from './PostFooter';
 export * from './CustomInput';
 export * from './CustomPasswordInput';
+export * from './SmallSpinner';
+export * from './InputValidate';
