@@ -138,6 +138,34 @@
 			remoteGlobalIDString = 8A1B8E771B22E4E300DB45C2;
 			remoteInfo = RCTMaterialKit;
 		};
+		1F4BE8B31F768172000AFF95 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 146833FF1AC3E56700842450 /* React.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 139D7ECE1E25DB7D00323FB7;
+			remoteInfo = "third-party";
+		};
+		1F4BE8B51F768172000AFF95 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 146833FF1AC3E56700842450 /* React.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 3D383D3C1EBD27B6005632C8;
+			remoteInfo = "third-party-tvOS";
+		};
+		1F4BE8B71F768172000AFF95 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 146833FF1AC3E56700842450 /* React.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 139D7E881E25C6D100323FB7;
+			remoteInfo = "double-conversion";
+		};
+		1F4BE8B91F768172000AFF95 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 146833FF1AC3E56700842450 /* React.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 3D383D621EBD27B9005632C8;
+			remoteInfo = "double-conversion-tvOS";
+		};
 		1FB837C21F6B9D7300BF627C /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 2B5CB6EFC5F84F13BDFA6E8B /* RNVectorIcons.xcodeproj */;
@@ -499,6 +527,10 @@
 				3DAD3EAB1DF850E9000B6D8A /* libcxxreact.a */,
 				3DAD3EAD1DF850E9000B6D8A /* libjschelpers.a */,
 				3DAD3EAF1DF850E9000B6D8A /* libjschelpers.a */,
+				1F4BE8B41F768172000AFF95 /* libthird-party.a */,
+				1F4BE8B61F768172000AFF95 /* libthird-party.a */,
+				1F4BE8B81F768172000AFF95 /* libdouble-conversion.a */,
+				1F4BE8BA1F768172000AFF95 /* libdouble-conversion.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -509,6 +541,16 @@
 				1F2246171F725A9100CEE5CB /* libRCTMaterialKit.a */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		1F4BE7921F75396B000AFF95 /* Recovered References */ = {
+			isa = PBXGroup;
+			children = (
+				0A50D422D35C4E128609C40B /* libRealmReact.a */,
+				0DEC0459FA574CBAB823E568 /* libRNVectorIcons.a */,
+				EFE0295B1CDB42A18DF4016C /* libRCTMaterialKit.a */,
+			);
+			name = "Recovered References";
 			sourceTree = "<group>";
 		};
 		1FB837A51F6B9D7300BF627C /* Products */ = {
@@ -615,6 +657,7 @@
 				83CBBA001A601CBA00E9B192 /* Products */,
 				66B7457286F543B49904A867 /* Resources */,
 				C19B7C417B394F1791C10132 /* Frameworks */,
+				1F4BE7921F75396B000AFF95 /* Recovered References */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -728,10 +771,12 @@
 					00E356ED1AD99517003FC87E = {
 						CreatedOnToolsVersion = 6.2;
 						DevelopmentTeam = 9T9EKPAPC4;
+						ProvisioningStyle = Automatic;
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
 						DevelopmentTeam = 9T9EKPAPC4;
+						ProvisioningStyle = Automatic;
 					};
 					2D02E47A1E0B4A5D006451C7 = {
 						CreatedOnToolsVersion = 8.2.1;
@@ -885,6 +930,34 @@
 			fileType = archive.ar;
 			path = libRCTMaterialKit.a;
 			remoteRef = 1F2246161F725A9100CEE5CB /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		1F4BE8B41F768172000AFF95 /* libthird-party.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libthird-party.a";
+			remoteRef = 1F4BE8B31F768172000AFF95 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		1F4BE8B61F768172000AFF95 /* libthird-party.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libthird-party.a";
+			remoteRef = 1F4BE8B51F768172000AFF95 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		1F4BE8B81F768172000AFF95 /* libdouble-conversion.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libdouble-conversion.a";
+			remoteRef = 1F4BE8B71F768172000AFF95 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		1F4BE8BA1F768172000AFF95 /* libdouble-conversion.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libdouble-conversion.a";
+			remoteRef = 1F4BE8B91F768172000AFF95 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		1FB837C31F6B9D7300BF627C /* libRNVectorIcons.a */ = {
@@ -1166,6 +1239,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 9T9EKPAPC4;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -1191,6 +1266,7 @@
 					"-lc++",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Portal.app/Portal";
 			};
 			name = Debug;
@@ -1199,6 +1275,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
 				DEVELOPMENT_TEAM = 9T9EKPAPC4;
 				HEADER_SEARCH_PATHS = (
@@ -1221,6 +1299,7 @@
 					"-lc++",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Portal.app/Portal";
 			};
 			name = Release;
@@ -1229,6 +1308,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = 9T9EKPAPC4;
@@ -1246,6 +1327,7 @@
 					"-lc++",
 				);
 				PRODUCT_NAME = Portal;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -1254,6 +1336,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 9T9EKPAPC4;
 				HEADER_SEARCH_PATHS = (
@@ -1270,6 +1354,7 @@
 					"-lc++",
 				);
 				PRODUCT_NAME = Portal;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;

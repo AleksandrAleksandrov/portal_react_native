@@ -12,4 +12,5 @@ export * from './PostFooter';
 export * from './CustomInput';
 export * from './CustomPasswordInput';
 export * from './SmallSpinner';
-export * from './InputValidate';
+export * from './InputValidateIOS';
+export * from './InputValidateAndroid';

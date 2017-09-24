@@ -2,6 +2,7 @@ import React from 'react';
 import { Scene, Router } from 'react-native-router-flux';
 import StartScreen from './components/StartScreen';
 import LoginForm from './components/LoginForm';
+import TestLogin from './components/TestLogin';
 import PostsListForm from './components/PostsListForm';
 import PostForm from './components/PostForm';
 

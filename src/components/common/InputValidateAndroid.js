@@ -5,16 +5,16 @@ import { MKTextField } from 'react-native-material-kit';
 
 const TextFieldWithFloatingLabel = MKTextField.textfieldWithFloatingLabel().build();
 
-const InputValidate = (props) => {
-  
+const InputValidateAndroid = (props) => {
+
   const { secureTextEntry, meta, input, ...inputProps } = props;
 
-  console.warn(meta.error);
+  const shouldShowError = ((!meta.active && meta.dirty) || meta.submitFailed) && meta.error;
 
   return (
-    <View style={{ flex:1, height: 50}}>
-      <TextInput
-        style={{ flex:1, height: 50}}
+    <View style={{ flex:1, height: 70}}>
+      <TextFieldWithFloatingLabel
+        style={{ flex:1, height: 70}}
         {...inputProps}
         secureTextEntry={secureTextEntry}
         onTextChange={input.onChange}
@@ -22,7 +22,7 @@ const InputValidate = (props) => {
         onFocus={input.onFocus}
         text={input.value}
       />
-      { meta.error && !meta.active && <Text style={styles.errorText}>{meta.error }</Text> }
+      { shouldShowError && <Text style={styles.errorText}>{meta.error}</Text>}
     </View>
   );
 };
@@ -33,4 +33,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export { InputValidate };
+export { InputValidateAndroid };
