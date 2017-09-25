@@ -1,5 +1,5 @@
 import React from 'react';
-import { View } from 'react-native';
+import { View, TouchableWithoutFeedback } from 'react-native';
 import { TextCustom } from './TextCustom';
 import { PostIcon } from './PostIcon';
 
@@ -44,7 +44,10 @@ const styles = {
   },
 };
 
-const PostHeader = ({ messageType, title, isFavorite }) => {
+const PostHeader = ({ id, messageType, title, isFavorite }) => {
+  onStarPress = () => {
+    // console.warn('click', id);
+  };
   return (
     <View style={styles.headerViewStyle}>
       <View style={styles.textViewWrapper}>
@@ -58,7 +61,9 @@ const PostHeader = ({ messageType, title, isFavorite }) => {
         </TextCustom>
       </View>
       <View style={styles.starViewWrapper}>
-        {PostIcon.getStart(isFavorite)}
+        <TouchableWithoutFeedback onPress={this.onStarPress.bind(this)}>
+          {PostIcon.getStart(isFavorite)}
+        </TouchableWithoutFeedback>
       </View>
     </View>
   );

@@ -1,5 +1,5 @@
 import React, { Component, PropTypes as PT } from 'react';
-import { Text, View } from 'react-native';
+import { Text, View, ScrollView } from 'react-native';
 import { CardSection, PostHeader, PostFooter } from './common';
 import Post from '../models/Post';
 
@@ -38,21 +38,23 @@ class PostForm extends Component {
     // const r = Post.objects('Post').filtered(`id == ${post.id}`); // r[0].message.text get message's text 
 
     return (
-      <CardSection>
-        <View style={{ flexDirection: 'column', flex: 4 }}>
-          <PostHeader
-            messageType={message_type}
-            title={title}
-            isFavorite={is_favorite}
-          />
-          <Text>{text}</Text>
-          <PostFooter
-            author={author}
-            createDate={create_dt}
-            commentsCount={comments_count}
-          />
-        </View>
-      </CardSection>
+      <ScrollView>
+        <CardSection>
+          <View style={{ flexDirection: 'column', flex: 4 }}>
+            <PostHeader
+              messageType={message_type}
+              title={title}
+              isFavorite={is_favorite}
+            />
+            <Text>{text}</Text>
+            <PostFooter
+              author={author}
+              createDate={create_dt}
+              commentsCount={comments_count}
+            />
+          </View>
+        </CardSection>
+      </ScrollView>
     );
   }
 }
