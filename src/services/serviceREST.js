@@ -1,3 +1,4 @@
+import { NetInfo } from 'react-native';
 import { create } from 'apisauce';
 import { setToken, getToken } from './StorageHelper';
 import {
@@ -79,20 +80,36 @@ export const postReview = (data, id) => new Promise((resolve, reject) => {
 });
 
 export const postLogin = data => new Promise((resolve, reject) => {
-  api.post('/api/auth/login/', data)
-  .then((response) => {
-    if (response.ok) {
-      setToken(response.data.user.token);
-      setTokenToHeaders(response.data.user.token);
-      resolve(response);
-    } else {
-      // console.warn(response.data.detail);
-      reject(response.data.detail);
+  NetInfo.isConnected.fetch().then(isConnected => {
+    function handleFirstConnectivityChange(connectionInfo) {
+      NetInfo.isConnected.fetch().then(isConnected => {
+        if (isConnected) {
+          api.post('/api/auth/login/', data)
+          .then((response) => {
+            if (response.ok) {
+              setToken(response.data.user.token);
+              setTokenToHeaders(response.data.user.token);
+              resolve(response);
+            } else {
+              reject(response.data ? response.data.detail : 'Не удалось подключится к серверу');
+            }
+          })
+          .catch((error) => {
+            reject(error);
+          });
+        } else {
+          reject('Нет подключения к интернету');
+        }
+      });
+      NetInfo.removeEventListener(
+        'connectionChange',
+      handleFirstConnectivityChange,
+    );
     }
-  })
-  .catch((error) => {
-    // console.warn('postLogin error:', error);
-    reject(error);
+    NetInfo.addEventListener(
+      'connectionChange',
+      handleFirstConnectivityChange,
+    );
   });
 });
 

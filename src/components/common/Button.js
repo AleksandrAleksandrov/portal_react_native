@@ -27,7 +27,6 @@ const styles = {
 
 const Button = ({ onPress, children, enabled }) => {
   const { buttonStyle, textStyle, buttonDisabledStyle } = styles;
-  console.warn('is enabled', enabled);
   return (
     <TouchableHighlight underlayColor="white" onPress={onPress} style={[buttonStyle, (!enabled && buttonDisabledStyle)]} disabled={!enabled}>
       <Text style={textStyle}>
