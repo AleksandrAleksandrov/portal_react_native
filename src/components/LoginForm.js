@@ -7,7 +7,6 @@ import { connect } from 'react-redux';
 import { emailChanged, passwordChanged, loginUser } from '../actions';
 import { Card, CardSection, Input, Button, Spinner, TextCustom, CustomInput, CustomPasswordInput, InputValidateIOS, InputValidateAndroid } from './common';
 import { isEmailValid, isPasswordValid } from '../utils/Validation';
-// import { MKButton, MKColor } from 'react-native-material-kit';
 const MK = require('react-native-material-kit');
 
 const {
@@ -53,15 +52,6 @@ const validate = values => {
   } else {
     errors.password = 'Обязательное поле';
   }
-
-  // if (values.email === '') {
-  //   error.email = 'Обязательноые поле';
-  // }
-
-  // if (values.password === '') {
-  //   error.password = 'Обязательноые поле';
-  // }
-  // Обязательноые поле
   return errors;
 };
 

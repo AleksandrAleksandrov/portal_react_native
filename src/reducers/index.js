@@ -3,6 +3,7 @@ import { reducer as formReducer } from 'redux-form';
 import AuthReducer from './AuthReducer';
 import PostsListReucer from './PostsListReducer';
 import PostReducer from './PostReducer';
+import MessageActionsReducer from './MessageActionsReducer';
 
 
 export default combineReducers({
@@ -10,4 +11,5 @@ export default combineReducers({
   postsList: PostsListReucer,
   post: PostReducer,
   form: formReducer,
+  messageActions: MessageActionsReducer,
 });

@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { Text, View, TouchableWithoutFeedback } from 'react-native';
 import { Actions } from 'react-native-router-flux';
-import { CardSection, PostIcon, TextCustom, PostHeader, PostFooter } from './common';
+import { CardSection, PostIcon, TextCustom, PostFooter } from './common';
+import PostHeader from './common/PostHeader';
 
 const styles = {
   titleTextStyle: {
@@ -53,7 +54,7 @@ class PostItem extends Component {
   }
 
   render() {
-    const { is_favorite } = this.props.post;
+    const { id, is_favorite } = this.props.post;
     const { title, text, message_type, create_dt, author, comments_count } = this.props.post.message; // able to crash
     return (
       <TouchableWithoutFeedback onPress={this.onPostPress}>
@@ -61,6 +62,7 @@ class PostItem extends Component {
           <CardSection >
             <View style={styles.rootViewStyle}>
             <PostHeader
+              id={id}
               messageType={message_type}
               title={title}
               isFavorite={is_favorite}
@@ -68,7 +70,7 @@ class PostItem extends Component {
               <View>
                 <TextCustom type={'t2_regular'} numberOfLines={4} >{text}</TextCustom>
               </View>
-              <PostFooter 
+              <PostFooter
                 author={author}
                 createDate={create_dt}
                 commentsCount={comments_count}

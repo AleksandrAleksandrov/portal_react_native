@@ -1,7 +1,9 @@
 import React from 'react';
 import { View, TouchableWithoutFeedback } from 'react-native';
+import { connect } from 'react-redux';
 import { TextCustom } from './TextCustom';
 import { PostIcon } from './PostIcon';
+import { onStarPressed } from '../../actions';
 
 const styles = {
   titleTextStyle: {
@@ -44,9 +46,10 @@ const styles = {
   },
 };
 
-const PostHeader = ({ id, messageType, title, isFavorite }) => {
+const PostHeader = ({ id, messageType, title, isFavorite, dispatch }) => {
   onStarPress = () => {
-    // console.warn('click', id);
+    console.warn('onStartPressed');
+    dispatch(onStarPressed(id, !isFavorite));
   };
   return (
     <View style={styles.headerViewStyle}>
@@ -61,7 +64,7 @@ const PostHeader = ({ id, messageType, title, isFavorite }) => {
         </TextCustom>
       </View>
       <View style={styles.starViewWrapper}>
-        <TouchableWithoutFeedback onPress={this.onStarPress.bind(this)}>
+        <TouchableWithoutFeedback onPress={this.onStarPress}>
           {PostIcon.getStart(isFavorite)}
         </TouchableWithoutFeedback>
       </View>
@@ -69,4 +72,11 @@ const PostHeader = ({ id, messageType, title, isFavorite }) => {
   );
 };
 
-export { PostHeader };
+const mapStateToProps = ({ messageActions }) => {
+  const { post, adding, error } = messageActions;
+
+  return { post, adding, error };
+};
+
+
+export default connect(mapStateToProps)(PostHeader);

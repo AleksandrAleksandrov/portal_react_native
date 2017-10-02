@@ -7,7 +7,6 @@ export * from './Spinner';
 export * from './Confirm';
 export * from './PostIcon';
 export * from './TextCustom';
-export * from './PostHeader';
 export * from './PostFooter';
 export * from './CustomInput';
 export * from './CustomPasswordInput';

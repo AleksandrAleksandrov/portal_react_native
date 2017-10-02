@@ -5,7 +5,6 @@ import { getPosts, setToken } from '../actions';
 import PostItem from './PostItem';
 import { Spinner } from './common/Spinner';
 import { SmallSpinner } from './common/SmallSpinner';
-import * as serviceREST from '../services/serviceREST';
 
 class PostsListForm extends Component {
   constructor(props) {

@@ -1,5 +1,5 @@
 import { NetInfo } from 'react-native';
-import { create } from 'apisauce';
+import { create, https } from 'apisauce';
 import { setToken, getToken } from './StorageHelper';
 import {
   EMAIL_CHANGED,
@@ -9,7 +9,8 @@ import {
   LOGIN_USER_FAIL,
 } from '../actions/types';
 
-const REQUEST_URL = 'https://www.portal.light-it.net';
+// const REQUEST_URL = 'https://www.portal.light-it.net';
+const REQUEST_URL = 'https://portal-dev.light-it.loc';
 
 const api = create({
   baseURL: REQUEST_URL,
@@ -142,6 +143,22 @@ export const getPosts = (url) => {
         console.warn(error);
       });
     }
+  });
+};
+
+export const favourite = ({ id, isFavourite }) => {
+  console.warn('id', isFavourite);
+  return new Promise((resolve, reject) => {
+      api.patch(`/api/user_messages/${id}/`, { is_favorite: isFavourite })
+      .then((response) => {
+        // console.warn('success', response);
+        resolve(response);
+      })
+      .catch((error) => {
+        // console.warn('fail', error);
+        // reject()
+        console.warn(error);
+      });
   });
 };
 

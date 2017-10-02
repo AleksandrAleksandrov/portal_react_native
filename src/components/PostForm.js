@@ -1,6 +1,7 @@
 import React, { Component, PropTypes as PT } from 'react';
 import { Text, View, ScrollView } from 'react-native';
-import { CardSection, PostHeader, PostFooter } from './common';
+import { CardSection, PostFooter } from './common';
+import PostHeader from './common/PostHeader';
 import Post from '../models/Post';
 
 class PostForm extends Component {
