@@ -50,7 +50,7 @@ class PostItem extends Component {
   }
 
   onPostPress() {
-    Actions.post({ post: this.props.post });
+    Actions.post({ id: this.props.post.id });
   }
 
   render() {

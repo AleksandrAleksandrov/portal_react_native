@@ -48,7 +48,6 @@ const styles = {
 
 const PostHeader = ({ id, messageType, title, isFavorite, dispatch }) => {
   onStarPress = () => {
-    console.warn('onStartPressed');
     dispatch(onStarPressed(id, !isFavorite));
   };
   return (
@@ -72,8 +71,8 @@ const PostHeader = ({ id, messageType, title, isFavorite, dispatch }) => {
   );
 };
 
-const mapStateToProps = ({ messageActions }) => {
-  const { post, adding, error } = messageActions;
+const mapStateToProps = ({ postsList }) => {
+  const { post, adding, error } = postsList;
 
   return { post, adding, error };
 };

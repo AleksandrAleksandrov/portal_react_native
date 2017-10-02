@@ -147,7 +147,6 @@ export const getPosts = (url) => {
 };
 
 export const favourite = ({ id, isFavourite }) => {
-  console.warn('id', isFavourite);
   return new Promise((resolve, reject) => {
       api.patch(`/api/user_messages/${id}/`, { is_favorite: isFavourite })
       .then((response) => {

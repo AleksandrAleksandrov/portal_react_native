@@ -2,7 +2,8 @@ import React, { Component, PropTypes as PT } from 'react';
 import { Text, View, ScrollView } from 'react-native';
 import { CardSection, PostFooter } from './common';
 import PostHeader from './common/PostHeader';
-import Post from '../models/Post';
+import { connect } from 'react-redux';
+import _ from 'lodash';
 
 class PostForm extends Component {
   static propTypes = {
@@ -32,17 +33,18 @@ class PostForm extends Component {
   };
 
   render() {
-    const { post } = this.props;
+    const { id, post } = this.props;
     const { is_favorite } = post;
     const { title, text, message_type, create_dt, author, comments_count } = post.message; // able to crash
 
-    // const r = Post.objects('Post').filtered(`id == ${post.id}`); // r[0].message.text get message's text 
+    // const r = Post.objects('Post').filtered(`id == ${post.id}`); // r[0].message.text get message's text
 
     return (
       <ScrollView>
         <CardSection>
           <View style={{ flexDirection: 'column', flex: 4 }}>
             <PostHeader
+              id={id}
               messageType={message_type}
               title={title}
               isFavorite={is_favorite}
@@ -64,4 +66,10 @@ const styles = {
   
 };
 
-export default PostForm;
+const mapStateToProps = (state, myProps) => ({
+
+  post: _.find(state.postsList.results, (o) => { return o.id === myProps.id })
+
+});
+
+export default connect(mapStateToProps)(PostForm);
