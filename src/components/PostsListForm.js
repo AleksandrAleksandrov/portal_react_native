@@ -9,7 +9,6 @@ import { SmallSpinner } from './common/SmallSpinner';
 class PostsListForm extends Component {
   constructor(props) {
     super(props);
-    this.state = { results: [] };
     // console.warn(this.state.token);
   }
 

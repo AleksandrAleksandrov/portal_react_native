@@ -36,6 +36,7 @@ const setPostsAreLoading = () => {
 };
 
 const setMorePostsInProgress = () => {
+  console.warn('setMorePostsInProgress');
   return {
     type: SET_MORE_POSTS_IN_PROGRESS,
   };
@@ -80,7 +81,6 @@ export const getPosts = (url) => (dispatch) => {
 };
 
 export const getMorePosts = (url) => (dispatch) => {
-  dispatch(setMorePostsInProgress());
 
   serviceREST.getMorePosts(url)
     .then((response) => {
@@ -114,18 +114,15 @@ export const addRemoveFailed = (post) => {
 
 export const addedToFavourite = (post) => {
   return {
-    type: GET_NEW_POST,
+    type: SET_CURRENT_POST,
     payload: post,
   };
-  // return {
-  //   type: SET_CURRENT_POST,
-  //   payload: post,
-  // };
 };
 
 export const onStarPressed = (id, isFavourite) => (dispatch) => {
   dispatch({
     type: ON_STAR_PRESSED,
+    payload: id,
   });
   serviceREST.favourite({ id, isFavourite })
     .then((response) => {

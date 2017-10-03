@@ -46,9 +46,12 @@ const styles = {
   },
 };
 
-const PostHeader = ({ id, messageType, title, isFavorite, dispatch }) => {
+// ({ id, messageType, title, isFavorite, dispatch, pressedStarId }) => means this.props......
+const PostHeader = ({ id, messageType, title, isFavorite, dispatch, pressedStarId }) => {
   onStarPress = () => {
-    dispatch(onStarPressed(id, !isFavorite));
+    if (pressedStarId[id] === undefined) {
+      dispatch(onStarPressed(id, !isFavorite));
+    }
   };
   return (
     <View style={styles.headerViewStyle}>
@@ -71,10 +74,10 @@ const PostHeader = ({ id, messageType, title, isFavorite, dispatch }) => {
   );
 };
 
-const mapStateToProps = ({ postsList }) => {
-  const { post, adding, error } = postsList;
+const mapStateToProps = (state) => {
+  const { post, error, pressedStarId } = state.postsList;
 
-  return { post, adding, error };
+  return { post, error, pressedStarId };
 };
 
 

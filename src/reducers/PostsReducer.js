@@ -18,7 +18,7 @@ const INITIAL_STATE = {
   nextPage: '',
   newPost: {},
   post: {},
-  adding: false,
+  pressedStarId: {},
   error: '',
 };
 
@@ -32,7 +32,6 @@ export default (state = INITIAL_STATE, action) => {
         postsAreLoading: false,
       };
     case SET_MORE_POSTS_IN_PROGRESS:
-      // console.warn('loadingMorePostsInProgress', true);
       return {
         ...state,
         loadingMorePostsInProgress: true,
@@ -46,20 +45,32 @@ export default (state = INITIAL_STATE, action) => {
         loadingMorePostsInProgress: false,
       };
     case SET_POSTS_ARE_LOADING:
-      return { ...state, postsAreLoading: true };
-    case GET_NEW_POST:
+      return { ...state,
+        postsAreLoading: true,
+      };
+    case SET_CURRENT_POST:
       const newResults = [...state.results];
       const newPost = action.payload;
-      // newResults.map(obj => newPost.find(o => o.id === obj.id) || obj);
       Object.keys(newResults).map(function(objectKey, index) {
         var value = newResults[objectKey];
         if (newPost.id === value.id) {
           newResults[index] = newPost;
         }
       });
-      return {...state, results: newResults,};
-    case SET_CURRENT_POST:
-      return { ...state, post: action.payload, adding: false, };
+
+      var pressedStarId_ = { ...state.pressedStarId };
+      delete pressedStarId_[newPost.id];
+      return {...state,
+        results: newResults,
+        pressedStarId: pressedStarId_,
+      };
+    case ON_STAR_PRESSED:
+      var pressedStarId_ = { ...state.pressedStarId };
+      pressedStarId_[action.payload] = true;
+      return {
+        ...state,
+        pressedStarId: pressedStarId_,
+      };
     default:
       return state;
   }
