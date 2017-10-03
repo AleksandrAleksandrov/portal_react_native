@@ -8,6 +8,8 @@ export const SET_TOKEN = 'set_token';
 export const SET_NEXT_PAGE = 'set_next_page';
 
 export const POSTS_FETCH_SUCCESS = 'posts_fetch_success';
+export const GET_MORE_POSTS = 'get_more_posts';
+export const SET_MORE_POSTS_IN_PROGRESS = 'set_more_posts_in_progress';
 export const ADD_MORE_POSTS_SUCCESS = 'add_more_posts_success';
 export const SET_POSTS_ARE_LOADING = 'set_posts_are_loading';
 

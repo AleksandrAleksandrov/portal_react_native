@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { AsyncStorage, ListView, Text, View } from 'react-native';
+import { ListView, View } from 'react-native';
 import { connect } from 'react-redux';
-import { getPosts, setToken } from '../actions';
+import { getPosts, getMorePosts } from '../actions';
 import PostItem from './PostItem';
 import { Spinner } from './common/Spinner';
 import { SmallSpinner } from './common/SmallSpinner';
@@ -22,35 +22,44 @@ class PostsListForm extends Component {
     getPosts(null);
   }
 
+  getMorePosts() {
+    const { getMorePosts } = this.props;
+    getMorePosts();
+  }
+
   renderRow = (post) => (<PostItem post={post} />);
   renderLastRow = () => {
-    if (!this.props.postsAreLoading || !this.props.postsList.length) {
+    if (!this.props.loadingMorePostsInProgress || !this.props.postsList.length) {
       return <View />;
     }
     
     return (<SmallSpinner size="large" />);
   };
 
-  pagin = () => {
-    if (!this.props.postsAreLoading && this.props.nextPage != null) {
-      this.props.getPosts(this.props.nextPage);
+  paginate = () => {
+    if (!this.props.postsAreLoading && this.props.nextPage != null && !this.props.loadingMorePostsInProgress) {
+      this.props.getMorePosts(this.props.nextPage);
     }
-  }
+  };
 
   render() {
     const { postsList, postsAreLoading } = this.props;
 
-    // if (postsAreLoading) {
-    //   return <Spinner size="small" />;
-    // }
+    if (postsAreLoading) {
+      return <Spinner size="large" />;
+    }
+
     return (
       <View>
         <ListView
           enableEmptySections
-          onEndReachedThreshold={100}
+          initialListSize={20}
+          pageSize={5}
+          scrollRenderAheadDistance={300}
+          onEndReachedThreshold={10}
           dataSource={ds.cloneWithRows(postsList ? postsList : [])}
           renderRow={this.renderRow}
-          onEndReached={this.pagin}
+          onEndReached={this.paginate}
           renderFooter={this.renderLastRow}
         />
       </View>
@@ -67,11 +76,13 @@ const mapStateToProps = state => ({
   postsList: state.postsList.results,
   nextPage: state.postsList.nextPage,
   postsAreLoading: state.postsList.postsAreLoading,
+  loadingMorePostsInProgress: state.postsList.loadingMorePostsInProgress,
 });
 
 const mapDispatchToProps = dispatch => ({
   dispatch,
   getPosts: (url) => { dispatch(getPosts(url)); },
+  getMorePosts: (url) => { dispatch(getMorePosts(url)); },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(PostsListForm);

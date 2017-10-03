@@ -9,6 +9,7 @@ import {
   SET_CURRENT_POST,
   ON_STAR_PRESSED,
   GET_NEW_POST,
+  SET_MORE_POSTS_IN_PROGRESS
 } from './types';
 import * as serviceREST from '../services/serviceREST';
 
@@ -31,6 +32,12 @@ const addMorePosts = (data) => {
 const setPostsAreLoading = () => {
   return {
     type: SET_POSTS_ARE_LOADING,
+  };
+};
+
+const setMorePostsInProgress = () => {
+  return {
+    type: SET_MORE_POSTS_IN_PROGRESS,
   };
 };
 
@@ -70,6 +77,25 @@ export const getPosts = (url) => (dispatch) => {
   .catch((error) => {
     console.warn(error);
   });
+};
+
+export const getMorePosts = (url) => (dispatch) => {
+  dispatch(setMorePostsInProgress());
+
+  serviceREST.getMorePosts(url)
+    .then((response) => {
+
+      if (url != null) {
+        dispatch(addMorePosts(response.data));
+      } else {
+        dispatch(getPostsSuccess(response.data));
+      }
+
+      dispatch(setNextPage(response.data.next));
+    })
+    .catch((error) => {
+      // console.warn(error);
+    });
 };
 
 export const addRemoveSuccess = (post) => {

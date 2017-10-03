@@ -44,6 +44,7 @@ export const setTokenToState = payload => (dispatch) => {
 };
 
 export const loginUser = (email, password) => (dispatch) => {
+  // console.warn('email', email, 'password', password);
   dispatch({
     type: LOGIN_USER,
   });
@@ -52,9 +53,11 @@ export const loginUser = (email, password) => (dispatch) => {
     password,
   })
   .then((response) => {
+    console.warn('loginUserSuccess');
     dispatch(loginUserSuccess(response.data));
   })
   .catch((error) => {
+    console.warn('loginUserFail');
     dispatch(loginUserFail(error));
   });
 };

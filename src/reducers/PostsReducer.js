@@ -1,8 +1,10 @@
 import {
   POSTS_FETCH_SUCCESS,
   SET_POSTS_ARE_LOADING,
+  GET_MORE_POSTS,
   ADD_MORE_POSTS_SUCCESS,
   GET_NEW_POST,
+  SET_MORE_POSTS_IN_PROGRESS,
   SET_CURRENT_POST,
   ADDED_TO_FAVOURITE,
   ADDING_TO_FAVOURITE_FAILED,
@@ -11,6 +13,7 @@ import {
 
 const INITIAL_STATE = {
   postsAreLoading: false,
+  loadingMorePostsInProgress: false,
   results: [], // posts list
   nextPage: '',
   newPost: {},
@@ -28,17 +31,24 @@ export default (state = INITIAL_STATE, action) => {
         nextPage: action.nextPage,
         postsAreLoading: false,
       };
+    case SET_MORE_POSTS_IN_PROGRESS:
+      // console.warn('loadingMorePostsInProgress', true);
+      return {
+        ...state,
+        loadingMorePostsInProgress: true,
+      };
+
     case ADD_MORE_POSTS_SUCCESS:
       return {
         ...state,
         results: [...state.results, ...action.payload],
         nextPage: action.nextPage,
-        postsAreLoading: false,
+        loadingMorePostsInProgress: false,
       };
     case SET_POSTS_ARE_LOADING:
       return { ...state, postsAreLoading: true };
     case GET_NEW_POST:
-      const newResults = [...state.results]
+      const newResults = [...state.results];
       const newPost = action.payload;
       // newResults.map(obj => newPost.find(o => o.id === obj.id) || obj);
       Object.keys(newResults).map(function(objectKey, index) {
