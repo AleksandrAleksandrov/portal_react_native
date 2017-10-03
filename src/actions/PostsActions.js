@@ -6,11 +6,13 @@ import {
   ADD_MORE_POSTS_SUCCESS,
   ADDED_TO_FAVOURITE,
   ADDING_TO_FAVOURITE_FAILED,
+  DELETE_POST_BY_ID,
   SET_CURRENT_POST,
   ON_STAR_PRESSED,
   GET_NEW_POST,
   SET_MORE_POSTS_IN_PROGRESS
 } from './types';
+import { NOT_FOUND } from "../Constants";
 import * as serviceREST from '../services/serviceREST';
 
 const getPostsSuccess = (data) => {
@@ -112,6 +114,13 @@ export const addRemoveFailed = (post) => {
   };
 };
 
+export const deletePostById = (id) => {
+  return {
+    type: DELETE_POST_BY_ID,
+    payload: id,
+  };
+}
+
 export const addedToFavourite = (post) => {
   return {
     type: SET_CURRENT_POST,
@@ -126,12 +135,15 @@ export const onStarPressed = (id, isFavourite) => (dispatch) => {
   });
   serviceREST.favourite({ id, isFavourite })
     .then((response) => {
-      // console.warn('response:', response);
-      dispatch(addedToFavourite(response.data));
+      if (response.data.detail === NOT_FOUND) {
+        dispatch(deletePostById(id));
+      } else {
+        dispatch(addedToFavourite(response.data));
+      }
       // dispatch(addRemoveSuccess(response.data));
     })
     .catch((error) => {
-      // console.warn('error:', error);
+      console.warn('error:', error);
       dispatch(addRemoveFailed(error));
     });
 };

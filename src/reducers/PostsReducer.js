@@ -8,8 +8,10 @@ import {
   SET_CURRENT_POST,
   ADDED_TO_FAVOURITE,
   ADDING_TO_FAVOURITE_FAILED,
+  DELETE_POST_BY_ID,
   ON_STAR_PRESSED,
 } from '../actions/types';
+
 
 const INITIAL_STATE = {
   postsAreLoading: false,
@@ -57,7 +59,6 @@ export default (state = INITIAL_STATE, action) => {
           newResults[index] = newPost;
         }
       });
-
       var pressedStarId_ = { ...state.pressedStarId };
       delete pressedStarId_[newPost.id];
       return {...state,
@@ -70,6 +71,17 @@ export default (state = INITIAL_STATE, action) => {
       return {
         ...state,
         pressedStarId: pressedStarId_,
+      };
+    case DELETE_POST_BY_ID:
+      var resultsToRemove = [...state.results];
+      const id = action.payload;
+      resultsToRemove.forEach((objectKey, index) => {
+        if (id === objectKey.id) {
+          resultsToRemove.splice(index, 1);
+        }
+      });
+      return {...state,
+        results: resultsToRemove,
       };
     default:
       return state;

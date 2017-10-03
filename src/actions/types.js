@@ -16,5 +16,6 @@ export const SET_POSTS_ARE_LOADING = 'set_posts_are_loading';
 export const ON_STAR_PRESSED = 'on_star_pressed';
 export const ADDED_TO_FAVOURITE = 'added_to_favourite';
 export const ADDING_TO_FAVOURITE_FAILED = 'adding_to_favourite_failed';
+export const DELETE_POST_BY_ID = 'delete_post_by_id';
 export const GET_NEW_POST = "get_new_post";
 export const SET_CURRENT_POST = "set_current_post";
