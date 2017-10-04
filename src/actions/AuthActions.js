@@ -1,6 +1,11 @@
 import { Actions } from 'react-native-router-flux';
 import { AsyncStorage } from 'react-native';
 import {
+  EMAIL_CHANGED_IN_CHANGE_PASSWORD,
+  HIDE_RESTORE_PASSWORD_DIALOG,
+  SHOW_RESTORE_PASSWORD_DIALOG,
+  SHOW_TOAST_RESTORE_PASSWORD,
+  HIDE_TOAST_RESTORE_PASSWORD,
   EMAIL_CHANGED,
   PASSWORD_CHANGED,
   LOGIN_USER,
@@ -10,6 +15,50 @@ import {
   SET_TOKEN,
 } from './types';
 import * as serviceREST from '../services/serviceREST';
+
+export const emailChangedInChangePassword = (text) => {
+  return {
+    type: EMAIL_CHANGED_IN_CHANGE_PASSWORD,
+    payload: text,
+  };
+};
+
+export const hideRestorePasswordDialog = () => {
+  return {
+    type: HIDE_RESTORE_PASSWORD_DIALOG,
+  };
+};
+
+export const showToast = () => {
+  return {
+    type: SHOW_TOAST_RESTORE_PASSWORD,
+  };
+};
+
+export const hideToast = () => {
+  console.warn('hideToast');
+  return {
+    type: HIDE_TOAST_RESTORE_PASSWORD,
+  };
+};
+
+export const showRestorePassword = () => {
+  return {
+    type: SHOW_RESTORE_PASSWORD_DIALOG,
+  };
+};
+
+export const restorePassword = (email) => (dispatch) => {
+  serviceREST.restorePassword(email)
+    .then((response) => {
+      console.warn('restorePassword', response);
+      dispatch(hideRestorePasswordDialog());
+      dispatch(showToast());
+    })
+    .catch((error) => {
+      console.warn('restorePassword', error);
+    });
+};
 
 export const emailChanged = (text) => {
   return {

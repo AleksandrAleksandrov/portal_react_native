@@ -4,9 +4,12 @@ import { Platform, View, Text } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import { Field, reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
-import { emailChanged, passwordChanged, loginUser } from '../actions';
-import { Card, CardSection, Input, Button, Spinner, TextCustom, CustomInput, CustomPasswordInput, InputValidateIOS, InputValidateAndroid } from './common';
+import { emailChanged, passwordChanged, loginUser, hideRestorePasswordDialog, showRestorePassword, hideToast } from '../actions';
+import { Card, CardSection, Input, Button, Spinner, ChangePasswordDialog, TextCustom, CustomInput, CustomPasswordInput, InputValidateIOS, InputValidateAndroid } from './common';
 import { isEmailValid, isPasswordValid } from '../utils/Validation';
+import Toast from 'react-native-smart-toast';
+import TimerEnhance from 'react-native-smart-timer-enhance';
+import {restorePassword} from "../actions/AuthActions";
 const MK = require('react-native-material-kit');
 
 const {
@@ -58,6 +61,21 @@ const validate = values => {
 let enabled = false;
 
 class LoginForm extends Component {
+  _showBottomToast = () => {
+    this._toast.show({
+      position: Toast.constants.gravity.bottom,
+      duration: 1000,
+      children: 'На ' + this.props.email + ' выслана ссылка на восстановление пароля',
+      animationEnd: () => {
+        this._toast._toastAnimationToggle = setTimeout(() => {
+          this.props.dispatch(hideToast());
+          this._toast.hide({
+            duration: 1000,
+          })
+        }, 3000)
+      }
+    })
+  };
   onEmailChanged(text) {
     this.props.dispatch(emailChanged(text));
   }
@@ -69,6 +87,18 @@ class LoginForm extends Component {
   onButtonPress() {
     const { email, password } = this.props;
     this.props.dispatch(loginUser(email, password));
+  }
+
+  onShowRestorePasswordDialog() {
+    this.props.dispatch(showRestorePassword());
+  }
+
+  onDecline() {
+    this.props.dispatch(hideRestorePasswordDialog());
+  }
+
+  onRestorePassword() {
+    this.props.dispatch(restorePassword(this.props.email));
   }
 
   renderButton() {
@@ -104,6 +134,9 @@ class LoginForm extends Component {
       enabled = false;
     }
 
+    if (this.props.showToastRestorePassword) {
+      this._showBottomToast();
+    }
     return (
       <Card>
         <CardSection>
@@ -132,16 +165,36 @@ class LoginForm extends Component {
           {this.renderButton()}
         </CardSection>
         {this.renderMessage()}
+
+        <CardSection>
+          <Button onPress={this.onShowRestorePasswordDialog.bind(this)} enabled={true} >
+            Восстановить пароль
+          </Button>
+        </CardSection>
+
+        <ChangePasswordDialog
+          visible={this.props.restorePasswordDialog}
+          dispatch={this.props.dispatch}
+          email={this.props.email}
+          onPress={this.onRestorePassword.bind(this)}
+          onDecline={this.onDecline.bind(this)}
+        />
+        <Toast
+          ref={ component => this._toast = component }
+          marginTop={64}>
+        </Toast>
       </Card>
+
+
     );
   }
 }
 
 const mapStateToProps = ({ auth, form }) => {
-  const { email, password, error, loading, user } = auth;
+  const { restorePasswordDialog, showToastRestorePassword, email, password, error, loading, user } = auth;
   const loginForm = form.loginForm;
 
-  return { email, password, error, loading, user, loginForm, form };
+  return { restorePasswordDialog, showToastRestorePassword, email, password, error, loading, user, loginForm, form };
 };
 
 export default reduxForm({
@@ -149,4 +202,5 @@ export default reduxForm({
   validate,
 })(
     connect(mapStateToProps)(LoginForm),
+    TimerEnhance(LoginForm),
 );

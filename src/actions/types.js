@@ -1,4 +1,5 @@
 export const EMAIL_CHANGED = 'email_changed';
+export const EMAIL_CHANGED_IN_CHANGE_PASSWORD = 'email_changed_in_change_password';
 export const PASSWORD_CHANGED = 'password_changed';
 export const LOGIN_USER = 'login_user';
 export const LOGIN_USER_SECCESS = 'login_user_success';
@@ -19,3 +20,9 @@ export const ADDING_TO_FAVOURITE_FAILED = 'adding_to_favourite_failed';
 export const DELETE_POST_BY_ID = 'delete_post_by_id';
 export const GET_NEW_POST = "get_new_post";
 export const SET_CURRENT_POST = "set_current_post";
+
+// Restore password
+export const HIDE_RESTORE_PASSWORD_DIALOG = "hide_restore_password_dialog";
+export const SHOW_RESTORE_PASSWORD_DIALOG = "show_restore_password_dialog";
+export const SHOW_TOAST_RESTORE_PASSWORD = "show_toast_restore_dialog";
+export const HIDE_TOAST_RESTORE_PASSWORD = "hide_toast_restore_dialog";

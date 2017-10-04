@@ -1,4 +1,9 @@
 import {
+  EMAIL_CHANGED_IN_CHANGE_PASSWORD,
+  HIDE_RESTORE_PASSWORD_DIALOG,
+  SHOW_RESTORE_PASSWORD_DIALOG,
+  SHOW_TOAST_RESTORE_PASSWORD,
+  HIDE_TOAST_RESTORE_PASSWORD,
   EMAIL_CHANGED,
   PASSWORD_CHANGED,
   LOGIN_USER,
@@ -10,6 +15,8 @@ import {
 const INITIAL_STATE = {
   email: '',
   password: '',
+  restorePasswordDialog: false,
+  showToastRestorePassword: false,
   user: null,
   firstName: null,
   lastName: null,
@@ -20,6 +27,31 @@ const INITIAL_STATE = {
 
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
+    case HIDE_RESTORE_PASSWORD_DIALOG:
+      return {
+        ...state,
+        restorePasswordDialog: false,
+      };
+    case SHOW_TOAST_RESTORE_PASSWORD:
+      return {
+        ...state,
+        showToastRestorePassword: true,
+      };
+    case HIDE_TOAST_RESTORE_PASSWORD:
+      return {
+        ...state,
+        showToastRestorePassword: false,
+      };
+    case SHOW_RESTORE_PASSWORD_DIALOG:
+      return {
+        ...state,
+        restorePasswordDialog: true,
+      };
+    case EMAIL_CHANGED_IN_CHANGE_PASSWORD:
+      return {
+        ...state,
+        email: action.payload,
+      };
     case EMAIL_CHANGED:
       return {
         ...state,

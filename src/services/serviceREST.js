@@ -145,6 +145,22 @@ export const getMorePosts = (url) => {
   });
 };
 
+export const restorePassword = email => {
+  return new Promise((resolve, reject) => {
+    api.post(`/api/auth/password/reset/`, { email: email})
+      .then((response) => {
+        if (response.ok) {
+          resolve(response);
+        } else {
+          reject(response);
+        }
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+};
+
 /**
  *
  * Add/remove post from favourite.
