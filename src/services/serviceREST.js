@@ -123,6 +123,7 @@ export const getPosts = (url) => {
         }
       })
       .catch((error) => {
+        reject(error);
         console.warn(error);
       });
 

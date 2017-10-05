@@ -10,7 +10,9 @@ import {
   SET_CURRENT_POST,
   ON_STAR_PRESSED,
   GET_NEW_POST,
-  SET_MORE_POSTS_IN_PROGRESS
+  SET_MORE_POSTS_IN_PROGRESS,
+  START_REFRESH,
+  FINISH_REFRESH,
 } from './types';
 import { NOT_FOUND } from "../Constants";
 import * as serviceREST from '../services/serviceREST';
@@ -48,6 +50,32 @@ const setNextPage = (data) => {
   return {
     type: SET_NEXT_PAGE,
     payload: data.next,
+  };
+};
+
+export const startRefresh = () => {
+  return {
+    type: START_REFRESH,
+  };
+};
+
+export const refreshPosts = () => (dispatch) => {
+  dispatch(startRefresh());
+  serviceREST.getPosts(null)
+    .then((response) => {
+      dispatch(getPostsSuccess(response.data));
+      dispatch(setNextPage(response.data.next));
+      dispatch(finishRefresh());
+    })
+    .catch((error) => {
+      console.warn(error);
+      dispatch(finishRefresh());
+    });
+};
+
+export const finishRefresh = () => {
+  return {
+    type: FINISH_REFRESH,
   };
 };
 
@@ -119,7 +147,7 @@ export const deletePostById = (id) => {
     type: DELETE_POST_BY_ID,
     payload: id,
   };
-}
+};
 
 export const addedToFavourite = (post) => {
   return {

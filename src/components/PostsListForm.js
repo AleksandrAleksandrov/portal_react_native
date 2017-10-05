@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { ListView, View } from 'react-native';
+import { ListView, View, RefreshControl } from 'react-native';
 import { connect } from 'react-redux';
-import { getPosts, getMorePosts } from '../actions';
+import { getPosts, getMorePosts, refreshPosts } from '../actions';
 import PostItem from './PostItem';
 import { Spinner } from './common/Spinner';
 import { SmallSpinner } from './common/SmallSpinner';
@@ -41,12 +41,18 @@ class PostsListForm extends Component {
     }
   };
 
+  _onRefresh() {
+    this.props.dispatch(refreshPosts());
+  }
+
   render() {
     const { postsList, postsAreLoading } = this.props;
 
     if (postsAreLoading) {
       return <Spinner size="large" />;
     }
+
+    console.log('render state refreshing:', this.props.refreshing);
 
     return (
       <View>
@@ -60,6 +66,12 @@ class PostsListForm extends Component {
           renderRow={this.renderRow}
           onEndReached={this.paginate}
           renderFooter={this.renderLastRow}
+          refreshControl={
+            <RefreshControl
+              refreshing={this.props.refreshing}
+              onRefresh={this._onRefresh.bind(this)}
+            />
+          }
         />
       </View>
     );
@@ -76,6 +88,7 @@ const mapStateToProps = state => ({
   nextPage: state.postsList.nextPage,
   postsAreLoading: state.postsList.postsAreLoading,
   loadingMorePostsInProgress: state.postsList.loadingMorePostsInProgress,
+  refreshing: state.postsList.refreshing,
 });
 
 const mapDispatchToProps = dispatch => ({

@@ -7,6 +7,8 @@ import { connect } from 'react-redux';
 import { emailChangedInChangePassword } from "../../actions/AuthActions";
 import { InputAndroid, Input } from "./";
 import { isEmailValid } from '../../utils/Validation';
+import Toast from 'react-native-smart-toast';
+import TimerEnhance from 'react-native-smart-timer-enhance';
 
 const styles = {
   cardSectionStyle: {
@@ -27,6 +29,26 @@ const styles = {
 };
 
 class ChangePasswordDialog extends Component {
+  componentDidMount() {
+    console.warn('ChangePasswordDialog');
+    this._showBottomToast;
+  }
+
+  _showBottomToast = () => {
+    this._toast.show({
+      position: Toast.constants.gravity.bottom,
+      duration: 1000,
+      children: 'error',
+      // animationEnd: () => {
+      //   this._toast._toastAnimationToggle = setTimeout(() => {
+      //     this.props.dispatch(hideToast());
+      //     this._toast.hide({
+      //       duration: 1000,
+      //     })
+      //   }, 3000)
+      // }
+    })
+  };
 
   onEmailChanged(text) {
     this.props.dispatch(emailChangedInChangePassword(text));
@@ -70,9 +92,13 @@ class ChangePasswordDialog extends Component {
             </TouchableWithoutFeedback>
           </View>
         </TouchableWithoutFeedback>
+        <Toast
+          ref={ component => this._toast = component }
+          marginTop={64}>
+        </Toast>
       </Modal>
     );
   }
-};
+}
 
 export { ChangePasswordDialog };

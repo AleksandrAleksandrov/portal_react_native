@@ -26,3 +26,8 @@ export const HIDE_RESTORE_PASSWORD_DIALOG = "hide_restore_password_dialog";
 export const SHOW_RESTORE_PASSWORD_DIALOG = "show_restore_password_dialog";
 export const SHOW_TOAST_RESTORE_PASSWORD = "show_toast_restore_dialog";
 export const HIDE_TOAST_RESTORE_PASSWORD = "hide_toast_restore_dialog";
+export const SET_ERROR = "set_error";
+
+// Refresh posts
+export const START_REFRESH = 'start_refresh';
+export const FINISH_REFRESH = 'finish_refresh';

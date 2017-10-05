@@ -10,12 +10,14 @@ import {
   ADDING_TO_FAVOURITE_FAILED,
   DELETE_POST_BY_ID,
   ON_STAR_PRESSED,
+  START_REFRESH,
+  FINISH_REFRESH,
 } from '../actions/types';
-
 
 const INITIAL_STATE = {
   postsAreLoading: false,
   loadingMorePostsInProgress: false,
+  refreshing: false,
   results: [], // posts list
   nextPage: '',
   newPost: {},
@@ -82,6 +84,16 @@ export default (state = INITIAL_STATE, action) => {
       });
       return {...state,
         results: resultsToRemove,
+      };
+    case START_REFRESH:
+      return {
+        ...state,
+        refreshing: true,
+      };
+    case FINISH_REFRESH:
+      return {
+        ...state,
+        refreshing: false,
       };
     default:
       return state;

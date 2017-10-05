@@ -13,8 +13,10 @@ import {
   LOGIN_USER_FAIL,
   TOKEN,
   SET_TOKEN,
+  SET_ERROR,
 } from './types';
 import * as serviceREST from '../services/serviceREST';
+import { INVALID_EMAIL } from '../Constants';
 
 export const emailChangedInChangePassword = (text) => {
   return {
@@ -42,6 +44,13 @@ export const hideToast = () => {
   };
 };
 
+export const setError = (error) => {
+  return {
+    type: SET_ERROR,
+    payload: error,
+  };
+};
+
 export const showRestorePassword = () => {
   return {
     type: SHOW_RESTORE_PASSWORD_DIALOG,
@@ -51,12 +60,13 @@ export const showRestorePassword = () => {
 export const restorePassword = (email) => (dispatch) => {
   serviceREST.restorePassword(email)
     .then((response) => {
-      console.warn('restorePassword', response);
       dispatch(hideRestorePasswordDialog());
       dispatch(showToast());
     })
     .catch((error) => {
-      console.warn('restorePassword', error);
+      dispatch(setError(error.data.email));
+      dispatch(showToast());
+      console.warn('restorePassword', error.data.email);
     });
 };
 

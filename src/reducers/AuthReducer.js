@@ -10,6 +10,7 @@ import {
   LOGIN_USER_SECCESS,
   LOGIN_USER_FAIL,
   SET_TOKEN,
+  SET_ERROR,
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -22,7 +23,8 @@ const INITIAL_STATE = {
   lastName: null,
   loading: false, // authorization in progress
   token: null,
-  error: '',
+  error: null,
+
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -88,6 +90,11 @@ export default (state = INITIAL_STATE, action) => {
         ...state,
         ...INITIAL_STATE,
         token: action.payload,
+      };
+    case SET_ERROR:
+      return {
+        ...state,
+        error: action.payload,
       };
     default:
       return state;
