@@ -79,11 +79,11 @@ export const postReview = (data, id) => new Promise((resolve, reject) => {
 });
 
 export const postLogin = data => new Promise((resolve, reject) => {
-  NetInfo.isConnected.fetch().then(isConnected => {
-    function handleFirstConnectivityChange(connectionInfo) {
-      NetInfo.isConnected.fetch().then(isConnected => {
-        if (isConnected) {
-          api.post('/api/auth/login/', data)
+  // NetInfo.isConnected.fetch().then(isConnected => {
+  //   function handleFirstConnectivityChange(connectionInfo) {
+  //     NetInfo.isConnected.fetch().then(isConnected => {
+  //       if (isConnected) {
+          api.post(`/api/auth/login/`, data)
           .then((response) => {
             if (response.ok) {
               setToken(response.data.user.token);
@@ -96,20 +96,20 @@ export const postLogin = data => new Promise((resolve, reject) => {
           .catch((error) => {
             reject(error);
           });
-        } else {
-          reject('Нет подключения к интернету');
-        }
-      });
-      NetInfo.removeEventListener(
-        'connectionChange',
-      handleFirstConnectivityChange,
-    );
-    }
-    NetInfo.addEventListener(
-      'connectionChange',
-      handleFirstConnectivityChange,
-    );
-  });
+  //       } else {
+  //         reject('Нет подключения к интернету');
+  //       }
+  //     });
+  //     NetInfo.removeEventListener(
+  //       'connectionChange',
+  //     handleFirstConnectivityChange,
+  //   );
+  //   }
+  //   NetInfo.addEventListener(
+  //     'connectionChange',
+  //     handleFirstConnectivityChange,
+  //   );
+  // });
 });
 
 

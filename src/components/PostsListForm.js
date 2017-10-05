@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { ListView, View, RefreshControl } from 'react-native';
+import { FlatList, View, ScrollView, RefreshControl } from 'react-native';
 import { connect } from 'react-redux';
 import { getPosts, getMorePosts, refreshPosts } from '../actions';
 import PostItem from './PostItem';
@@ -26,10 +26,10 @@ class PostsListForm extends Component {
     getMorePosts();
   }
 
-  renderRow = (post) => (<PostItem post={post} />);
+  renderItem = ({post, index}) => (<PostItem post={post} />);
   renderLastRow = () => {
     if (!this.props.loadingMorePostsInProgress || !this.props.postsList.length) {
-      return <View />;
+      return null;
     }
     
     return (<SmallSpinner size="large" />);
@@ -56,16 +56,12 @@ class PostsListForm extends Component {
 
     return (
       <View>
-        <ListView
-          enableEmptySections
-          initialListSize={20}
-          pageSize={5}
-          scrollRenderAheadDistance={300}
-          onEndReachedThreshold={10}
-          dataSource={ds.cloneWithRows(postsList ? postsList : [])}
-          renderRow={this.renderRow}
+        <FlatList
+          data={postsList ? postsList : []}
+          renderItem={({item}) => <PostItem post={item} />}
+          keyExtractor={item => item.id}
           onEndReached={this.paginate}
-          renderFooter={this.renderLastRow}
+          ListFooterComponent={this.renderLastRow}
           refreshControl={
             <RefreshControl
               refreshing={this.props.refreshing}
@@ -78,9 +74,9 @@ class PostsListForm extends Component {
   }
 }
 
-const ds = new ListView.DataSource({
-  rowHasChanged: (r1, r2) => r1 !== r2,
-});
+// const ds = new FlatList.DataSource({
+//   rowHasChanged: (r1, r2) => r1 !== r2,
+// });
 
 const mapStateToProps = state => ({
   token: state.auth.token,
