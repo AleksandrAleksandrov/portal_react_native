@@ -13,3 +13,4 @@ export * from './CustomPasswordInput';
 export * from './SmallSpinner';
 export * from './InputValidateIOS';
 export * from './InputValidateAndroid';
+export * from './Avatar';

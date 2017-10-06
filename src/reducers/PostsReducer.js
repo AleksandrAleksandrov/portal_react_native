@@ -12,6 +12,8 @@ import {
   ON_STAR_PRESSED,
   START_REFRESH,
   FINISH_REFRESH,
+  SET_FETCHING_COMMENTS,
+  SET_FETCHING_COMMENTS_FINISHED,
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -24,6 +26,8 @@ const INITIAL_STATE = {
   post: {},
   pressedStarId: {},
   error: '',
+  loadingCommentsInProgress: false,
+  comments: [],
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -94,6 +98,17 @@ export default (state = INITIAL_STATE, action) => {
       return {
         ...state,
         refreshing: false,
+      };
+    case SET_FETCHING_COMMENTS:
+      return {
+        ...state,
+        loadingCommentsInProgress: true,
+      };
+    case SET_FETCHING_COMMENTS_FINISHED:
+      return {
+        ...state,
+        comments: action.payload,
+        loadingCommentsInProgress: false,
       };
     default:
       return state;

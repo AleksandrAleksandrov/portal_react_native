@@ -163,6 +163,23 @@ export const restorePassword = email => {
 };
 
 /**
+ * Fetch comments from the server by message id
+ * @param messageId
+ * @returns {Promise}
+ */
+export const getComments = (messageId) => {
+  return new Promise((resolve, reject) => {
+    api.get(`/api/messages/${messageId}/comments/`)
+      .then((response) => {
+        resolve(response);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+};
+
+/**
  *
  * Add/remove post from favourite.
  * @param id
@@ -174,14 +191,11 @@ export const favourite = ({ id, isFavourite }) => {
   return new Promise((resolve, reject) => {
       api.patch(`/api/user_messages/${id}/`, { is_favorite: isFavourite })
       .then((response) => {
-        if (response.ok) {
-
-        }
         resolve(response);
       })
       .catch((error) => {
         // console.warn('favourite fail', error);
-        reject();
+        reject(error);
         // console.warn(error);
       });
   });

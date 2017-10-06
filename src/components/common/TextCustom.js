@@ -63,6 +63,19 @@ const styles = StyleSheet.create({
   t3_light: {
     fontSize: 14,
   },
+
+  date: {
+    fontSize: 12,
+  },
+
+  name: {
+    fontSize: 12,
+  },
+
+  comment: {
+    fontSize: 14,
+  }
+
 });
 
 class TextCustom extends PureComponent {

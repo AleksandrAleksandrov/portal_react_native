@@ -31,3 +31,7 @@ export const SET_ERROR = "set_error";
 // Refresh posts
 export const START_REFRESH = 'start_refresh';
 export const FINISH_REFRESH = 'finish_refresh';
+
+// Comments
+export const SET_FETCHING_COMMENTS = 'set_fetching_comments';
+export const SET_FETCHING_COMMENTS_FINISHED = 'set_fetching_comments_finished';

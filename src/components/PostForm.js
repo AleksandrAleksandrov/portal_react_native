@@ -1,11 +1,22 @@
 import React, { Component, PropTypes as PT } from 'react';
-import { Text, View, ScrollView } from 'react-native';
+import { Text, View, ScrollView, FlatList } from 'react-native';
 import { CardSection, PostFooter } from './common';
 import PostHeader from './common/PostHeader';
+import { CommentItem } from './CommentItem';
 import { connect } from 'react-redux';
+import { getComments } from '../actions';
 import _ from 'lodash';
 
 class PostForm extends Component {
+  componentWillMount() {
+    this.getComments();
+  }
+
+  getComments() {
+    const { getComments } = this.props;
+    getComments(this.props.post.message.id);
+  }
+
   static propTypes = {
     post: PT.shape({
       id: PT.number,
@@ -33,12 +44,13 @@ class PostForm extends Component {
   };
 
   render() {
-    const { id, post } = this.props;
+    const { id, post, comments } = this.props;
     const { is_favorite } = post;
     const { title, text, message_type, create_dt, author, comments_count } = post.message; // able to crash
 
     // const r = Post.objects('Post').filtered(`id == ${post.id}`); // r[0].message.text get message's text
 
+    console.log('render', comments);
     return (
       <ScrollView>
         <CardSection>
@@ -57,6 +69,13 @@ class PostForm extends Component {
             />
           </View>
         </CardSection>
+        <CardSection>
+          <FlatList
+            data={comments ? comments : []}
+            renderItem={({item}) => <CommentItem comment={item} />}
+            keyExtractor={item => item.id}
+          />
+        </CardSection>
       </ScrollView>
     );
   }
@@ -68,8 +87,15 @@ const styles = {
 
 const mapStateToProps = (state, myProps) => ({
 
-  post: _.find(state.postsList.results, (o) => { return o.id === myProps.id })
+  post: _.find(state.postsList.results, (o) => { return o.id === myProps.id }),
+  comments: state.postsList.comments,
+  loadingCommentsInProgress: state.postsList.loadingCommentsInProgress,
 
 });
 
-export default connect(mapStateToProps)(PostForm);
+const mapDispatchToProps = dispatch => ({
+  dispatch,
+  getComments: (messageId) => { dispatch(getComments(messageId)); },
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(PostForm);

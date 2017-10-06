@@ -52,8 +52,6 @@ class PostsListForm extends Component {
       return <Spinner size="large" />;
     }
 
-    console.log('render state refreshing:', this.props.refreshing);
-
     return (
       <View>
         <FlatList
@@ -73,10 +71,6 @@ class PostsListForm extends Component {
     );
   }
 }
-
-// const ds = new FlatList.DataSource({
-//   rowHasChanged: (r1, r2) => r1 !== r2,
-// });
 
 const mapStateToProps = state => ({
   token: state.auth.token,

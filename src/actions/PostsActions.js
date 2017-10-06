@@ -13,6 +13,8 @@ import {
   SET_MORE_POSTS_IN_PROGRESS,
   START_REFRESH,
   FINISH_REFRESH,
+  SET_FETCHING_COMMENTS,
+  SET_FETCHING_COMMENTS_FINISHED,
 } from './types';
 import { NOT_FOUND } from "../Constants";
 import * as serviceREST from '../services/serviceREST';
@@ -173,6 +175,30 @@ export const onStarPressed = (id, isFavourite) => (dispatch) => {
     .catch((error) => {
       console.warn('error:', error);
       dispatch(addRemoveFailed(error));
+    });
+};
+
+export const setFetchingCommentsInProgress = () => {
+  return {
+    type: SET_FETCHING_COMMENTS,
+  };
+};
+
+export const setComments = (response) => {
+  return {
+    type: SET_FETCHING_COMMENTS_FINISHED,
+    payload: response.data,
+  }
+};
+
+export const getComments = (messageId) => (dispatch) => {
+  dispatch(setFetchingCommentsInProgress);
+  serviceREST.getComments(messageId)
+    .then((response) => {
+      dispatch(setComments(response));
+    })
+    .catch((error) => {
+      console.log(error);
     });
 };
 
