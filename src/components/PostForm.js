@@ -4,12 +4,26 @@ import { CardSection, PostFooter } from './common';
 import PostHeader from './common/PostHeader';
 import { CommentItem } from './CommentItem';
 import { connect } from 'react-redux';
-import { getComments } from '../actions';
+import {
+  POLL,
+  EVENT
+} from '../Constants';
+import { getComments, setAsRead } from '../actions';
 import _ from 'lodash';
 
 class PostForm extends Component {
   componentWillMount() {
     this.getComments();
+    this.setAsRead();
+  }
+
+  setAsRead() {
+    const { post } = this.props;
+    if ((post.message.message_type === POLL | post.message.message_type === EVENT) & post.my_vote === null) {
+      return;
+    }
+
+    this.props.dispatch(setAsRead(this.props.post.id));
   }
 
   getComments() {

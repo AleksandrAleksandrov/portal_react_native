@@ -1,5 +1,11 @@
 import React from 'react';
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
+import {
+  ADVERT,
+  POLL,
+  EVENT,
+  REMIND,
+} from '../../Constants';
 
 const styles = {
   iconStyle: {
@@ -8,7 +14,7 @@ const styles = {
   startStyle: {
     fontSize: 32,
   },
-  commmentStyle: {
+  commentStyle: {
     fontSize: 15,
   },
 };
@@ -16,16 +22,16 @@ const styles = {
 const getPostIcon = (messageType) => {
   let name = '';
   switch (messageType) {
-    case 'advert':
+    case ADVERT:
       name = 'bullhorn';
       break;
-    case 'event':
+    case EVENT:
       name = 'users';
       break;
-    case 'poll':
+    case POLL:
       name = 'tasks';
       break;
-    case 'remind':
+    case REMIND:
       name = 'calendar';
       break;
     default:
@@ -44,7 +50,7 @@ const getStart = (isFavorite) => {
 };
 
 const getCommentsIcon = () => {
-  return <Icon name="comments-o" style={styles.commmentStyle} />;
+  return <Icon name="comments-o" style={styles.commentStyle} />;
 };
 
 const PostIcon = {

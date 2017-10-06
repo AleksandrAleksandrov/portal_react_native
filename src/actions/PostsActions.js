@@ -151,7 +151,7 @@ export const deletePostById = (id) => {
   };
 };
 
-export const addedToFavourite = (post) => {
+export const setNewPost = (post) => {
   return {
     type: SET_CURRENT_POST,
     payload: post,
@@ -168,7 +168,7 @@ export const onStarPressed = (id, isFavourite) => (dispatch) => {
       if (response.data.detail === NOT_FOUND) {
         dispatch(deletePostById(id));
       } else {
-        dispatch(addedToFavourite(response.data));
+        dispatch(setNewPost(response.data));
       }
       // dispatch(addRemoveSuccess(response.data));
     })
@@ -202,6 +202,19 @@ export const getComments = (messageId) => (dispatch) => {
     });
 };
 
+export const setAsRead = (postId) => (dispatch) => {
+  serviceREST.setAsRead(postId)
+    .then((response) => {
+      if (response.data.detail === NOT_FOUND) {
+        dispatch(deletePostById(postId));
+      } else {
+        dispatch(setNewPost(response.data));
+      }
+    })
+    .catch((error) => {
+
+    });
+};
 
 // const Post = {
 //   name: 'Post',

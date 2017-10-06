@@ -163,6 +163,23 @@ export const restorePassword = email => {
 };
 
 /**
+ * Mark message as read
+ * @param postId
+ * @returns {Promise}
+ */
+export const setAsRead = (postId) => {
+  return new Promise((resolve, reject) => {
+    api.patch(`/api/user_messages/${postId}/`, { is_readed: true })
+      .then((response) => {
+        resolve(response);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+};
+
+/**
  * Fetch comments from the server by message id
  * @param messageId
  * @returns {Promise}
