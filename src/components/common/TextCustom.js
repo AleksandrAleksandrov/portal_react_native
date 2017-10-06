@@ -74,8 +74,11 @@ const styles = StyleSheet.create({
 
   comment: {
     fontSize: 14,
-  }
+  },
 
+  labelText: {
+    fontSize: 16,
+  },
 });
 
 class TextCustom extends PureComponent {

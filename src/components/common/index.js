@@ -14,3 +14,5 @@ export * from './SmallSpinner';
 export * from './InputValidateIOS';
 export * from './InputValidateAndroid';
 export * from './Avatar';
+export * from './LabelImportant';
+export * from './LabelNew';
