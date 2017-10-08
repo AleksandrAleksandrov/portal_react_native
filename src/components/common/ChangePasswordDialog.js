@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Platform, Text, View, Modal, TouchableWithoutFeedback } from 'react-native';
 import { CardSection } from './CardSection';
+import { Card } from './Card';
 import { Button } from './Button';
 import { Field, reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
@@ -16,15 +17,21 @@ const styles = {
   },
   textStyle: {
     flex: 1,
-    fontSize: 18,
+    fontSize: 16,
     textAlign: 'center',
-    lineHeight: 40,
   },
   containerStyle: {
     backgroundColor: 'rgba(0, 0, 0, 0.75)',
     position: 'relative',
     flex: 1,
     justifyContent: 'center',
+  },
+  elementContainer: {
+    padding: 10,
+    backgroundColor: '#fff',
+    justifyContent: 'flex-start',
+    flexDirection: 'row',
+    position: 'relative',
   },
 };
 
@@ -60,19 +67,20 @@ class ChangePasswordDialog extends Component {
       <Modal
         visible={this.props.visible}
         transparent
-        animationType="slide"
+
         onRequestClose={() => {}}
       >
         <TouchableWithoutFeedback onPress={this.props.onDecline} >
           <View style={styles.containerStyle} >
             <TouchableWithoutFeedback onPress={() => {}} >
-              <View>
-                <CardSection>
-                  <Text>
+              <View >
+                <Card style={{borderRadius: 15,}}>
+                <View style={styles.elementContainer}>
+                  <Text style={styles.textStyle}>
                     На email будет выслана ссылка для восстановления пароля
                   </Text>
-                </CardSection>
-                <CardSection>
+                </View>
+                <View style={styles.elementContainer}>
                   <Field
                     label="Email"
                     name={'email'}
@@ -81,13 +89,13 @@ class ChangePasswordDialog extends Component {
                     values={this.props.email}
                     onChangeText={this.onEmailChanged.bind(this)}
                   />
-                </CardSection>
-
-                <CardSection>
+                </View>
+                <View style={styles.elementContainer}>
                   <Button onPress={this.props.onPress} enabled={isEmailValid(this.props.email)} >
                     Восстановить пароль
                   </Button>
-                </CardSection>
+                </View>
+                </Card>
               </View>
             </TouchableWithoutFeedback>
           </View>

@@ -42,7 +42,6 @@ const setPostsAreLoading = () => {
 };
 
 const setMorePostsInProgress = () => {
-  console.warn('setMorePostsInProgress');
   return {
     type: SET_MORE_POSTS_IN_PROGRESS,
   };
@@ -113,7 +112,7 @@ export const getPosts = (url) => (dispatch) => {
 };
 
 export const getMorePosts = (url) => (dispatch) => {
-
+  dispatch(setMorePostsInProgress());
   serviceREST.getMorePosts(url)
     .then((response) => {
 

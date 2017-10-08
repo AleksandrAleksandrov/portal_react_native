@@ -4,7 +4,9 @@ import { connect } from 'react-redux';
 import { getPosts, getMorePosts, refreshPosts } from '../actions';
 import PostItem from './PostItem';
 import { Spinner } from './common/Spinner';
+import PopupMenu from './common/PopupMenu';
 import { SmallSpinner } from './common/SmallSpinner';
+import Menu, { MenuContext, MenuOptions, MenuOption, MenuTrigger } from 'react-native-menu';
 
 class PostsListForm extends Component {
   constructor(props) {
@@ -32,7 +34,7 @@ class PostsListForm extends Component {
       return null;
     }
     
-    return (<SmallSpinner size="large" />);
+    return (<SmallSpinner size="small" />);
   };
 
   paginate = () => {

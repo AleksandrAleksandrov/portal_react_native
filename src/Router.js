@@ -7,18 +7,18 @@ import PostsListForm from './components/PostsListForm';
 import PostForm from './components/PostForm';
 
 const styles = {
-  rootRoutreStyle: {
+  rootRouterStyle: {
     paddingTop: 60,
   },
 };
 
 const RouterComponent = () => (
-  <Router sceneStyle={styles.rootRoutreStyle}>
+  <Router>
     <Scene key="main">
       <Scene
         key="startScreen"
         component={StartScreen}
-        title="Start"
+        hideNavBar={true}
         initial
       />
       <Scene
@@ -31,9 +31,11 @@ const RouterComponent = () => (
         duration={1000}
       />
       <Scene
+        onRight={() => {}}
         key="postsList"
         component={PostsListForm}
         title="Portal"
+        rightTitle="Filter"
         panHandlers={null}
         animation={'fade'}
         type={'replace'}

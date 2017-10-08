@@ -18,7 +18,7 @@
 {
   NSURL *jsCodeLocation;
 
-  jsCodeLocation = [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index.ios" fallbackResource:nil];
+  jsCodeLocation = [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index" fallbackResource:nil];
 
   RCTRootView *rootView = [[RCTRootView alloc] initWithBundleURL:jsCodeLocation
                                                       moduleName:@"Portal"
@@ -31,11 +31,6 @@
   rootViewController.view = rootView;
   self.window.rootViewController = rootViewController;
   [self.window makeKeyAndVisible];
-  for (NSString *fontFamilyName in [UIFont familyNames]) {
-    for (NSString *fontName in [UIFont fontNamesForFamilyName:fontFamilyName]) {
-      NSLog(@"Family: %@    Font: %@", fontFamilyName, fontName);
-    }
-  }
   return YES;
 }
 
