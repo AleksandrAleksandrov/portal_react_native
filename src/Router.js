@@ -15,6 +15,7 @@ const styles = {
 const RouterComponent = () => (
   <Router>
     <Scene key="main">
+
       <Scene
         key="startScreen"
         component={StartScreen}
@@ -31,16 +32,17 @@ const RouterComponent = () => (
         duration={1000}
       />
       <Scene
-        onRight={() => {}}
+
         key="postsList"
         component={PostsListForm}
         title="Portal"
-        rightTitle="Filter"
+        hideNavBar={true}
         panHandlers={null}
         animation={'fade'}
         type={'replace'}
       />
       <Scene
+        hideNavBar={true}
         key="post"
         component={PostForm}
       />

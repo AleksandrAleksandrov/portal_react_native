@@ -1,18 +1,23 @@
 import React, { Component } from 'react';
-import { FlatList, View, ScrollView, RefreshControl } from 'react-native';
+import { FlatList, View, Text, ScrollView, RefreshControl, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
-import { getPosts, getMorePosts, refreshPosts } from '../actions';
+import { getPosts, getMorePosts, refreshPosts, showFilterBy } from '../actions';
+import { NavigationBar, DropDownMenu } from '@shoutem/ui';
 import PostItem from './PostItem';
 import { Spinner } from './common/Spinner';
-import PopupMenu from './common/PopupMenu';
+import { DialogFilterBy } from "./common/DialogFilterBy";
 import { SmallSpinner } from './common/SmallSpinner';
-import Menu, { MenuContext, MenuOptions, MenuOption, MenuTrigger } from 'react-native-menu';
+import Icon from 'react-native-vector-icons/dist/FontAwesome';
+import {hideFilterBy} from "../actions/PostsActions";
+
+const styles = {
+  iconStyle: {
+    fontSize: 24,
+    margin: 10,
+  },
+};
 
 class PostsListForm extends Component {
-  constructor(props) {
-    super(props);
-    // console.warn(this.state.token);
-  }
 
   componentWillMount() {
     this.getPosts();
@@ -28,7 +33,6 @@ class PostsListForm extends Component {
     getMorePosts();
   }
 
-  renderItem = ({post, index}) => (<PostItem post={post} />);
   renderLastRow = () => {
     if (!this.props.loadingMorePostsInProgress || !this.props.postsList.length) {
       return null;
@@ -47,8 +51,25 @@ class PostsListForm extends Component {
     this.props.dispatch(refreshPosts());
   }
 
+  onPressWriteNewPost() {
+
+  }
+
+  onPressFilterByFavourite() {
+
+  }
+
+  onPressFilter() {
+    this.props.dispatch(showFilterBy());
+  }
+
+  onDecline() {
+    this.props.dispatch(hideFilterBy());
+  }
+
   render() {
-    const { postsList, postsAreLoading } = this.props;
+    const { postsList, postsAreLoading, refreshing, showSortBy, sortByAdvert, sortByPoll, sortByEvent } = this.props;
+    const { iconStyle } = styles;
 
     if (postsAreLoading) {
       return <Spinner size="large" />;
@@ -57,6 +78,7 @@ class PostsListForm extends Component {
     return (
       <View>
         <FlatList
+          style={{marginTop: 60}}
           data={postsList ? postsList : []}
           renderItem={({item}) => <PostItem post={item} />}
           keyExtractor={item => item.id}
@@ -64,10 +86,33 @@ class PostsListForm extends Component {
           ListFooterComponent={this.renderLastRow}
           refreshControl={
             <RefreshControl
-              refreshing={this.props.refreshing}
+              refreshing={refreshing}
               onRefresh={this._onRefresh.bind(this)}
             />
           }
+        />
+        <DialogFilterBy
+          visible={showSortBy}
+          dispatch={this.props.dispatch}
+          onDecline={this.onDecline.bind(this)}
+          sortByAdvert={sortByAdvert}
+          sortByPoll={sortByPoll}
+          sortByEvent={sortByEvent}
+        />
+        <NavigationBar
+          title={'Portal'}
+          rightComponent={
+            <View style={{flexDirection: 'row'}}>
+              <TouchableOpacity onPress={this.onPressWriteNewPost}>
+                <Icon name="plus-circle" style={iconStyle}/>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={this.onPressFilterByFavourite}>
+                <Icon name="star-o" style={iconStyle}/>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={this.onPressFilter.bind(this)}>
+                <Icon name="filter" style={iconStyle}/>
+              </TouchableOpacity>
+            </View>}
         />
       </View>
     );
@@ -81,6 +126,10 @@ const mapStateToProps = state => ({
   postsAreLoading: state.postsList.postsAreLoading,
   loadingMorePostsInProgress: state.postsList.loadingMorePostsInProgress,
   refreshing: state.postsList.refreshing,
+  showSortBy: state.postsList.showSortBy,
+  sortByAdvert: state.postsList.sortByAdvert,
+  sortByPoll: state.postsList.sortByPoll,
+  sortByEvent: state.postsList.sortByEvent,
 });
 
 const mapDispatchToProps = dispatch => ({

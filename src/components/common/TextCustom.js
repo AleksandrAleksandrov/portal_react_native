@@ -79,6 +79,10 @@ const styles = StyleSheet.create({
   labelText: {
     fontSize: 16,
   },
+
+  sortBy: {
+    fontSize: 18,
+  },
 });
 
 class TextCustom extends PureComponent {

@@ -15,6 +15,11 @@ import {
   FINISH_REFRESH,
   SET_FETCHING_COMMENTS,
   SET_FETCHING_COMMENTS_FINISHED,
+  SHOW_SORT_BY_DIALOG,
+  HIDE_SORT_BY_DIALOG,
+  SET_SORT_BY_ADVERT,
+  SET_SORT_BY_POLL,
+  SET_SORT_BY_EVENT,
 } from './types';
 import { NOT_FOUND } from "../Constants";
 import * as serviceREST from '../services/serviceREST';
@@ -212,6 +217,52 @@ export const setAsRead = (postId) => (dispatch) => {
     })
     .catch((error) => {
 
+    });
+};
+
+export const showFilterBy = () => {
+  return {
+    type: SHOW_SORT_BY_DIALOG,
+  };
+};
+
+export const hideFilterBy = () => {
+  return {
+    type: HIDE_SORT_BY_DIALOG,
+  };
+};
+
+export const setAdvert = (isChecked) => {
+  return {
+    type: SET_SORT_BY_ADVERT,
+    payload: isChecked,
+  };
+};
+
+export const setPoll = (isChecked) => {
+  return {
+    type: SET_SORT_BY_POLL,
+    payload: isChecked,
+  };
+};
+
+export const setEvent = (isChecked) => {
+  return {
+    type: SET_SORT_BY_EVENT,
+    payload: isChecked,
+  };
+};
+
+export const getFilteredPosts = (query) => (dispatch) => {
+  dispatch(startRefresh(query));
+  serviceREST.getFilteredPosts(query)
+    .then((response) => {
+      dispatch(getPostsSuccess(response.data));
+      dispatch(finishRefresh());
+    })
+    .catch((error) => {
+      console.warn("ERROR", error);
+      dispatch(finishRefresh());
     });
 };
 

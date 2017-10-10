@@ -163,6 +163,29 @@ export const restorePassword = email => {
 };
 
 /**
+ * Get filtered by advert, poll, event posts.
+ */
+export const getFilteredPosts = (query) => {
+  return new Promise((resolve, reject) => {
+    api.get("/api/user_messages/?" + createQuery(query))
+      .then((response) => {
+        resolve(response);
+      })
+      .catch((error) => {
+        reject(error);
+        console.warn('getFilteredPosts', error);
+      })
+  });
+};
+const createQuery = (params) => {
+  let query = '';
+  params.forEach((objectKey, index) => {
+    query += 'type=' + params[index] + '&';
+  });
+  return query;
+};
+
+/**
  * Mark message as read
  * @param postId
  * @returns {Promise}

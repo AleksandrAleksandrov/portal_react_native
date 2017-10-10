@@ -18,3 +18,4 @@ export * from './LabelImportant';
 export * from './LabelNew';
 export * from './Toolbar';
 export * from './PopupMenu';
+export * from './DialogFilterBy';

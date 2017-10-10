@@ -14,6 +14,11 @@ import {
   FINISH_REFRESH,
   SET_FETCHING_COMMENTS,
   SET_FETCHING_COMMENTS_FINISHED,
+  SHOW_SORT_BY_DIALOG,
+  HIDE_SORT_BY_DIALOG,
+  SET_SORT_BY_ADVERT,
+  SET_SORT_BY_POLL,
+  SET_SORT_BY_EVENT,
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -28,6 +33,10 @@ const INITIAL_STATE = {
   error: '',
   loadingCommentsInProgress: false,
   comments: [],
+  showSortBy: false,
+  sortByAdvert: false,
+  sortByPoll: false,
+  sortByEvent: false,
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -109,6 +118,31 @@ export default (state = INITIAL_STATE, action) => {
         ...state,
         comments: action.payload,
         loadingCommentsInProgress: false,
+      };
+    case SHOW_SORT_BY_DIALOG:
+      return {
+        ...state,
+        showSortBy: true,
+      };
+    case HIDE_SORT_BY_DIALOG:
+      return {
+        ...state,
+        showSortBy: false,
+      };
+    case SET_SORT_BY_ADVERT:
+      return {
+        ...state,
+        sortByAdvert: action.payload,
+      };
+    case SET_SORT_BY_POLL:
+      return {
+        ...state,
+        sortByPoll: action.payload,
+      };
+    case SET_SORT_BY_EVENT:
+      return {
+        ...state,
+        sortByEvent: action.payload,
       };
     default:
       return state;

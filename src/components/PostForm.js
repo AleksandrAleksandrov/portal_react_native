@@ -1,6 +1,6 @@
 import React, { Component, PropTypes as PT } from 'react';
 import { Text, View, ScrollView, FlatList } from 'react-native';
-import { CardSection, PostFooter } from './common';
+import { CardSection, PostFooter, TextCustom } from './common';
 import PostHeader from './common/PostHeader';
 import { CommentItem } from './CommentItem';
 import { connect } from 'react-redux';
@@ -10,6 +10,7 @@ import {
 } from '../Constants';
 import { getComments, setAsRead } from '../actions';
 import _ from 'lodash';
+import { NavigationBar, DropDownMenu } from '@shoutem/ui';
 
 class PostForm extends Component {
   componentWillMount() {
@@ -66,7 +67,8 @@ class PostForm extends Component {
 
     console.log('render', comments);
     return (
-      <ScrollView>
+      <View>
+      <ScrollView style={{marginTop: 60}}>
         <CardSection>
           <View style={{ flexDirection: 'column', flex: 4 }}>
             <PostHeader
@@ -91,6 +93,12 @@ class PostForm extends Component {
           />
         </CardSection>
       </ScrollView>
+        <NavigationBar
+          hasHistory
+          navigateBack={this.props.navigation.goBack}
+          title={<TextCustom type={'labelText'} numberOfLines={1}>{title}</TextCustom>}
+        />
+      </View>
     );
   }
 }

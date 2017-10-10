@@ -35,3 +35,10 @@ export const FINISH_REFRESH = 'finish_refresh';
 // Comments
 export const SET_FETCHING_COMMENTS = 'set_fetching_comments';
 export const SET_FETCHING_COMMENTS_FINISHED = 'set_fetching_comments_finished';
+
+// Filter by
+export const SHOW_SORT_BY_DIALOG = 'show_sort_by_dialog';
+export const HIDE_SORT_BY_DIALOG = 'hide_sort_by_dialog';
+export const SET_SORT_BY_ADVERT = 'set_sort_by_advert';
+export const SET_SORT_BY_POLL = 'set_sort_by_poll';
+export const SET_SORT_BY_EVENT = 'set_sort_by_event';
