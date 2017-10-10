@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { View, Modal, TouchableWithoutFeedback } from 'react-native';
-import { CardSection, Card } from './';
+import { CardSection, Card, TouchableFilterBy } from './';
 import { TextCustom} from "./TextCustom";
 import { setAdvert, setEvent, setPoll, getFilteredPosts } from '../../actions';
 import { InputAndroid  } from "./";
@@ -92,12 +92,44 @@ class DialogFilterBy extends Component {
     return Array.from(mySet);
   }
 
+  getFilterArray = () => {
+    const { sortByAdvert, sortByPoll, sortByEvent } = this.props;
+    const filterList = [
+      {
+        key: ADVERT,
+        label: 'Объявления',
+        checked: sortByAdvert,
+        onPress: () => {
+          this.onAdvert();
+        }
+      },
+      {
+        key: POLL,
+        label: 'Опросы',
+        checked: sortByPoll,
+        onPress: () => {
+          this.onPoll();
+        }
+      },
+      {
+        key: EVENT,
+        label: 'События',
+        checked: sortByEvent,
+        onPress: () => {
+          this.onEvent();
+        }
+      },
+    ];
+    return filterList;
+  };
   render () {
-    const { showSortBy, sortByAdvert, sortByPoll, sortByEvent } = this.props;
+    const { showSortBy} = this.props;
     const { textStyle } = styles;
+
     return (
 
       <Modal
+        animationType="none"
         visible={showSortBy}
         transparent
         onRequestClose={() => {}}>
@@ -106,34 +138,22 @@ class DialogFilterBy extends Component {
           <View style={styles.containerStyle} >
             <TouchableWithoutFeedback onPress={() => {}} >
               <View style={{ marginLeft: 30, marginRight: 30,}} >
-                <Card style={{borderRadius: 15}}>
-                  <CardSection style={{flexDirection: 'column'}}>
-                    <TouchableWithoutFeedback onPress={this.onAdvert.bind(this)}>
-                      <View style={textStyle}>
-                        {this.isChecked(sortByAdvert)}
-                        <TextCustom type={'sortBy'}>Объявления</TextCustom>
-                      </View>
-                    </TouchableWithoutFeedback>
-                    <TouchableWithoutFeedback onPress={this.onPoll.bind(this)}>
-                      <View style={textStyle}>
-                        {this.isChecked(sortByPoll)}
-                        <TextCustom type={'sortBy'} >Опросы</TextCustom>
-                      </View>
-                    </TouchableWithoutFeedback>
-                    <TouchableWithoutFeedback onPress={this.onEvent.bind(this)}>
-                      <View style={textStyle}>
-                        {this.isChecked(sortByEvent)}
-                        <TextCustom type={'sortBy'} >События</TextCustom>
-                      </View>
-                    </TouchableWithoutFeedback>
-                  </CardSection>
-                </Card>
+                <CardSection style={{flexDirection: 'column', borderRadius: 10}}>
+                  {
+                    this.getFilterArray().map(item => (
+                      <TouchableFilterBy
+                        key={item.key}
+                        label={item.label}
+                        checked={item.checked}
+                        onPress={item.onPress}
+                      />
+                    ))
+                  }
+                </CardSection>
               </View>
             </TouchableWithoutFeedback>
           </View>
-
         </TouchableWithoutFeedback>
-
       </Modal>
     );
   }

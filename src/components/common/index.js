@@ -19,3 +19,4 @@ export * from './LabelNew';
 export * from './Toolbar';
 export * from './PopupMenu';
 export * from './DialogFilterBy';
+export * from './TouchableFilterBy';
