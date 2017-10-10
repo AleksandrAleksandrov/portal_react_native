@@ -10,7 +10,9 @@ import {
 } from '../Constants';
 import { getComments, setAsRead } from '../actions';
 import _ from 'lodash';
-import { NavigationBar, DropDownMenu } from '@shoutem/ui';
+import { NavigationBar } from '@shoutem/ui';
+
+const navigationBarHeight = 70;
 
 class PostForm extends Component {
   componentWillMount() {
@@ -68,7 +70,15 @@ class PostForm extends Component {
     console.log('render', comments);
     return (
       <View>
-      <ScrollView style={{marginTop: 60}}>
+        <View style={{ width: 'auto', height: navigationBarHeight, backgroundColor: '#2BA0F3' }}>
+          <NavigationBar
+            hasHistory
+            styleName="clear"
+            navigateBack={this.props.navigation.goBack}
+            title={<TextCustom type={'labelText'} numberOfLines={1}>{title}</TextCustom>}
+          />
+        </View>
+      <ScrollView style={{marginBottom: navigationBarHeight}}>
         <CardSection>
           <View style={{ flexDirection: 'column', flex: 4 }}>
             <PostHeader
@@ -93,11 +103,7 @@ class PostForm extends Component {
           />
         </CardSection>
       </ScrollView>
-        <NavigationBar
-          hasHistory
-          navigateBack={this.props.navigation.goBack}
-          title={<TextCustom type={'labelText'} numberOfLines={1}>{title}</TextCustom>}
-        />
+
       </View>
     );
   }

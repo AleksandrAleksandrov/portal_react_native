@@ -11,11 +11,17 @@ import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import {hideFilterBy} from "../actions/PostsActions";
 
 const styles = {
+  clear: {
+    backgroundColor: 'blue',
+  },
   iconStyle: {
     fontSize: 24,
     margin: 10,
+    color: 'white',
   },
 };
+
+const navigationBarHeight = 70;
 
 class PostsListForm extends Component {
 
@@ -77,8 +83,26 @@ class PostsListForm extends Component {
 
     return (
       <View>
+        <View style={{ width: 'auto', height: navigationBarHeight, backgroundColor: '#2BA0F3' }}>
+          <NavigationBar
+            title={'Portal'}
+            styleName='clear'
+            rightComponent={
+              <View style={{flexDirection: 'row'}}>
+                <TouchableOpacity onPress={this.onPressWriteNewPost}>
+                  <Icon name="plus-circle" style={iconStyle}/>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={this.onPressFilterByFavourite}>
+                  <Icon name="star-o" style={iconStyle}/>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={this.onPressFilter.bind(this)}>
+                  <Icon name="filter" style={iconStyle}/>
+                </TouchableOpacity>
+              </View>}
+          />
+        </View>
         <FlatList
-          style={{marginTop: 60}}
+          style={{marginBottom: navigationBarHeight}}
           data={postsList ? postsList : []}
           renderItem={({item}) => <PostItem post={item} />}
           keyExtractor={item => item.id}
@@ -95,21 +119,7 @@ class PostsListForm extends Component {
           dispatch={this.props.dispatch}
           onDecline={this.onDecline.bind(this)}
         />
-        <NavigationBar
-          title={'Portal'}
-          rightComponent={
-            <View style={{flexDirection: 'row'}}>
-              <TouchableOpacity onPress={this.onPressWriteNewPost}>
-                <Icon name="plus-circle" style={iconStyle}/>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={this.onPressFilterByFavourite}>
-                <Icon name="star-o" style={iconStyle}/>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={this.onPressFilter.bind(this)}>
-                <Icon name="filter" style={iconStyle}/>
-              </TouchableOpacity>
-            </View>}
-        />
+
       </View>
     );
   }
