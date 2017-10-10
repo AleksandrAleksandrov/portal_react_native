@@ -5,7 +5,7 @@ import { getPosts, getMorePosts, refreshPosts, showFilterBy } from '../actions';
 import { NavigationBar, DropDownMenu } from '@shoutem/ui';
 import PostItem from './PostItem';
 import { Spinner } from './common/Spinner';
-import { DialogFilterBy } from "./common/DialogFilterBy";
+import DialogFilterBy from "./common/DialogFilterBy";
 import { SmallSpinner } from './common/SmallSpinner';
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import {hideFilterBy} from "../actions/PostsActions";
@@ -68,7 +68,7 @@ class PostsListForm extends Component {
   }
 
   render() {
-    const { postsList, postsAreLoading, refreshing, showSortBy, sortByAdvert, sortByPoll, sortByEvent } = this.props;
+    const { postsList, postsAreLoading, refreshing } = this.props;
     const { iconStyle } = styles;
 
     if (postsAreLoading) {
@@ -92,12 +92,8 @@ class PostsListForm extends Component {
           }
         />
         <DialogFilterBy
-          visible={showSortBy}
           dispatch={this.props.dispatch}
           onDecline={this.onDecline.bind(this)}
-          sortByAdvert={sortByAdvert}
-          sortByPoll={sortByPoll}
-          sortByEvent={sortByEvent}
         />
         <NavigationBar
           title={'Portal'}
@@ -126,10 +122,6 @@ const mapStateToProps = state => ({
   postsAreLoading: state.postsList.postsAreLoading,
   loadingMorePostsInProgress: state.postsList.loadingMorePostsInProgress,
   refreshing: state.postsList.refreshing,
-  showSortBy: state.postsList.showSortBy,
-  sortByAdvert: state.postsList.sortByAdvert,
-  sortByPoll: state.postsList.sortByPoll,
-  sortByEvent: state.postsList.sortByEvent,
 });
 
 const mapDispatchToProps = dispatch => ({

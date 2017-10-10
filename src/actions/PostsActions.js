@@ -232,25 +232,28 @@ export const hideFilterBy = () => {
   };
 };
 
-export const setAdvert = (isChecked) => {
-  return {
+export const setAdvert = (isChecked) => (dispatch) => {
+  dispatch({
     type: SET_SORT_BY_ADVERT,
     payload: isChecked,
-  };
+  });
+  return Promise.resolve();
 };
 
-export const setPoll = (isChecked) => {
-  return {
+export const setPoll = (isChecked) => (dispatch) => {
+  dispatch({
     type: SET_SORT_BY_POLL,
     payload: isChecked,
-  };
+  });
+  return Promise.resolve();
 };
 
-export const setEvent = (isChecked) => {
-  return {
+export const setEvent = (isChecked) => (dispatch) => {
+  dispatch({
     type: SET_SORT_BY_EVENT,
     payload: isChecked,
-  };
+  });
+  return Promise.resolve();
 };
 
 export const getFilteredPosts = (query) => (dispatch) => {

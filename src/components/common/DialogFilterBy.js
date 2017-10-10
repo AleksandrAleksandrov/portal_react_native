@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { View, Modal, TouchableWithoutFeedback } from 'react-native';
 import { CardSection, Card } from './';
 import { TextCustom} from "./TextCustom";
@@ -48,21 +49,24 @@ class DialogFilterBy extends Component {
   }
 
   onAdvert() {
-    this.props.onDecline();
-    this.props.dispatch(setAdvert(!this.props.sortByAdvert));
-    this.props.dispatch(getFilteredPosts(this.createQuery()));
+    this.props.dispatch(setAdvert(!this.props.sortByAdvert)).then(() => {
+      this.props.dispatch(getFilteredPosts(this.createQuery()));
+      this.props.onDecline();
+    });
   }
 
   onPoll() {
-    this.props.onDecline();
-    this.props.dispatch(setPoll(!this.props.sortByPoll));
-    this.props.dispatch(getFilteredPosts(this.createQuery()));
+    this.props.dispatch(setPoll(!this.props.sortByPoll)).then(() => {
+      this.props.dispatch(getFilteredPosts(this.createQuery()));
+      this.props.onDecline();
+    });
   }
 
   onEvent() {
-    this.props.onDecline();
-    this.props.dispatch(setEvent(!this.props.sortByEvent));
-    this.props.dispatch(getFilteredPosts(this.createQuery()));
+    this.props.dispatch(setEvent(!this.props.sortByEvent)).then(() => {
+      this.props.dispatch(getFilteredPosts(this.createQuery()));
+      this.props.onDecline();
+    });
   }
 
   createQuery() {
@@ -84,14 +88,17 @@ class DialogFilterBy extends Component {
     } else {
       mySet.delete(EVENT);
     }
+
     return Array.from(mySet);
   }
 
   render () {
+    const { showSortBy, sortByAdvert, sortByPoll, sortByEvent } = this.props;
+    const { textStyle } = styles;
     return (
 
       <Modal
-        visible={this.props.visible}
+        visible={showSortBy}
         transparent
         onRequestClose={() => {}}>
 
@@ -102,20 +109,20 @@ class DialogFilterBy extends Component {
                 <Card style={{borderRadius: 15}}>
                   <CardSection style={{flexDirection: 'column'}}>
                     <TouchableWithoutFeedback onPress={this.onAdvert.bind(this)}>
-                      <View style={styles.textStyle}>
-                        {this.isChecked(this.props.sortByAdvert)}
+                      <View style={textStyle}>
+                        {this.isChecked(sortByAdvert)}
                         <TextCustom type={'sortBy'}>Объявления</TextCustom>
                       </View>
                     </TouchableWithoutFeedback>
                     <TouchableWithoutFeedback onPress={this.onPoll.bind(this)}>
-                      <View style={styles.textStyle}>
-                        {this.isChecked(this.props.sortByPoll)}
+                      <View style={textStyle}>
+                        {this.isChecked(sortByPoll)}
                         <TextCustom type={'sortBy'} >Опросы</TextCustom>
                       </View>
                     </TouchableWithoutFeedback>
                     <TouchableWithoutFeedback onPress={this.onEvent.bind(this)}>
-                      <View style={styles.textStyle}>
-                        {this.isChecked(this.props.sortByEvent)}
+                      <View style={textStyle}>
+                        {this.isChecked(sortByEvent)}
                         <TextCustom type={'sortBy'} >События</TextCustom>
                       </View>
                     </TouchableWithoutFeedback>
@@ -132,4 +139,11 @@ class DialogFilterBy extends Component {
   }
 }
 
-export { DialogFilterBy };
+const mapStateToProps = state => ({
+  showSortBy: state.postsList.showSortBy,
+  sortByAdvert: state.postsList.sortByAdvert,
+  sortByPoll: state.postsList.sortByPoll,
+  sortByEvent: state.postsList.sortByEvent,
+});
+
+export default connect(mapStateToProps)(DialogFilterBy);
