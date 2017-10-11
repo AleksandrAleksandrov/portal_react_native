@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
-import { FlatList, View, Text, ScrollView, RefreshControl, TouchableOpacity } from 'react-native';
+import { FlatList, View, RefreshControl, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 import { getPosts, getMorePosts, refreshPosts, showFilterBy } from '../actions';
-import { NavigationBar, DropDownMenu } from '@shoutem/ui';
+import { NavigationBar } from '@shoutem/ui';
 import PostItem from './PostItem';
 import { Spinner } from './common/Spinner';
 import DialogFilterBy from "./common/DialogFilterBy";
 import { SmallSpinner } from './common/SmallSpinner';
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
-import {hideFilterBy} from "../actions/PostsActions";
+import { hideFilterBy } from "../actions/PostsActions";
+import PropTypes from 'prop-types';
 
 const styles = {
   clear: {
@@ -40,7 +41,10 @@ class PostsListForm extends Component {
   }
 
   renderLastRow = () => {
-    if (!this.props.loadingMorePostsInProgress || !this.props.postsList.length) {
+
+    const { loadingMorePostsInProgress, postsList: { length } } = this.props;
+
+    if (!loadingMorePostsInProgress || !length) {
       return null;
     }
     
@@ -48,8 +52,11 @@ class PostsListForm extends Component {
   };
 
   paginate = () => {
-    if (!this.props.postsAreLoading && this.props.nextPage != null && !this.props.loadingMorePostsInProgress) {
-      this.props.getMorePosts(this.props.nextPage);
+
+    const { nextPage, postsAreLoading, loadingMorePostsInProgress } = this.props;
+
+    if (!postsAreLoading && nextPage != null && !loadingMorePostsInProgress) {
+      this.props.getMorePosts(nextPage);
     }
   };
 
@@ -124,6 +131,24 @@ class PostsListForm extends Component {
     );
   }
 }
+
+PostsListForm.propType = {
+  token: PropTypes.string.isRequired,
+  postsList: PropTypes.array.isRequired,
+  nextPage: PropTypes.string,
+  postsAreLoading: PropTypes.bool,
+  loadingMorePostsInProgress: PropTypes.bool,
+  refreshing: PropTypes.bool,
+};
+
+PostsListForm.defaultProps = {
+  token: '',
+  postsList: [],
+  nextPage: '',
+  postsAreLoading: false,
+  loadingMorePostsInProgress: false,
+  refreshing: false,
+};
 
 const mapStateToProps = state => ({
   token: state.auth.token,

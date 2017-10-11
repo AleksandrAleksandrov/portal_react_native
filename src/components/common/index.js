@@ -20,3 +20,4 @@ export * from './Toolbar';
 export * from './PopupMenu';
 export * from './DialogFilterBy';
 export * from './TouchableFilterBy';
+export * from './CheckBoxCustom';

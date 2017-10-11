@@ -69,26 +69,26 @@ export default (state = INITIAL_STATE, action) => {
       const newResults = [...state.results];
       const newPost = action.payload;
       Object.keys(newResults).map(function(objectKey, index) {
-        var value = newResults[objectKey];
+        let value = newResults[objectKey];
         if (newPost.id === value.id) {
           newResults[index] = newPost;
         }
       });
-      var pressedStarId_ = { ...state.pressedStarId };
+      let pressedStarId_ = { ...state.pressedStarId };
       delete pressedStarId_[newPost.id];
       return {...state,
         results: newResults,
         pressedStarId: pressedStarId_,
       };
     case ON_STAR_PRESSED:
-      var pressedStarId_ = { ...state.pressedStarId };
+      let pressedStarId_ = { ...state.pressedStarId };
       pressedStarId_[action.payload] = true;
       return {
         ...state,
         pressedStarId: pressedStarId_,
       };
     case DELETE_POST_BY_ID:
-      var resultsToRemove = [...state.results];
+      let resultsToRemove = [...state.results];
       const id = action.payload;
       resultsToRemove.forEach((objectKey, index) => {
         if (id === objectKey.id) {
