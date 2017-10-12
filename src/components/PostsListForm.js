@@ -25,14 +25,14 @@ const styles = {
 const navigationBarHeight = 70;
 
 class PostsListForm extends Component {
-
+  // в конструкторе лучше биндить!
   componentWillMount() {
     this.getPosts();
   }
 
   getPosts() {
     const { getPosts } = this.props;
-    getPosts(null);
+    getPosts();
   }
 
   getMorePosts() {
@@ -47,7 +47,6 @@ class PostsListForm extends Component {
     if (!loadingMorePostsInProgress || !length) {
       return null;
     }
-    
     return (<SmallSpinner size="small" />);
   };
 
@@ -72,7 +71,7 @@ class PostsListForm extends Component {
 
   }
 
-  onPressFilter() {
+  onPressFilter = () => {
     this.props.dispatch(showFilterBy());
   }
 
@@ -102,7 +101,7 @@ class PostsListForm extends Component {
                 <TouchableOpacity onPress={this.onPressFilterByFavourite}>
                   <Icon name="star-o" style={iconStyle}/>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={this.onPressFilter.bind(this)}>
+                <TouchableOpacity onPress={() => this.onPressFilter()}>
                   <Icon name="filter" style={iconStyle}/>
                 </TouchableOpacity>
               </View>}
@@ -161,7 +160,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   dispatch,
-  getPosts: (url) => { dispatch(getPosts(url)); },
+  getPosts: () => { dispatch(getPosts()); },
   getMorePosts: (url) => { dispatch(getMorePosts(url)); },
 });
 

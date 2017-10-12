@@ -15,6 +15,7 @@ module.exports = {
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
     "react/prefer-stateless-function": [0,],
     "import/prefer-default-export": ["off"],
-    // "react/forbid-prop-types": [false, { "forbid": ['any'] }],
+    "react/forbid-prop-types": [0, { "forbid": ['any'] }],
+    "react/prop-types": [0, { ignore: 0, customValidators: 0 }],
   },
 };

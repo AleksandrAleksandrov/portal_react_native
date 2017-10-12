@@ -37,7 +37,6 @@ const styles = {
 
 class ChangePasswordDialog extends Component {
   componentDidMount() {
-    console.warn('ChangePasswordDialog');
     this._showBottomToast;
   }
 
@@ -54,14 +53,14 @@ class ChangePasswordDialog extends Component {
       //     })
       //   }, 3000)
       // }
-    })
+    });
   };
 
   onEmailChanged(text) {
     this.props.dispatch(emailChangedInChangePassword(text));
   }
 
-  render () {
+  render() {
     return (
 
       <Modal

@@ -2,11 +2,12 @@ import { Component } from 'react';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import { getToken } from '../services/StorageHelper';
-import { setTokenToState } from '../actions';
+import { setTokenToState, startNetworkListener } from '../actions';
 import * as serviceREST from '../services/serviceREST';
 
 class StartScreen extends Component {
   componentWillMount() {
+    this.props.dispatch(startNetworkListener());
     // Rename to getTokenfrom Storrage
     getToken()
     .then((data) => {

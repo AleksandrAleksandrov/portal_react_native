@@ -1,7 +1,7 @@
 import React from 'react';
 import { TouchableWithoutFeedback, View, StyleSheet } from 'react-native';
-import { TextCustom, CheckBoxCustom } from "./";
 import PropTypes from 'prop-types';
+import { TextCustom, CheckBoxCustom } from './';
 
 const styles = StyleSheet.create({
   textStyle: {
@@ -14,17 +14,14 @@ const styles = StyleSheet.create({
   },
 });
 
-const TouchableFilterBy = (props) => {
-
+const TouchableFilterBy = ({ checked, onPress, label }) => {
   const { textStyle, textWrapStyle } = styles;
-
-  const { checked, onPress } = props;
 
   return (
     <TouchableWithoutFeedback onPress={onPress}>
-      <View style={ textWrapStyle }>
+      <View style={textWrapStyle}>
         {CheckBoxCustom.getCheckBox(checked)}
-        <TextCustom type={'sortBy'} style={ textStyle }>{props.label}</TextCustom>
+        <TextCustom type={'sortBy'} style={textStyle}>{label}</TextCustom>
       </View>
     </TouchableWithoutFeedback>
   );
@@ -33,11 +30,13 @@ const TouchableFilterBy = (props) => {
 TouchableFilterBy.propType = {
   checked: PropTypes.bool.isRequired,
   onPress: PropTypes.func.isRequired,
+  label: PropTypes.string,
 };
 
 TouchableFilterBy.defaultProps = {
   checked: false,
   onPress: null,
+  label: '',
 };
 
 export { TouchableFilterBy };

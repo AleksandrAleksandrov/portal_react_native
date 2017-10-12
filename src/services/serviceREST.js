@@ -1,14 +1,13 @@
-import { NetInfo } from 'react-native';
-import { create, https } from 'apisauce';
-import { setToken, getToken } from './StorageHelper';
-import { URL } from '../Constants';
+import { create } from 'apisauce';
+import { setToken } from './StorageHelper';
+import { createQuery } from '../utils/StringUtils';
 import {
-  EMAIL_CHANGED,
-  PASSWORD_CHANGED,
-  LOGIN_USER,
-  LOGIN_USER_SECCESS,
-  LOGIN_USER_FAIL,
-} from '../actions/types';
+  URL,
+  AUTH,
+  MESSAGES,
+  USER_MESSAGE,
+  PASSWORD_RESET,
+} from '../ApiConstants';
 
 const api = create({
   baseURL: URL,
@@ -19,8 +18,11 @@ const api = create({
   timeout: 10000,
 });
 
+/**
+ * Set token to every header that go with requests
+ * @param token
+ */
 export const setTokenToHeaders = (token) => {
-  // console.warn('setTokenToHeaders', token);
   if (token) {
     api.setHeaders({
       Authorization: `Token ${token}`,
@@ -32,123 +34,58 @@ export const setTokenToHeaders = (token) => {
   }
 };
 
-export const getProducts = () => new Promise((resolve, reject) => {
-  api
-  .get('products/')
-  .then((response) => {
-    if (response.ok) {
-      resolve(response);
-    } else {
-      requestErrorHandler(response, reject);
-    }
-  })
-  .catch((error) => {
-    console.warn('getProducts error:', error);
-    reject(error);
-  });
-});
-
-export const getProductReviews = id => new Promise((resolve, reject) => {
-  api
-  .get(`reviews/${id}`)
-  .then((response) => {
-    if (response.ok) {
-      resolve(response);
-    } else {
-      requestErrorHandler(response, reject);
-    }
-  })
-  .catch((error) => {
-    console.warn('getProductReviews error:', error);
-    reject(error);
-  });
-});
-
-export const postReview = (data, id) => new Promise((resolve, reject) => {
-  api.post(`reviews/${id}`, data)
-  .then((response) => {
-    if (response.ok) {
-      resolve(response);
-    }
-    resolve(response);
-  })
-  .catch((error) => {
-    console.warn('postReview error:', error);
-    reject(error);
-  });
-});
-
-export const postLogin = data => new Promise((resolve, reject) => {
-  // NetInfo.isConnected.fetch().then(isConnected => {
-  //   function handleFirstConnectivityChange(connectionInfo) {
-  //     NetInfo.isConnected.fetch().then(isConnected => {
-  //       if (isConnected) {
-          api.post(`/api/auth/login/`, data)
-          .then((response) => {
-            if (response.ok) {
-              setToken(response.data.user.token);
-              setTokenToHeaders(response.data.user.token);
-              resolve(response);
-            } else {
-              reject(response.data ? response.data.detail : 'Не удалось подключится к серверу');
-            }
-          })
-          .catch((error) => {
-            reject(error);
-          });
-  //       } else {
-  //         reject('Нет подключения к интернету');
-  //       }
-  //     });
-  //     NetInfo.removeEventListener(
-  //       'connectionChange',
-  //     handleFirstConnectivityChange,
-  //   );
-  //   }
-  //   NetInfo.addEventListener(
-  //     'connectionChange',
-  //     handleFirstConnectivityChange,
-  //   );
-  // });
-});
-
-
-export const getPosts = (url) => {
+/**
+ * Authorize with email and password
+ * @param data contains email and password
+ * @returns {Promise}
+ */
+export const postLogin = (data) => {
   return new Promise((resolve, reject) => {
-
-      api.get('/api/user_messages/')
+    api.post(AUTH, data)
       .then((response) => {
         if (response.ok) {
+          setToken(response.data.user.token);
+          setTokenToHeaders(response.data.user.token);
           resolve(response);
+        } else {
+          reject(response.data ? response.data.detail : 'Не удалось подключится к серверу');
         }
       })
       .catch((error) => {
         reject(error);
-        console.warn(error);
       });
-
   });
 };
 
-export const getMorePosts = (url) => {
+/**
+ * Get posts list.
+ * @returns {Promise}
+ */
+export const getPosts = () => {
   return new Promise((resolve, reject) => {
-    api.get(url)
+    api.get(USER_MESSAGE)
       .then((response) => {
         if (response.ok) {
           resolve(response);
         } else {
-          console.warn(response);
+          reject(response);
         }
       })
       .catch((error) => {
-        console.warn(error);
+        reject(error);
       });
   });
 };
+// export const getPosts = () => api.get(USER_MESSAGE);
 
-export const restorePassword = email => {
+/**
+ * Get more posts by pagination.
+ * @param next page url
+ * @returns {Promise}
+ */
+export const getMorePosts = (url) => {
   return new Promise((resolve, reject) => {
-    api.post(`/api/auth/password/reset/`, { email: email})
+    api.get(url)
       .then((response) => {
         if (response.ok) {
           resolve(response);
@@ -163,26 +100,46 @@ export const restorePassword = email => {
 };
 
 /**
- * Get filtered by advert, poll, event posts.
+ * Restore password with email.
+ * @param email
+ * @returns {Promise}
  */
-export const getFilteredPosts = (query) => {
+export const restorePassword = (email) => {
   return new Promise((resolve, reject) => {
-    api.get("/api/user_messages/?" + createQuery(query))
+    api.post(PASSWORD_RESET, { email: email })
       .then((response) => {
-        resolve(response);
+        if (response.ok) {
+          resolve(response);
+        } else {
+          reject(response);
+        }
       })
       .catch((error) => {
         reject(error);
-        console.warn('getFilteredPosts', error);
-      })
+      });
   });
 };
-const createQuery = (params) => {
-  let query = '';
-  params.forEach((objectKey, index) => {
-    query += 'type=' + params[index] + '&';
+// export const restorePassword = (email) => api.post(PASSWORD_RESET, { email: email });
+
+/**
+ * Get filtered by advert, poll, event posts.
+ * @param query
+ * @returns {Promise}
+ */
+export const getFilteredPosts = (query) => {
+  return new Promise((resolve, reject) => {
+    api.get(`${USER_MESSAGE}?` + createQuery(query))
+      .then((response) => {
+        if (response.ok) {
+          resolve(response);
+        } else {
+          reject(response);
+        }
+      })
+      .catch((error) => {
+        reject(error);
+      });
   });
-  return query;
 };
 
 /**
@@ -192,9 +149,13 @@ const createQuery = (params) => {
  */
 export const setAsRead = (postId) => {
   return new Promise((resolve, reject) => {
-    api.patch(`/api/user_messages/${postId}/`, { is_readed: true })
+    api.patch(`${USER_MESSAGE}${postId}/`, { is_readed: true })
       .then((response) => {
-        resolve(response);
+        if (response.ok) {
+          resolve(response);
+        } else {
+          reject(response);
+        }
       })
       .catch((error) => {
         reject(error);
@@ -209,9 +170,13 @@ export const setAsRead = (postId) => {
  */
 export const getComments = (messageId) => {
   return new Promise((resolve, reject) => {
-    api.get(`/api/messages/${messageId}/comments/`)
+    api.get(`${MESSAGES}${messageId}/comments/`)
       .then((response) => {
-        resolve(response);
+        if (response.ok) {
+          resolve(response);
+        } else {
+          reject(response);
+        }
       })
       .catch((error) => {
         reject(error);
@@ -226,18 +191,19 @@ export const getComments = (messageId) => {
  * @param isFavourite
  * @returns {Promise}
  */
-
 export const favourite = ({ id, isFavourite }) => {
   return new Promise((resolve, reject) => {
-      api.patch(`/api/user_messages/${id}/`, { is_favorite: isFavourite })
-      .then((response) => {
+    api.patch(`${USER_MESSAGE}${id}/`, { is_favorite: isFavourite })
+    .then((response) => {
+      if (response.ok) {
         resolve(response);
-      })
-      .catch((error) => {
-        // console.warn('favourite fail', error);
-        reject(error);
-        // console.warn(error);
-      });
+      } else {
+        reject(response);
+      }
+    })
+    .catch((error) => {
+      reject(error);
+    });
   });
 };
 

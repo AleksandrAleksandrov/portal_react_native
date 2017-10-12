@@ -38,7 +38,6 @@ export const showToast = () => {
 };
 
 export const hideToast = () => {
-  console.warn('hideToast');
   return {
     type: HIDE_TOAST_RESTORE_PASSWORD,
   };
@@ -102,22 +101,27 @@ export const setTokenToState = payload => (dispatch) => {
   dispatch({ type: SET_TOKEN, payload });
 };
 
-export const loginUser = (email, password) => (dispatch) => {
-  // console.warn('email', email, 'password', password);
-  dispatch({
-    type: LOGIN_USER,
-  });
-  serviceREST.postLogin({
-    email,
-    password,
-  })
-  .then((response) => {
-    console.warn('loginUserSuccess');
-    dispatch(loginUserSuccess(response.data));
-  })
-  .catch((error) => {
-    console.warn('loginUserFail');
-    dispatch(loginUserFail(error));
-  });
+export const loginUser = (email, password) => (dispatch, getState) => {
+  const { networkIsConnected } = getState().networkReducer;
+  if (!networkIsConnected) {
+    dispatch(loginUserFail('нет интернета'));
+  } else {
+    dispatch({
+      type: LOGIN_USER,
+    });
+
+    serviceREST.postLogin({
+      email,
+      password,
+    })
+      .then((response) => {
+        console.warn('loginUserSuccess');
+        dispatch(loginUserSuccess(response.data));
+      })
+      .catch((error) => {
+        console.warn('loginUserFail');
+        dispatch(loginUserFail(error));
+      });
+  }
 };
 
