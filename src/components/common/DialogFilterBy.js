@@ -10,7 +10,6 @@ import {
   ADVERT,
   POLL,
   EVENT,
-  FAVOURITE,
 } from '../../Constants';
 
 const styles = {

@@ -1,17 +1,17 @@
 import React, { Component } from 'react';
 import { Actions } from 'react-native-router-flux';
 import { FlatList, View, RefreshControl, TouchableOpacity } from 'react-native';
-import { connect } from 'react-redux';
-import { getPosts, getMorePosts, refreshPosts, showFilterBy, setFavourite, getFilteredPosts } from '../actions';
 import { NavigationBar } from '@shoutem/ui';
+import { connect } from 'react-redux';
+import Icon from 'react-native-vector-icons/dist/FontAwesome';
+import PropTypes from 'prop-types';
+import { getPosts, getMorePosts, refreshPosts, showFilterBy, setFavourite, getFilteredPosts } from '../actions';
 import { CustomIcons, TextCustom } from './common';
 import PostItem from './PostItem';
 import { Spinner } from './common/Spinner';
 import DialogFilterBy from './common/DialogFilterBy';
 import { SmallSpinner } from './common/SmallSpinner';
-import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import { hideFilterBy } from '../actions/PostsActions';
-import PropTypes from 'prop-types';
 
 const navigationBarHeight = 70;
 
@@ -29,34 +29,30 @@ const styles = {
     height: navigationBarHeight,
     backgroundColor: '#2BA0F3',
   },
+  navigationIconsWrapper: {
+    flexDirection: 'row',
+  },
 };
 
 class PostsListForm extends Component {
+  // в конструкторе лучше биндить!
   componentWillMount() {
-    this.getPosts();
+    this.props.getPosts();
   }
 
   onRefresh() {
-    this.props.dispatch(refreshPosts());
+    this.props.refreshPosts();
   }
 
   onPressWriteNewPost = () => {
     Actions.newPostForm();
   }
 
-  getPosts() {
-    const { getPosts } = this.props;
-    getPosts();
-  }
-
-  getMorePosts() {
-    const { getMorePosts } = this.props;
-    getMorePosts();
-  }
-
   onPressFilterByFavourite() {
-    this.props.dispatch(setFavourite(!this.props.filterByFavourite)).then(() => {
-      this.props.dispatch(getFilteredPosts(Array.from(this.props.filterSet)));
+    const { filterByFavourite, filterSet, getFilteredPosts } = this.props;
+
+    this.props.dispatch(setFavourite(!filterByFavourite)).then(() => {
+      getFilteredPosts(Array.from(filterSet));
     });
   }
 
@@ -68,24 +64,27 @@ class PostsListForm extends Component {
     this.props.dispatch(hideFilterBy());
   }
 
-  renderNavigationBar = (iconStyle, navigationBarWrapper) => {
+  renderNavigationBar = () => {
+    const { filterByFavourite } = this.props;
+    const { iconStyle, navigationBarWrapper, navigationIconsWrapper } = styles;
     return (
       <View style={navigationBarWrapper}>
         <NavigationBar
           title={'Portal'}
           styleName="clear"
           rightComponent={
-            <View style={{ flexDirection: 'row' }}>
-              <TouchableOpacity onPress={this.onPressWriteNewPost}>
+            <View style={navigationIconsWrapper}>
+              <TouchableOpacity onPress={() => this.onPressWriteNewPost()}>
                 <Icon name="plus-circle" style={iconStyle} />
               </TouchableOpacity>
               <TouchableOpacity onPress={() => this.onPressFilterByFavourite()}>
-                {CustomIcons.getNavBarStar(this.props.filterByFavourite)}
+                {CustomIcons.getNavBarStar(filterByFavourite)}
               </TouchableOpacity>
               <TouchableOpacity onPress={() => this.onPressFilter()}>
                 <Icon name="filter" style={iconStyle} />
               </TouchableOpacity>
-            </View>}
+            </View>
+          }
         />
       </View>
     );
@@ -98,11 +97,12 @@ class PostsListForm extends Component {
     return null;
   }
 
-  renderPostsList = (postsList, refreshing) => {
+  renderPostsList = () => {
+    const { postsList, refreshing } = this.props;
     return (
       <FlatList
         style={{ marginBottom: navigationBarHeight }}
-        data={postsList ? postsList : []}
+        data={postsList}
         renderItem={({ item }) => <PostItem post={item} />}
         keyExtractor={item => item.id}
         onEndReached={() => this.paginate()}
@@ -117,7 +117,9 @@ class PostsListForm extends Component {
     );
   }
 
-  showInfoMessage = (postsList, filteredByFavourite, postsAreLoading) => {
+  showInfoMessage = () => {
+    const { postsList, postsAreLoading, filteredByFavourite } = this.props;
+
     if (!postsAreLoading && !postsList.length) {
       return (<TextCustom>У Вас нет избранных сообщений</TextCustom>);
     } else if (!postsAreLoading && filteredByFavourite) {
@@ -127,10 +129,10 @@ class PostsListForm extends Component {
   }
 
   paginate = () => {
-    const { nextPage, postsAreLoading, loadingMorePostsInProgress } = this.props;
+    const { nextPage, postsAreLoading, loadingMorePostsInProgress, getMorePosts } = this.props;
 
     if (!postsAreLoading && nextPage != null && !loadingMorePostsInProgress) {
-      this.props.getMorePosts(nextPage);
+      getMorePosts(nextPage);
     }
   }
 
@@ -144,8 +146,7 @@ class PostsListForm extends Component {
   }
 
   render() {
-    const { postsList, postsAreLoading, refreshing, filteredByFavourite } = this.props;
-    const { iconStyle, navigationBarWrapper } = styles;
+    const { postsAreLoading } = this.props;
 
     if (postsAreLoading) {
       return (<Spinner size="large" />);
@@ -153,11 +154,10 @@ class PostsListForm extends Component {
 
     return (
       <View>
-        {this.renderNavigationBar(iconStyle, navigationBarWrapper)}
-        {this.showInfoMessage(postsList, filteredByFavourite, postsAreLoading)}
-        {this.renderPostsList(postsList, refreshing)}
+        {this.renderNavigationBar()}
+        {this.showInfoMessage()}
+        {this.renderPostsList()}
         <DialogFilterBy
-          dispatch={this.props.dispatch}
           onDecline={() => this.onDecline()}
         />
       </View>
@@ -200,6 +200,8 @@ const mapDispatchToProps = dispatch => ({
   dispatch,
   getPosts: () => { dispatch(getPosts()); },
   getMorePosts: (url) => { dispatch(getMorePosts(url)); },
+  refreshPosts: () => { dispatch(refreshPosts()); },
+  getFilteredPosts: (filter) => { dispatch(getFilteredPosts(filter)); },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(PostsListForm);
