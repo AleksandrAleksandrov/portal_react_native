@@ -2,7 +2,7 @@ import React from 'react';
 import Moment from 'moment';
 import { View } from 'react-native';
 import { TextCustom } from './TextCustom';
-import { PostIcon } from './PostIcon';
+import { CustomIcons } from './CustomIcons';
 
 const styles = {
   titleTextStyle: {
@@ -47,7 +47,7 @@ const getComments = (commentsCount, showComments) => {
   if (showComments) {
     return (
       <View style={styles.dateViewWrapper}>
-        {PostIcon.getCommentsIcon()}
+        {CustomIcons.getCommentsIcon()}
         <TextCustom type={'t3_light'} style={{ marginLeft: 10 }}>
           {commentsCount}
         </TextCustom>

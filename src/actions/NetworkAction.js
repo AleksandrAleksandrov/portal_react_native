@@ -12,5 +12,5 @@ export const startNetworkListener = () => (dispatch) => {
   function handleFirstConnectivityChange(isConnected) {
     dispatch(setNetworkIsConnected(isConnected));
   }
-  NetInfo.isConnected.addEventListener('change', handleFirstConnectivityChange);
+  NetInfo.isConnected.addEventListener('connectionChange', handleFirstConnectivityChange);
 };

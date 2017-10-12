@@ -16,7 +16,10 @@ import {
   SET_ERROR,
 } from './types';
 import * as serviceREST from '../services/serviceREST';
-import { INVALID_EMAIL } from '../Constants';
+import {
+  INVALID_EMAIL,
+  NO_INTERNET_CONNECTION,
+} from '../Constants';
 
 export const emailChangedInChangePassword = (text) => {
   return {
@@ -104,7 +107,7 @@ export const setTokenToState = payload => (dispatch) => {
 export const loginUser = (email, password) => (dispatch, getState) => {
   const { networkIsConnected } = getState().networkReducer;
   if (!networkIsConnected) {
-    dispatch(loginUserFail('нет интернета'));
+    dispatch(loginUserFail(NO_INTERNET_CONNECTION));
   } else {
     dispatch({
       type: LOGIN_USER,

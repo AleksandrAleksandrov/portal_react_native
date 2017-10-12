@@ -6,7 +6,7 @@ export * from './Input';
 export * from './InputAndroid';
 export * from './Spinner';
 export * from './ChangePasswordDialog';
-export * from './PostIcon';
+export * from './CustomIcons';
 export * from './TextCustom';
 export * from './PostFooter';
 export * from './CustomPasswordInput';

@@ -10,6 +10,7 @@ import {
   ADVERT,
   POLL,
   EVENT,
+  FAVOURITE,
 } from '../../Constants';
 
 const styles = {
@@ -41,89 +42,59 @@ const styles = {
 
 class DialogFilterBy extends Component {
 
-  isChecked(checked) {
-    if (checked) {
-      return <Icon name="check-square-o" style={styles.iconStyle} />;
-    }
-    return <Icon name="square-o" style={styles.iconStyle} />;
-  }
-
   onAdvert() {
-    this.props.dispatch(setAdvert(!this.props.sortByAdvert)).then(() => {
-      this.props.dispatch(getFilteredPosts(this.createQuery()));
+    this.props.dispatch(setAdvert(!this.props.filterByAdvert)).then(() => {
+      this.props.dispatch(getFilteredPosts(Array.from(this.props.filterSet)));
       this.props.onDecline();
     });
   }
 
   onPoll() {
-    this.props.dispatch(setPoll(!this.props.sortByPoll)).then(() => {
-      this.props.dispatch(getFilteredPosts(this.createQuery()));
+    this.props.dispatch(setPoll(!this.props.filterByPoll)).then(() => {
+      this.props.dispatch(getFilteredPosts(Array.from(this.props.filterSet)));
       this.props.onDecline();
     });
   }
 
   onEvent() {
-    this.props.dispatch(setEvent(!this.props.sortByEvent)).then(() => {
-      this.props.dispatch(getFilteredPosts(this.createQuery()));
+    this.props.dispatch(setEvent(!this.props.filterByEvent)).then(() => {
+      this.props.dispatch(getFilteredPosts(Array.from(this.props.filterSet)));
       this.props.onDecline();
     });
   }
 
-  createQuery() {
-    var mySet = new Set();
-    if (this.props.sortByAdvert) {
-      mySet.add(ADVERT);
-    } else {
-      mySet.delete(ADVERT);
-    }
-
-    if (this.props.sortByPoll) {
-      mySet.add(POLL);
-    } else {
-      mySet.delete(POLL);
-    }
-
-    if (this.props.sortByEvent) {
-      mySet.add(EVENT);
-    } else {
-      mySet.delete(EVENT);
-    }
-
-    return Array.from(mySet);
-  }
-
   getFilterArray = () => {
-    const { sortByAdvert, sortByPoll, sortByEvent } = this.props;
+    const { filterByAdvert, filterByPoll, filterByEvent } = this.props;
     const filterList = [
       {
         key: ADVERT,
         label: 'Объявления',
-        checked: sortByAdvert,
+        checked: filterByAdvert,
         onPress: () => {
           this.onAdvert();
-        }
+        },
       },
       {
         key: POLL,
         label: 'Опросы',
-        checked: sortByPoll,
+        checked: filterByPoll,
         onPress: () => {
           this.onPoll();
-        }
+        },
       },
       {
         key: EVENT,
         label: 'События',
-        checked: sortByEvent,
+        checked: filterByEvent,
         onPress: () => {
           this.onEvent();
-        }
+        },
       },
     ];
     return filterList;
   };
-  render () {
-    const { showSortBy} = this.props;
+  render() {
+    const { showSortBy } = this.props;
     const { textStyle } = styles;
 
     return (
@@ -161,9 +132,10 @@ class DialogFilterBy extends Component {
 
 const mapStateToProps = state => ({
   showSortBy: state.postsList.showSortBy,
-  sortByAdvert: state.postsList.sortByAdvert,
-  sortByPoll: state.postsList.sortByPoll,
-  sortByEvent: state.postsList.sortByEvent,
+  filterSet: state.postsList.filterSet,
+  filterByAdvert: state.postsList.filterByAdvert,
+  filterByPoll: state.postsList.filterByPoll,
+  filterByEvent: state.postsList.filterByEvent,
 });
 
 export default connect(mapStateToProps)(DialogFilterBy);

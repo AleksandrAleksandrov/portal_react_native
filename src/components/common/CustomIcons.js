@@ -17,6 +17,11 @@ const styles = {
   commentStyle: {
     fontSize: 15,
   },
+  navBarIcon: {
+    fontSize: 24,
+    margin: 10,
+    color: 'white',
+  },
 };
 
 const getPostIcon = (messageType) => {
@@ -53,10 +58,19 @@ const getCommentsIcon = () => {
   return <Icon name="comments-o" style={styles.commentStyle} />;
 };
 
-const PostIcon = {
+const getNavBarStar = (isFavorite) => {
+  if (isFavorite) {
+    return <Icon name="star" style={styles.navBarIcon} />;
+  }
+
+  return <Icon name="star-o" style={styles.navBarIcon} />;
+};
+
+const CustomIcons = {
   getPostIcon,
   getStart,
   getCommentsIcon,
+  getNavBarStar,
 };
 
-export { PostIcon };
+export { CustomIcons };

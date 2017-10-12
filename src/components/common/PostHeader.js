@@ -2,7 +2,7 @@ import React from 'react';
 import { View, TouchableWithoutFeedback } from 'react-native';
 import { connect } from 'react-redux';
 import { TextCustom } from './TextCustom';
-import { PostIcon } from './PostIcon';
+import { CustomIcons } from './CustomIcons';
 import { onStarPressed } from '../../actions';
 
 const styles = {
@@ -56,7 +56,7 @@ const PostHeader = ({ id, messageType, title, isFavorite, dispatch, pressedStarI
   return (
     <View style={styles.headerViewStyle}>
       <View style={styles.textViewWrapper}>
-        {PostIcon.getPostIcon(messageType)}
+        {CustomIcons.getPostIcon(messageType)}
         <TextCustom
           type={'t1_light'}
           style={styles.titleTextStyle}
@@ -67,7 +67,7 @@ const PostHeader = ({ id, messageType, title, isFavorite, dispatch, pressedStarI
       </View>
       <View style={styles.starViewWrapper}>
         <TouchableWithoutFeedback onPress={this.onStarPress}>
-          {PostIcon.getStart(isFavorite)}
+          {CustomIcons.getStart(isFavorite)}
         </TouchableWithoutFeedback>
       </View>
     </View>

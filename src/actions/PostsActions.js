@@ -20,6 +20,7 @@ import {
   SET_SORT_BY_ADVERT,
   SET_SORT_BY_POLL,
   SET_SORT_BY_EVENT,
+  SET_FILTER_BY_FAVOURITE,
 } from './types';
 import { NOT_FOUND } from "../Constants";
 import * as serviceREST from '../services/serviceREST';
@@ -256,8 +257,16 @@ export const setEvent = (isChecked) => (dispatch) => {
   return Promise.resolve();
 };
 
+export const setFavourite = isFavourite => (dispatch) => {
+  dispatch({
+    type: SET_FILTER_BY_FAVOURITE,
+    payload: isFavourite,
+  });
+  return Promise.resolve();
+};
+
 export const getFilteredPosts = (query) => (dispatch) => {
-  dispatch(startRefresh(query));
+  dispatch(startRefresh());
   serviceREST.getFilteredPosts(query)
     .then((response) => {
       dispatch(getPostsSuccess(response.data));

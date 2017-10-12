@@ -42,5 +42,6 @@ export const HIDE_SORT_BY_DIALOG = 'hide_sort_by_dialog';
 export const SET_SORT_BY_ADVERT = 'set_sort_by_advert';
 export const SET_SORT_BY_POLL = 'set_sort_by_poll';
 export const SET_SORT_BY_EVENT = 'set_sort_by_event';
+export const SET_FILTER_BY_FAVOURITE = 'set_filter_by_favourite';
 
-export const SET_NETWORK_IS_CONNECTED = 'sdf';
+export const SET_NETWORK_IS_CONNECTED = 'set_network_is_connected';

@@ -185,7 +185,6 @@ export const getComments = (messageId) => {
 };
 
 /**
- *
  * Add/remove post from favourite.
  * @param id
  * @param isFavourite

@@ -5,6 +5,7 @@ import LoginForm from './components/LoginForm';
 import TestLogin from './components/TestLogin';
 import PostsListForm from './components/PostsListForm';
 import PostForm from './components/PostForm';
+import NewPostForm from './components/NewPostForm'
 
 const styles = {
   rootRouterStyle: {
@@ -32,7 +33,6 @@ const RouterComponent = () => (
         duration={1000}
       />
       <Scene
-
         key="postsList"
         component={PostsListForm}
         title="Portal"
@@ -42,9 +42,14 @@ const RouterComponent = () => (
         type={'replace'}
       />
       <Scene
+        key="newPostForm"
+        component={NewPostForm}
         hideNavBar={true}
+      />
+      <Scene
         key="post"
         component={PostForm}
+        hideNavBar={true}
       />
     </Scene>
   </Router>);

@@ -19,7 +19,26 @@ import {
   SET_SORT_BY_ADVERT,
   SET_SORT_BY_POLL,
   SET_SORT_BY_EVENT,
+  SET_FILTER_BY_FAVOURITE,
 } from '../actions/types';
+import {
+  ADVERT,
+  POLL,
+  EVENT,
+  FAVOURITE,
+} from '../Constants';
+
+const filter = new Set();
+
+const createCurrentSet = (state, add, event) => {
+  const set = state.filterSet;
+  if (add) {
+    set.add(event);
+  } else {
+    set.delete(event);
+  }
+  return set;
+};
 
 const INITIAL_STATE = {
   postsAreLoading: false,
@@ -34,9 +53,11 @@ const INITIAL_STATE = {
   loadingCommentsInProgress: false,
   comments: [],
   showSortBy: false,
-  sortByAdvert: false,
-  sortByPoll: false,
-  sortByEvent: false,
+  filterByAdvert: false,
+  filterByPoll: false,
+  filterByEvent: false,
+  filterByFavourite: false,
+  filterSet: filter,
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -62,7 +83,8 @@ export default (state = INITIAL_STATE, action) => {
         loadingMorePostsInProgress: false,
       };
     case SET_POSTS_ARE_LOADING:
-      return { ...state,
+      return {
+        ...state,
         postsAreLoading: true,
       };
     case SET_CURRENT_POST:
@@ -134,17 +156,26 @@ export default (state = INITIAL_STATE, action) => {
     case SET_SORT_BY_ADVERT:
       return {
         ...state,
-        sortByAdvert: action.payload,
+        filterByAdvert: action.payload,
+        filterSet: createCurrentSet(state, action.payload, ADVERT),
       };
     case SET_SORT_BY_POLL:
       return {
         ...state,
-        sortByPoll: action.payload,
+        filterByPoll: action.payload,
+        filterSet: createCurrentSet(state, action.payload, POLL),
       };
     case SET_SORT_BY_EVENT:
       return {
         ...state,
-        sortByEvent: action.payload,
+        filterByEvent: action.payload,
+        filterSet: createCurrentSet(state, action.payload, EVENT),
+      };
+    case SET_FILTER_BY_FAVOURITE:
+      return {
+        ...state,
+        filterByFavourite: action.payload,
+        filterSet: createCurrentSet(state, action.payload, FAVOURITE),
       };
     default:
       return state;
