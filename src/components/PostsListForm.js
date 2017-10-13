@@ -5,37 +5,35 @@ import { NavigationBar } from '@shoutem/ui';
 import { connect } from 'react-redux';
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import PropTypes from 'prop-types';
-import { getPosts, getMorePosts, refreshPosts, showFilterBy, setFavourite, getFilteredPosts } from '../actions';
-import { CustomIcons, TextCustom } from './common';
+
+import { getPosts, getMorePosts, refreshPosts, showFilterBy, setFavourite, getFilteredPosts, hideFilterBy } from '../actions';
+import { CustomIcons, TextCustom, SmallSpinner, Spinner } from './common';
+import { color } from '../constants/color';
 import PostItem from './PostItem';
-import { Spinner } from './common/Spinner';
 import DialogFilterBy from './common/DialogFilterBy';
-import { SmallSpinner } from './common/SmallSpinner';
-import { hideFilterBy } from '../actions/PostsActions';
 
 const navigationBarHeight = 70;
 
 const styles = {
-  clear: {
-    backgroundColor: 'blue',
-  },
   iconStyle: {
     fontSize: 24,
     margin: 10,
-    color: 'white',
+    color: color.white,
   },
   navigationBarWrapper: {
     width: 'auto',
     height: navigationBarHeight,
-    backgroundColor: '#2BA0F3',
+    backgroundColor: color.primary,
   },
   navigationIconsWrapper: {
     flexDirection: 'row',
   },
+  postsListStyle: {
+    marginBottom: navigationBarHeight,
+  },
 };
 
 class PostsListForm extends Component {
-  // в конструкторе лучше биндить!
   componentWillMount() {
     this.props.getPosts();
   }
@@ -57,31 +55,40 @@ class PostsListForm extends Component {
   }
 
   onPressFilter = () => {
-    this.props.dispatch(showFilterBy());
+    this.props.showFilterBy();
   }
 
-  onDecline() {
-    this.props.dispatch(hideFilterBy());
+  onDecline = () => {
+    this.props.hideFilterBy();
+  }
+
+  paginate = () => {
+    const { nextPage, postsAreLoading, loadingMorePostsInProgress, getMorePosts } = this.props;
+
+    if ((!postsAreLoading && nextPage !== null) && !loadingMorePostsInProgress) {
+      getMorePosts(nextPage);
+    }
   }
 
   renderNavigationBar = () => {
     const { filterByFavourite } = this.props;
     const { iconStyle, navigationBarWrapper, navigationIconsWrapper } = styles;
+
     return (
       <View style={navigationBarWrapper}>
         <NavigationBar
           title={'Portal'}
-          styleName="clear"
+          styleName={'clear'}
           rightComponent={
             <View style={navigationIconsWrapper}>
               <TouchableOpacity onPress={() => this.onPressWriteNewPost()}>
-                <Icon name="plus-circle" style={iconStyle} />
+                <Icon name={'plus-circle'} style={iconStyle} />
               </TouchableOpacity>
               <TouchableOpacity onPress={() => this.onPressFilterByFavourite()}>
                 {CustomIcons.getNavBarStar(filterByFavourite)}
               </TouchableOpacity>
               <TouchableOpacity onPress={() => this.onPressFilter()}>
-                <Icon name="filter" style={iconStyle} />
+                <Icon name={'filter'} style={iconStyle} />
               </TouchableOpacity>
             </View>
           }
@@ -90,18 +97,13 @@ class PostsListForm extends Component {
     );
   }
 
-  postsAreLoading = (postsAreLoading) => {
-    if (postsAreLoading) {
-      return (<Spinner size="large" />);
-    }
-    return null;
-  }
-
   renderPostsList = () => {
     const { postsList, refreshing } = this.props;
+    const { postsListStyle } = styles;
+
     return (
       <FlatList
-        style={{ marginBottom: navigationBarHeight }}
+        style={postsListStyle}
         data={postsList}
         renderItem={({ item }) => <PostItem post={item} />}
         keyExtractor={item => item.id}
@@ -117,7 +119,7 @@ class PostsListForm extends Component {
     );
   }
 
-  showInfoMessage = () => {
+  renderInfoMessage = () => {
     const { postsList, postsAreLoading, filteredByFavourite } = this.props;
 
     if (!postsAreLoading && !postsList.length) {
@@ -128,34 +130,26 @@ class PostsListForm extends Component {
     return null;
   }
 
-  paginate = () => {
-    const { nextPage, postsAreLoading, loadingMorePostsInProgress, getMorePosts } = this.props;
-
-    if (!postsAreLoading && nextPage != null && !loadingMorePostsInProgress) {
-      getMorePosts(nextPage);
-    }
-  }
-
   renderLastRow = () => {
     const { loadingMorePostsInProgress, postsList: { length } } = this.props;
 
     if (!loadingMorePostsInProgress || !length) {
       return null;
     }
-    return (<SmallSpinner size="small" />);
+    return (<SmallSpinner size={'small'} />);
   }
 
   render() {
     const { postsAreLoading } = this.props;
 
     if (postsAreLoading) {
-      return (<Spinner size="large" />);
+      return (<Spinner size={'large'} />);
     }
 
     return (
       <View>
         {this.renderNavigationBar()}
-        {this.showInfoMessage()}
+        {this.renderInfoMessage()}
         {this.renderPostsList()}
         <DialogFilterBy
           onDecline={() => this.onDecline()}
@@ -166,8 +160,8 @@ class PostsListForm extends Component {
 }
 
 PostsListForm.propType = {
-  token: PropTypes.string.isRequired,
-  postsList: PropTypes.array.isRequired,
+  token: PropTypes.string,
+  postsList: PropTypes.array,
   nextPage: PropTypes.string,
   postsAreLoading: PropTypes.bool,
   loadingMorePostsInProgress: PropTypes.bool,
@@ -202,6 +196,8 @@ const mapDispatchToProps = dispatch => ({
   getMorePosts: (url) => { dispatch(getMorePosts(url)); },
   refreshPosts: () => { dispatch(refreshPosts()); },
   getFilteredPosts: (filter) => { dispatch(getFilteredPosts(filter)); },
+  showFilterBy: () => { dispatch(showFilterBy()); },
+  hideFilterBy: () => { dispatch(hideFilterBy()); },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(PostsListForm);
