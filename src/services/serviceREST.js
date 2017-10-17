@@ -4,6 +4,7 @@ import { createQuery } from '../utils/StringUtils';
 import {
   URL,
   AUTH,
+  SUBSCRIBE_TO_GET_NOTIFICATIONS,
   MESSAGES,
   USER_MESSAGE,
   PASSWORD_RESET,
@@ -35,7 +36,26 @@ export const setTokenToHeaders = (token) => {
 };
 
 /**
- * Authorize with email and password
+ * Subscribe device to receive push notifications.
+ * @param deviceId
+ * @returns {Promise}
+ */
+export const subscribeToNotifications = (deviceId) => {
+  return new Promise((resolve, reject) => {
+    api.post(SUBSCRIBE_TO_GET_NOTIFICATIONS, { player_id: deviceId })
+      .then((response) => {
+        console.warn('SUBSCRIBE_TO_GET_NOTIFICATIONS', response);
+        resolve(response);
+      })
+      .catch((error) => {
+        console.warn('SUBSCRIBE_TO_GET_NOTIFICATIONS', error);
+        reject(error);
+      });
+  });
+};
+
+/**
+ * Authorize with email and password.
  * @param data contains email and password
  * @returns {Promise}
  */

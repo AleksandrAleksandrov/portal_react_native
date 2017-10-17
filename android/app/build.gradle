@@ -134,9 +134,14 @@ android {
             }
         }
     }
+    defaultConfig {
+        manifestPlaceholders = [onesignal_app_id: "7dddc775-f055-4f7b-9db3-de94b0f14a80",
+                                onesignal_google_project_number: "822322983233"]
+    }
 }
 
 dependencies {
+    compile project(':react-native-onesignal')
     compile project(':react-native-photo-view')
     compile project(':react-native-share')
     compile project(':react-native-linear-gradient')

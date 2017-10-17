@@ -21,6 +21,7 @@ import {
   SET_SORT_BY_POLL,
   SET_SORT_BY_EVENT,
   SET_FILTER_BY_FAVOURITE,
+  HIDE_NOTIFICATION_PERMISSION_DIALOG,
 } from './types';
 import { NOT_FOUND } from "../Constants";
 import * as serviceREST from '../services/serviceREST';
@@ -276,6 +277,12 @@ export const getFilteredPosts = (query) => (dispatch) => {
       console.warn("ERROR", error);
       dispatch(finishRefresh());
     });
+};
+
+export const hideShowNotificationDialog = () => {
+  return {
+    type: HIDE_NOTIFICATION_PERMISSION_DIALOG,
+  };
 };
 
 // const Post = {

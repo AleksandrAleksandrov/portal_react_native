@@ -1,18 +1,18 @@
 import React, { Component } from 'react';
 import { Actions } from 'react-native-router-flux';
-import { FlatList, View, RefreshControl, TouchableOpacity } from 'react-native';
+import { FlatList, View, RefreshControl, TouchableOpacity, AsyncStorage } from 'react-native';
 import { NavigationBar } from '@shoutem/ui';
 import { connect } from 'react-redux';
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import PropTypes from 'prop-types';
+import OneSignal from 'react-native-onesignal';
 
-import { getPosts, getMorePosts, refreshPosts, showFilterBy, setFavourite, getFilteredPosts, hideFilterBy } from '../actions';
+import { getPosts, getMorePosts, refreshPosts, showFilterBy, setFavourite, getFilteredPosts, hideFilterBy, subscribeToNotifications, hideShowNotificationDialog } from '../actions';
 import { CustomIcons, TextCustom, SmallSpinner, Spinner } from './common';
 import { color } from '../constants/color';
+import { navigationBarHeight } from '../constants/StyleConstants';
 import PostItem from './PostItem';
 import DialogFilterBy from './common/DialogFilterBy';
-
-const navigationBarHeight = 70;
 
 const styles = {
   iconStyle: {
@@ -33,17 +33,76 @@ const styles = {
   },
 };
 
+const logOut = () => {
+  AsyncStorage.removeItem('token');
+  OneSignal.setSubscription(false);
+  Actions.login();
+};
+
+const notif = () => {
+  // const permissions = {
+  //   alert: true,
+  //   badge: true,
+  //   sound: true,
+  // };
+  // OneSignal.requestPermissions(permissions);
+  // OneSignal.registerForPushNotifications();
+  // this.dispatch.hideShowNotificationDialog();
+};
+
 class PostsListForm extends Component {
   componentWillMount() {
     this.props.getPosts();
   }
+  //
+  // componentDidMount() {
+  //   const permissions = {
+  //     alert: true,
+  //     badge: true,
+  //     sound: true,
+  //   };
+  //   OneSignal.requestPermissions(permissions);
+  //   OneSignal.registerForPushNotifications();
+  //   OneSignal.addEventListener('received', this.onReceived);
+  //   OneSignal.addEventListener('opened', this.onOpened);
+  //   OneSignal.addEventListener('registered', this.onRegistered.bind(this));
+  //   OneSignal.addEventListener('ids', this.onIds.bind(this));
+  // }
+  //
+  // componentWillUnmount() {
+  //   OneSignal.removeEventListener('received', this.onReceived);
+  //   OneSignal.removeEventListener('opened', this.onOpened);
+  //   OneSignal.removeEventListener('registered', this.onRegistered);
+  //   OneSignal.removeEventListener('ids', this.onIds);
+  // }
+  //
+  // onReceived(notification) {
+  //   console.log("Notification received: ", notification);
+  // }
+  //
+  // onOpened(openResult) {
+  //   console.log('Message: ', openResult.notification.payload.body);
+  //   console.log('Data: ', openResult.notification.payload.additionalData);
+  //   console.log('isActive: ', openResult.notification.isAppInFocus);
+  //   console.log('openResult: ', openResult);
+  // }
+  //
+  // onRegistered(notifData) {
+  //   console.log("Device had been registered for push notifications!", notifData);
+  // }
+  //
+  // onIds(device) {
+  //   console.warn(' onIds componentWillMount');
+  //   this.props.subscribeToNotifications(device.userId);
+  // }
 
   onRefresh() {
     this.props.refreshPosts();
   }
 
   onPressWriteNewPost = () => {
-    Actions.newPostForm();
+    // Actions.newPostForm();
+    logOut();
   }
 
   onPressFilterByFavourite() {
@@ -140,7 +199,11 @@ class PostsListForm extends Component {
   }
 
   render() {
-    const { postsAreLoading } = this.props;
+    const { postsAreLoading, showNotificationPermissionDialog } = this.props;
+
+    if (showNotificationPermissionDialog) {
+      notif();
+    }
 
     if (postsAreLoading) {
       return (<Spinner size={'large'} />);
@@ -188,6 +251,7 @@ const mapStateToProps = state => ({
   refreshing: state.postsList.refreshing,
   filterSet: state.postsList.filterSet,
   filterByFavourite: state.postsList.filterByFavourite,
+  showNotificationPermissionDialog: state.postsList.showNotificationPermissionDialog,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -198,6 +262,8 @@ const mapDispatchToProps = dispatch => ({
   getFilteredPosts: (filter) => { dispatch(getFilteredPosts(filter)); },
   showFilterBy: () => { dispatch(showFilterBy()); },
   hideFilterBy: () => { dispatch(hideFilterBy()); },
+  subscribeToNotifications: (deviceId) => { dispatch(subscribeToNotifications(deviceId)); },
+  hideShowNotificationDialog: () => { dispatch(hideShowNotificationDialog()); },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(PostsListForm);

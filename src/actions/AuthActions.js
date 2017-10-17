@@ -1,5 +1,6 @@
 import { Actions } from 'react-native-router-flux';
 import { AsyncStorage } from 'react-native';
+import OneSignal from 'react-native-onesignal';
 import {
   EMAIL_CHANGED_IN_CHANGE_PASSWORD,
   HIDE_RESTORE_PASSWORD_DIALOG,
@@ -14,6 +15,7 @@ import {
   TOKEN,
   SET_TOKEN,
   SET_ERROR,
+  SHOW_NOTIFICATION_PERMISSION_DIALOG,
 } from './types';
 import * as serviceREST from '../services/serviceREST';
 import {
@@ -104,6 +106,28 @@ export const setTokenToState = payload => (dispatch) => {
   dispatch({ type: SET_TOKEN, payload });
 };
 
+const showNotificationPermission = () => {
+  return {
+    type: SHOW_NOTIFICATION_PERMISSION_DIALOG,
+  };
+};
+
+export const subscribeToNotifications = (deviceId) => (dispatch, getState) => {
+  const { networkIsConnected } = getState().networkReducer;
+  if (!networkIsConnected) {
+    dispatch(loginUserFail(NO_INTERNET_CONNECTION));
+  } else {
+    serviceREST.subscribeToNotifications(deviceId)
+    .then((response) => {
+      console.warn('subscribeToNotifications', response);
+      dispatch(showNotificationPermission());
+    })
+    .catch((error) => {
+      console.warn('subscribeToNotifications', error);
+    });
+  }
+};
+
 export const loginUser = (email, password) => (dispatch, getState) => {
   const { networkIsConnected } = getState().networkReducer;
   if (!networkIsConnected) {
@@ -118,13 +142,15 @@ export const loginUser = (email, password) => (dispatch, getState) => {
       password,
     })
       .then((response) => {
-        console.warn('loginUserSuccess');
+        OneSignal.addEventListener('ids', (device) => {
+          dispatch(subscribeToNotifications(device.userId));
+        });
+        OneSignal.configure();
+        OneSignal.setSubscription(true);
         dispatch(loginUserSuccess(response.data));
       })
       .catch((error) => {
-        console.warn('loginUserFail');
         dispatch(loginUserFail(error));
       });
   }
 };
-

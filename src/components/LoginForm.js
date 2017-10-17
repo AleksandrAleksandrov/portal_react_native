@@ -1,15 +1,16 @@
 import React, { Component } from 'react';
 import { compose } from 'redux';
+import { NavigationBar } from '@shoutem/ui';
 import { Platform, View, Text } from 'react-native';
-import { Actions } from 'react-native-router-flux';
 import { Field, reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
-import { emailChanged, passwordChanged, loginUser, hideRestorePasswordDialog, showRestorePassword, hideToast } from '../actions';
-import { Card, CardSection, Input, Button, Spinner, ChangePasswordDialog, TextCustom, CustomInput, CustomPasswordInput, InputValidateIOS, InputValidateAndroid } from './common';
+import { emailChanged, passwordChanged, loginUser, hideRestorePasswordDialog, showRestorePassword, hideToast, restorePassword } from '../actions';
+import { Card, CardSection, Button, Spinner, ChangePasswordDialog, TextCustom, InputValidateIOS, InputValidateAndroid } from './common';
 import { isEmailValid, isPasswordValid } from '../utils/Validation';
+import { navigationBarHeight } from '../constants/StyleConstants';
+import { color } from '../constants/color';
 import Toast from 'react-native-smart-toast';
 import TimerEnhance from 'react-native-smart-timer-enhance';
-import {restorePassword} from "../actions/AuthActions";
 const MK = require('react-native-material-kit');
 
 const {
@@ -30,6 +31,14 @@ const styles = {
     justifyContent: 'flex-start',
     flexDirection: 'row',
     position: 'relative',
+  },
+  titleStyle: {
+    color: color.navigationBarText,
+  },
+  navigationBarWrapper: {
+    width: 'auto',
+    height: navigationBarHeight,
+    backgroundColor: color.primary,
   },
 };
 
@@ -61,47 +70,105 @@ const validate = values => {
 let enabled = false;
 
 class LoginForm extends Component {
-  _showBottomToast = () => {
+  showBottomToast = () => {
     this._toast.show({
       position: Toast.constants.gravity.bottom,
       duration: 1000,
       children: 'На ' + this.props.email + ' выслана ссылка на восстановление пароля',
       animationEnd: () => {
         this._toast._toastAnimationToggle = setTimeout(() => {
-          this.props.dispatch(hideToast());
+          this.props.hideToast();
           this._toast.hide({
             duration: 1000,
-          })
-        }, 3000)
-      }
-    })
+          });
+        }, 3000);
+      },
+    });
   };
   onEmailChanged(text) {
-    this.props.dispatch(emailChanged(text));
+    this.props.emailChanged(text);
   }
 
   onPasswordChanged(text) {
-    this.props.dispatch(passwordChanged(text));
+    this.props.passwordChanged(text);
   }
 
   onButtonPress() {
-    const { email, password } = this.props;
-    this.props.dispatch(loginUser(email, password));
+    const { email, password, loginUser } = this.props;
+    loginUser(email, password);
   }
 
   onShowRestorePasswordDialog() {
-    this.props.dispatch(showRestorePassword());
+    this.props.showRestorePassword();
   }
 
   onDecline() {
-    this.props.dispatch(hideRestorePasswordDialog());
+    this.props.hideRestorePasswordDialog();
   }
 
   onRestorePassword() {
-    this.props.dispatch(restorePassword(this.props.email));
+    const { email, restorePassword } = this.props;
+    restorePassword(email);
   }
 
-  renderButton() {
+  renderMessage() {
+    const { error } = this.props;
+    if (error) {
+      return (
+        <CardSection>
+          <Text>
+            {error}
+          </Text>
+        </CardSection>
+      );
+    }
+  }
+
+  renderNavigationBar = () => {
+    const { navigationBarWrapper, titleStyle } = styles;
+
+    return (
+      <View style={navigationBarWrapper}>
+        <NavigationBar
+          styleName={'clear'}
+          centerComponent={<TextCustom type={'t2'} style={titleStyle}>Авторизация</TextCustom>}
+        />
+      </View>
+    );
+  }
+
+  renderEmailField = () => {
+    const { email } = this.props;
+
+    return (
+      <Field
+        label={'Email'}
+        name={'email'}
+        placeholder={(Platform.OS === 'ios') ? 'email@mail.com' : 'Email'}
+        component={(Platform.OS === 'ios') ? InputValidateIOS : InputValidateAndroid}
+        onChangeText={this.onEmailChanged.bind(this)}
+        values={email}
+      />
+    );
+  }
+
+  renderPasswordField = () => {
+    const { password } = this.props;
+
+    return (
+      <Field
+        secureTextEntry
+        label={'Пароль'}
+        name={'password'}
+        placeholder={'Пароль'}
+        component={(Platform.OS === 'ios') ? InputValidateIOS : InputValidateAndroid}
+        onChangeText={this.onPasswordChanged.bind(this)}
+        values={password}
+      />
+    );
+  }
+
+  renderLoginButton = () => {
     if (this.props.loading) {
       return <Spinner size="large" />;
     }
@@ -113,94 +180,103 @@ class LoginForm extends Component {
     );
   }
 
-  renderMessage() {
-    if (this.props.error) {
-      return (
-        <CardSection>
-          <Text>
-            {this.props.error}
-          </Text>
-        </CardSection>
-      );
-    }
+  renderRestorePasswordButton = () => {
+    return (
+      <Button onPress={this.onShowRestorePasswordDialog.bind(this)} enabled={true} >
+        Восстановить пароль
+      </Button>
+    );
   }
 
+
   render() {
-    const { loginForm, form } = this.props;
+    const { email, password, loginForm, form, restorePasswordDialog } = this.props;
     
-    if (isEmailValid(this.props.email) && isPasswordValid(this.props.password)) {
+    if (isEmailValid(email) && isPasswordValid(password)) {
       enabled = true;
     } else {
       enabled = false;
     }
 
     if (this.props.showToastRestorePassword) {
-      this._showBottomToast();
+      this.showBottomToast();
     }
     return (
-      <Card>
-        <CardSection>
-          <Field
-            label="Email"
-            name={'email'}
-            placeholder={(Platform.OS === 'ios') ? "email@mail.com" : "Email"}
-            component={(Platform.OS === 'ios') ? InputValidateIOS : InputValidateAndroid}
-            onChangeText={this.onEmailChanged.bind(this)}
-            values={this.props.email}
+      <View>
+        {this.renderNavigationBar()}
+        <Card>
+          <CardSection>
+            {this.renderEmailField()}
+          </CardSection>
+          <CardSection>
+            {this.renderPasswordField()}
+          </CardSection>
+          <CardSection>
+            {this.renderLoginButton()}
+          </CardSection>
+          {this.renderMessage()}
+
+          <CardSection>
+            {this.renderRestorePasswordButton()}
+          </CardSection>
+
+          <ChangePasswordDialog
+            visible={restorePasswordDialog}
+            dispatch={this.props.dispatch}
+            email={email}
+            onPress={this.onRestorePassword.bind(this)}
+            onDecline={this.onDecline.bind(this)}
           />
-
-        </CardSection>
-        <CardSection>
-          <Field
-            secureTextEntry
-            label="Пароль"
-            name={'password'}
-            placeholder="Пароль"
-            component={(Platform.OS === 'ios') ? InputValidateIOS : InputValidateAndroid}
-            onChangeText={this.onPasswordChanged.bind(this)}
-            values={this.props.password}
-          />
-        </CardSection>
-        <CardSection>
-          {this.renderButton()}
-        </CardSection>
-        {this.renderMessage()}
-
-        <CardSection>
-          <Button onPress={this.onShowRestorePasswordDialog.bind(this)} enabled={true} >
-            Восстановить пароль
-          </Button>
-        </CardSection>
-
-        <ChangePasswordDialog
-          visible={this.props.restorePasswordDialog}
-          dispatch={this.props.dispatch}
-          email={this.props.email}
-          onPress={this.onRestorePassword.bind(this)}
-          onDecline={this.onDecline.bind(this)}
-        />
-        <Toast
-          ref={ component => this._toast = component }
-          marginTop={64}>
-        </Toast>
-      </Card>
-
-
+          <Toast
+            ref={ component => this._toast = component }
+            marginTop={64}>
+          </Toast>
+        </Card>
+      </View>
     );
   }
 }
 
 const mapStateToProps = ({ auth, form }) => {
-  const { restorePasswordDialog, showToastRestorePassword, email, password, error, loading, user } = auth;
+  const {
+    restorePasswordDialog,
+    showToastRestorePassword,
+    email,
+    password,
+    error,
+    loading,
+    user,
+  } = auth;
   const loginForm = form.loginForm;
 
-  return { restorePasswordDialog, showToastRestorePassword, email, password, error, loading, user, loginForm, form };
+  return {
+    restorePasswordDialog,
+    showToastRestorePassword,
+    email,
+    password,
+    error,
+    loading,
+    user,
+    loginForm,
+    form,
+  };
 };
+
+const mapDispatchToProps = dispatch => ({
+  dispatch,
+  emailChanged: (text) => { dispatch(emailChanged(text)); },
+  passwordChanged: (text) => { dispatch(passwordChanged(text)); },
+  loginUser: (login, password) => { dispatch(loginUser(login, password)); },
+  showRestorePassword: () => { dispatch(showRestorePassword()); },
+  hideRestorePasswordDialog: () => { dispatch(hideRestorePasswordDialog()); },
+  restorePassword: () => { dispatch(restorePassword()); },
+  hideToast: () => { dispatch(hideToast()); },
+});
 
 export default reduxForm({
   form: 'loginForm',
   validate,
 })(
-    connect(mapStateToProps)(LoginForm),
+    connect(mapStateToProps, mapDispatchToProps)(LoginForm),
     TimerEnhance(LoginForm),
 );

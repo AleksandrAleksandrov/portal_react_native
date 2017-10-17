@@ -26,8 +26,8 @@ const RouterComponent = () => (
       <Scene
         key="login"
         component={LoginForm}
-        title="Авторизация"
         panHandlers={null}
+        hideNavBar={true}
         animation={'fade'}
         type={'replace'}
         duration={1000}

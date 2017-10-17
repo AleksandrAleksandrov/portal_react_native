@@ -6,13 +6,12 @@ import { CommentItem } from './CommentItem';
 import { connect } from 'react-redux';
 import {
   POLL,
-  EVENT
+  EVENT,
 } from '../Constants';
 import { getComments, setAsRead } from '../actions';
 import _ from 'lodash';
 import { NavigationBar } from '@shoutem/ui';
-
-const navigationBarHeight = 70;
+import { navigationBarHeight } from '../constants/StyleConstants';
 
 class PostForm extends Component {
   componentWillMount() {

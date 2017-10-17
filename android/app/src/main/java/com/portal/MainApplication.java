@@ -3,6 +3,7 @@ package com.portal;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.geektime.rnonesignalandroid.ReactNativeOneSignalPackage;
 import com.reactnative.photoview.PhotoViewPackage;
 import cl.json.RNSharePackage;
 import com.BV.LinearGradient.LinearGradientPackage;
@@ -29,6 +30,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new ReactNativeOneSignalPackage(),
             new PhotoViewPackage(),
             new RNSharePackage(),
             new LinearGradientPackage(),

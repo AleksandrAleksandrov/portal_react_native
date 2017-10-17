@@ -20,6 +20,8 @@ import {
   SET_SORT_BY_POLL,
   SET_SORT_BY_EVENT,
   SET_FILTER_BY_FAVOURITE,
+  SHOW_NOTIFICATION_PERMISSION_DIALOG,
+  HIDE_NOTIFICATION_PERMISSION_DIALOG,
 } from '../actions/types';
 import {
   ADVERT,
@@ -58,6 +60,7 @@ const INITIAL_STATE = {
   filterByEvent: false,
   filterByFavourite: false,
   filterSet: filter,
+  showNotificationPermissionDialog: false,
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -176,6 +179,18 @@ export default (state = INITIAL_STATE, action) => {
         ...state,
         filterByFavourite: action.payload,
         filterSet: createCurrentSet(state, action.payload, FAVOURITE),
+      };
+    case SHOW_NOTIFICATION_PERMISSION_DIALOG:
+      console.warn('SHOW_NOTIFICATION_PERMISSION_DIALOG', true);
+      return {
+        ...state,
+        showNotificationPermissionDialog: true,
+      };
+    case HIDE_NOTIFICATION_PERMISSION_DIALOG:
+      console.warn('HIDE_NOTIFICATION_PERMISSION_DIALOG', false);
+      return {
+        ...state,
+        showNotificationPermissionDialog: false,
       };
     default:
       return state;
