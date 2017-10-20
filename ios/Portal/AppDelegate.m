@@ -20,47 +20,24 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
   NSURL *jsCodeLocation;
-
+  
   jsCodeLocation = [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index" fallbackResource:nil];
-
+  
   RCTRootView *rootView = [[RCTRootView alloc] initWithBundleURL:jsCodeLocation
                                                       moduleName:@"Portal"
                                                initialProperties:nil
                                                    launchOptions:launchOptions];
   rootView.backgroundColor = [[UIColor alloc] initWithRed:1.0f green:1.0f blue:1.0f alpha:1];
   
-//  [[UIApplication sharedApplication] registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeSound | UIUserNotificationTypeAlert | UIUserNotificationTypeBadge) categories:nil]];
-//  [[UIApplication sharedApplication] registerForRemoteNotifications];
-
-
   self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
   UIViewController *rootViewController = [UIViewController new];
   rootViewController.view = rootView;
   self.window.rootViewController = rootViewController;
   [self.window makeKeyAndVisible];
-  // For requiring push notification permissions manually.
   self.oneSignal = [[RCTOneSignal alloc] initWithLaunchOptions:launchOptions
-                                                         appId:@"7dddc775-f055-4f7b-9db3-de94b0f14a80"
-                                                      settings:@{kOSSettingsKeyAutoPrompt: @false}];
+                                                         appId:@"a0de680f-fecf-4a6d-8d1d-b5016960e382"
+                                                      settings:@{kOSSettingsKeyInFocusDisplayOption : @(OSNotificationDisplayTypeNotification), kOSSettingsKeyAutoPrompt : @YES}];
   return YES;
 }
-// Handle remote notification registration.
-//- (void)application:(UIApplication *)app
-//didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)devToken {
-//  NSLog(@"asddasd %@", [NSString stringWithFormat:@"%@", devToken]);
-//  NSLog(@"qyweqw %@", [NSKeyedUnarchiver unarchiveObjectWithData:devToken]);
-//}
-//
-//- (void)onOSSubscriptionChanged:(OSSubscriptionStateChanges*)stateChanges {
-//
-//  // Example of detecting subscribing to OneSignal
-////  if (!stateChanges.from.subscribed && stateChanges.to.subscribed) {
-////    NSLog(@"Subscribed for OneSignal push notifications!");
-////    // get player ID
-////    stateChanges.to.userId
-////  }
-//
-//  // prints out all properties
-//  NSLog(@"SubscriptionStateChanges:\n%@", stateChanges);
-//}
+
 @end

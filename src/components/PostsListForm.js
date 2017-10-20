@@ -1,18 +1,21 @@
 import React, { Component } from 'react';
 import { Actions } from 'react-native-router-flux';
-import { FlatList, View, RefreshControl, TouchableOpacity, AsyncStorage } from 'react-native';
+import { FlatList, View, RefreshControl, TouchableOpacity, StatusBar, AsyncStorage } from 'react-native';
 import { NavigationBar } from '@shoutem/ui';
 import { connect } from 'react-redux';
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import PropTypes from 'prop-types';
 import OneSignal from 'react-native-onesignal';
 
-import { getPosts, getMorePosts, refreshPosts, showFilterBy, setFavourite, getFilteredPosts, hideFilterBy, subscribeToNotifications, hideShowNotificationDialog } from '../actions';
+import { getPosts, getMorePosts, refreshPosts, showFilterBy, setFavourite, getFilteredPosts, hideFilterBy, subscribeToNotifications, hideShowNotificationDialog, getPostsFromNotification } from '../actions';
 import { CustomIcons, TextCustom, SmallSpinner, Spinner } from './common';
 import { color } from '../constants/color';
 import { navigationBarHeight } from '../constants/StyleConstants';
 import PostItem from './PostItem';
 import DialogFilterBy from './common/DialogFilterBy';
+import {
+  NOTIFICATION_TYPE_NEWS,
+} from '../Constants';
 
 const styles = {
   iconStyle: {
@@ -39,62 +42,29 @@ const logOut = () => {
   Actions.login();
 };
 
-const notif = () => {
-  // const permissions = {
-  //   alert: true,
-  //   badge: true,
-  //   sound: true,
-  // };
-  // OneSignal.requestPermissions(permissions);
-  // OneSignal.registerForPushNotifications();
-  // this.dispatch.hideShowNotificationDialog();
+const showPushNotificationRequest = () => {
+  const permissions = {
+    alert: false,
+    badge: true,
+    sound: true,
+  };
+  OneSignal.requestPermissions(permissions);
+  OneSignal.registerForPushNotifications();
+  this.dispatch.hideShowNotificationDialog();
 };
 
 class PostsListForm extends Component {
   componentWillMount() {
+    OneSignal.addEventListener('received', this.onReceived.bind(this));
+    OneSignal.inFocusDisplaying(2);
     this.props.getPosts();
   }
-  //
-  // componentDidMount() {
-  //   const permissions = {
-  //     alert: true,
-  //     badge: true,
-  //     sound: true,
-  //   };
-  //   OneSignal.requestPermissions(permissions);
-  //   OneSignal.registerForPushNotifications();
-  //   OneSignal.addEventListener('received', this.onReceived);
-  //   OneSignal.addEventListener('opened', this.onOpened);
-  //   OneSignal.addEventListener('registered', this.onRegistered.bind(this));
-  //   OneSignal.addEventListener('ids', this.onIds.bind(this));
-  // }
-  //
-  // componentWillUnmount() {
-  //   OneSignal.removeEventListener('received', this.onReceived);
-  //   OneSignal.removeEventListener('opened', this.onOpened);
-  //   OneSignal.removeEventListener('registered', this.onRegistered);
-  //   OneSignal.removeEventListener('ids', this.onIds);
-  // }
-  //
-  // onReceived(notification) {
-  //   console.log("Notification received: ", notification);
-  // }
-  //
-  // onOpened(openResult) {
-  //   console.log('Message: ', openResult.notification.payload.body);
-  //   console.log('Data: ', openResult.notification.payload.additionalData);
-  //   console.log('isActive: ', openResult.notification.isAppInFocus);
-  //   console.log('openResult: ', openResult);
-  // }
-  //
-  // onRegistered(notifData) {
-  //   console.log("Device had been registered for push notifications!", notifData);
-  // }
-  //
-  // onIds(device) {
-  //   console.warn(' onIds componentWillMount');
-  //   this.props.subscribeToNotifications(device.userId);
-  // }
+
+  onReceived(notification) {
+    if (notification.payload.launchURL.includes(NOTIFICATION_TYPE_NEWS)) {
+      this.props.getPostsFromNotification();
+    }
+  }
 
   onRefresh() {
     this.props.refreshPosts();
@@ -135,6 +105,10 @@ class PostsListForm extends Component {
 
     return (
       <View style={navigationBarWrapper}>
+        <StatusBar
+          backgroundColor={color.primary}
+          barStyle="light-content"
+        />
         <NavigationBar
           title={'Portal'}
           styleName={'clear'}
@@ -202,7 +176,7 @@ class PostsListForm extends Component {
     const { postsAreLoading, showNotificationPermissionDialog } = this.props;
 
     if (showNotificationPermissionDialog) {
-      notif();
+      showPushNotificationRequest();
     }
 
     if (postsAreLoading) {
@@ -264,6 +238,7 @@ const mapDispatchToProps = dispatch => ({
   hideFilterBy: () => { dispatch(hideFilterBy()); },
   subscribeToNotifications: (deviceId) => { dispatch(subscribeToNotifications(deviceId)); },
   hideShowNotificationDialog: () => { dispatch(hideShowNotificationDialog()); },
+  getPostsFromNotification: () => { dispatch(getPostsFromNotification()); },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(PostsListForm);

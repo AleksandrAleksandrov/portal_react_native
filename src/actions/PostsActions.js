@@ -87,26 +87,27 @@ export const finishRefresh = () => {
   };
 };
 
-// startfrom and count for pagination
-export const getPosts = (url) => (dispatch) => {
-  // console.warn('url', url);
-  dispatch(setPostsAreLoading());
+export const getPostsFromNotification = () => (dispatch) => {
+  serviceREST.getPosts()
+    .then((response) => {
+      dispatch(getPostsSuccess(response.data));
+      dispatch(setNextPage(response.data.next));
+    })
+    .catch((error) => {
+      console.warn(error);
+    });
+};
 
-  // if (!url) {
-  //   dispatch(setPostsAreLoading(null));
-  // }
+// startfrom and count for pagination
+export const getPosts = () => (dispatch) => {
+  dispatch(setPostsAreLoading());
   
-  serviceREST.getPosts(url)
+  serviceREST.getPosts()
   .then((response) => {
     // console.warn(response);
     // DBHelper.clearPosts();
     // DBHelper.writePostsToDB(response.data.results);
-    if (url != null) {
-      dispatch(addMorePosts(response.data));
-    } else {
-      dispatch(getPostsSuccess(response.data));
-    }
-    
+    dispatch(getPostsSuccess(response.data));
     // if (!url) {
     //   dispatch(setPostsAreLoading(null));
     // }

@@ -135,8 +135,8 @@ android {
         }
     }
     defaultConfig {
-        manifestPlaceholders = [onesignal_app_id: "7dddc775-f055-4f7b-9db3-de94b0f14a80",
-                                onesignal_google_project_number: "822322983233"]
+        manifestPlaceholders = [onesignal_app_id: "a0de680f-fecf-4a6d-8d1d-b5016960e382",
+                                onesignal_google_project_number: "2842934961"]
     }
 }
 
