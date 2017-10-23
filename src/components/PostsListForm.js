@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import { Actions } from 'react-native-router-flux';
-import { FlatList, View, RefreshControl, TouchableOpacity, StatusBar, AsyncStorage } from 'react-native';
+import { FlatList, View, RefreshControl, TouchableOpacity, StatusBar, AsyncStorage, Text, DrawerLayoutAndroid } from 'react-native';
 import { NavigationBar } from '@shoutem/ui';
 import { connect } from 'react-redux';
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import PropTypes from 'prop-types';
 import OneSignal from 'react-native-onesignal';
+import DrawerLayout from 'react-native-drawer-layout';
 
 import { getPosts, getMorePosts, refreshPosts, showFilterBy, setFavourite, getFilteredPosts, hideFilterBy, subscribeToNotifications, hideShowNotificationDialog, getPostsFromNotification } from '../actions';
 import { CustomIcons, TextCustom, SmallSpinner, Spinner } from './common';
@@ -13,6 +14,7 @@ import { color } from '../constants/color';
 import { navigationBarHeight } from '../constants/StyleConstants';
 import PostItem from './PostItem';
 import DialogFilterBy from './common/DialogFilterBy';
+import DrawerView from './common/DrawerView';
 import {
   NOTIFICATION_TYPE_NEWS,
 } from '../Constants';
@@ -71,8 +73,8 @@ class PostsListForm extends Component {
   }
 
   onPressWriteNewPost = () => {
-    // Actions.newPostForm();
-    logOut();
+    Actions.newPostForm();
+    // logOut();
   }
 
   onPressFilterByFavourite() {
@@ -172,6 +174,10 @@ class PostsListForm extends Component {
     return (<SmallSpinner size={'small'} />);
   }
 
+  nav = (
+    <DrawerView />
+  );
+
   render() {
     const { postsAreLoading, showNotificationPermissionDialog } = this.props;
 
@@ -184,14 +190,20 @@ class PostsListForm extends Component {
     }
 
     return (
-      <View>
-        {this.renderNavigationBar()}
-        {this.renderInfoMessage()}
-        {this.renderPostsList()}
-        <DialogFilterBy
-          onDecline={() => this.onDecline()}
-        />
-      </View>
+      <DrawerLayout
+        drawerWidth={300}
+        // drawerPosition={DrawerLayout.positions.Left}
+        renderNavigationView={() => this.nav}>
+        <View>
+
+          {this.renderNavigationBar()}
+          {this.renderInfoMessage()}
+          {this.renderPostsList()}
+          <DialogFilterBy
+            onDecline={() => this.onDecline()}
+          />
+        </View>
+      </DrawerLayout>
     );
   }
 }

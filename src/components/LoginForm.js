@@ -157,7 +157,7 @@ class LoginForm extends Component {
 
     return (
       <Field
-        secureTextEntry
+        secureTextEntry={true}
         label={'Пароль'}
         name={'password'}
         placeholder={'Пароль'}

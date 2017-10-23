@@ -16,7 +16,7 @@ const InputValidateAndroid = (props) => {
       <TextFieldWithFloatingLabel
         style={{ flex:1, height: 70}}
         {...inputProps}
-        secureTextEntry={secureTextEntry}
+        password={secureTextEntry}
         onTextChange={input.onChange}
         onBlur={input.onBlur}
         onFocus={input.onFocus}

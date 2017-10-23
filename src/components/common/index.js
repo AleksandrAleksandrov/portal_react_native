@@ -21,3 +21,5 @@ export * from './PopupMenu';
 export * from './DialogFilterBy';
 export * from './TouchableFilterBy';
 export * from './CheckBoxCustom';
+export * from './DrawerView';
+export * from './TouchableDrawerItem';
