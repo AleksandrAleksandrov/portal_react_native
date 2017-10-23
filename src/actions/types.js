@@ -49,3 +49,10 @@ export const SET_NETWORK_IS_CONNECTED = 'set_network_is_connected';
 // Notifications
 export const SHOW_NOTIFICATION_PERMISSION_DIALOG = 'show_notification_permission_dialog';
 export const HIDE_NOTIFICATION_PERMISSION_DIALOG = 'hide_notification_permission_dialog';
+
+// User
+export const SET_USER = 'set_user';
+
+// Drawer
+export const OPEN_DRAWER = 'open_drawer';
+export const CLOSE_DRAWER = 'close_drawer';

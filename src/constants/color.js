@@ -5,4 +5,5 @@ export const color = {
   red: 'red',
   white: 'white',
   navigationBarText: 'white',
+  drawerIconColor: 'gray',
 };

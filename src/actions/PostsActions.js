@@ -22,9 +22,35 @@ import {
   SET_SORT_BY_EVENT,
   SET_FILTER_BY_FAVOURITE,
   HIDE_NOTIFICATION_PERMISSION_DIALOG,
+  SET_USER,
 } from './types';
-import { NOT_FOUND } from "../Constants";
+import { NOT_FOUND } from '../Constants';
 import * as serviceREST from '../services/serviceREST';
+
+/**
+ * Set user model to state.
+ * @param data - user model
+ * @returns {{type, payload: *}}
+ */
+const setUser = (data) => {
+  return {
+    type: SET_USER,
+    payload: data,
+  };
+};
+
+/**
+ * Get my own user model to fill personal data
+ */
+const getUser = () => (dispatch) => {
+  serviceREST.getUser()
+    .then((response) => {
+      dispatch(setUser(response));
+    })
+    .catch((error) => {
+
+  });
+};
 
 const getPostsSuccess = (data) => {
   return {
@@ -100,6 +126,7 @@ export const getPostsFromNotification = () => (dispatch) => {
 
 // startfrom and count for pagination
 export const getPosts = () => (dispatch) => {
+  dispatch(getUser());
   dispatch(setPostsAreLoading());
   
   serviceREST.getPosts()

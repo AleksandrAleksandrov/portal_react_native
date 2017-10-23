@@ -1,7 +1,11 @@
 // export const URL = 'https://www.portal.light-it.net';
 export const URL = 'https://portal-dev.light-it.loc';
 
+export const DEFAULT_PHOTO = 'https://www.portal.light-it.net/images/cam.png';
+
 export const AUTH = '/api/auth/login/';
+
+export const USER = '/api/auth/user/';
 
 export const SUBSCRIBE_TO_GET_NOTIFICATIONS = 'api/add_device/';
 

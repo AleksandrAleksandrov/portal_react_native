@@ -21,3 +21,6 @@ export const PASSWORD_RESET_SUCCESS = 'Password reset e-mail has been sent.';
 
 // Notifications
 export const NOTIFICATION_TYPE_NEWS = 'news';
+
+// AsyncStorage
+export const TOKEN = 'token';

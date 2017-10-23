@@ -23,3 +23,4 @@ export * from './TouchableFilterBy';
 export * from './CheckBoxCustom';
 export * from './DrawerView';
 export * from './TouchableDrawerItem';
+export * from './DrawerIcons';

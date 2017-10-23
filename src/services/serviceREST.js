@@ -8,6 +8,7 @@ import {
   MESSAGES,
   USER_MESSAGE,
   PASSWORD_RESET,
+  USER,
 } from '../ApiConstants';
 
 const api = create({
@@ -69,6 +70,26 @@ export const postLogin = (data) => {
           resolve(response);
         } else {
           reject(response.data ? response.data.detail : 'Не удалось подключится к серверу');
+        }
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+};
+
+/**
+ * Fetch my own user model to fill personal data.
+ * @returns {Promise}
+ */
+export const getUser = () => {
+  return new Promise((resolve, reject) => {
+    api.get(USER)
+      .then((response) => {
+        if (response.ok) {
+          resolve(response.data);
+        } else {
+          reject(response);
         }
       })
       .catch((error) => {

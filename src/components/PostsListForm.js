@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 import OneSignal from 'react-native-onesignal';
 import DrawerLayout from 'react-native-drawer-layout';
 
-import { getPosts, getMorePosts, refreshPosts, showFilterBy, setFavourite, getFilteredPosts, hideFilterBy, subscribeToNotifications, hideShowNotificationDialog, getPostsFromNotification } from '../actions';
+import { getPosts, getMorePosts, refreshPosts, showFilterBy, setFavourite, getFilteredPosts, hideFilterBy, subscribeToNotifications, hideShowNotificationDialog, getPostsFromNotification, openDrawer } from '../actions';
 import { CustomIcons, TextCustom, SmallSpinner, Spinner } from './common';
 import { color } from '../constants/color';
 import { navigationBarHeight } from '../constants/StyleConstants';
@@ -56,6 +56,11 @@ const showPushNotificationRequest = () => {
 };
 
 class PostsListForm extends Component {
+  constructor() {
+    super();
+    this.openDrawer = this.openDrawer.bind(this);
+  }
+
   componentWillMount() {
     OneSignal.addEventListener('received', this.onReceived.bind(this));
     OneSignal.inFocusDisplaying(2);
@@ -101,6 +106,10 @@ class PostsListForm extends Component {
     }
   }
 
+  openDrawer = () => {
+    this.drawer.openDrawer();
+  }
+
   renderNavigationBar = () => {
     const { filterByFavourite } = this.props;
     const { iconStyle, navigationBarWrapper, navigationIconsWrapper } = styles;
@@ -126,6 +135,11 @@ class PostsListForm extends Component {
                 <Icon name={'filter'} style={iconStyle} />
               </TouchableOpacity>
             </View>
+          }
+          leftComponent={
+            <TouchableOpacity onPress={() => this.openDrawer()}>
+              <Icon name={'bars'} style={iconStyle} />
+            </TouchableOpacity>
           }
         />
       </View>
@@ -193,6 +207,7 @@ class PostsListForm extends Component {
       <DrawerLayout
         drawerWidth={300}
         // drawerPosition={DrawerLayout.positions.Left}
+        ref={(_drawer) => this.drawer = _drawer}
         renderNavigationView={() => this.nav}>
         <View>
 

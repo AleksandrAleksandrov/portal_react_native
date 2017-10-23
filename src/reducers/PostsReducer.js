@@ -22,6 +22,9 @@ import {
   SET_FILTER_BY_FAVOURITE,
   SHOW_NOTIFICATION_PERMISSION_DIALOG,
   HIDE_NOTIFICATION_PERMISSION_DIALOG,
+  SET_USER,
+  OPEN_DRAWER,
+  CLOSE_DRAWER,
 } from '../actions/types';
 import {
   ADVERT,
@@ -43,6 +46,8 @@ const createCurrentSet = (state, add, event) => {
 };
 
 const INITIAL_STATE = {
+  user: {},
+  isDrawerOpened: false,
   postsAreLoading: false,
   loadingMorePostsInProgress: false,
   refreshing: false,
@@ -191,6 +196,11 @@ export default (state = INITIAL_STATE, action) => {
       return {
         ...state,
         showNotificationPermissionDialog: false,
+      };
+    case SET_USER:
+      return {
+        ...state,
+        user: action.payload,
       };
     default:
       return state;
