@@ -60,9 +60,8 @@ class PostForm extends Component {
   };
 
   render() {
-    const { id, post, comments } = this.props;
-    const { is_favorite } = post;
-    const { title, text, message_type, create_dt, author, comments_count } = post.message; // able to crash
+    const { post, comments } = this.props;
+    const { title, text, create_dt, author, comments_count } = post.message; // able to crash
 
     // const r = Post.objects('Post').filtered(`id == ${post.id}`); // r[0].message.text get message's text
 
@@ -81,10 +80,8 @@ class PostForm extends Component {
         <CardSection>
           <View style={{ flexDirection: 'column', flex: 4 }}>
             <PostHeader
-              id={id}
-              messageType={message_type}
-              title={title}
-              isFavorite={is_favorite}
+              post={post}
+              id={post.id}
             />
             <Text>{text}</Text>
             <PostFooter
@@ -107,10 +104,6 @@ class PostForm extends Component {
     );
   }
 }
-
-const styles = {
-  
-};
 
 const mapStateToProps = (state, myProps) => ({
 

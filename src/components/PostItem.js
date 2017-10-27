@@ -53,30 +53,19 @@ class PostItem extends Component {
     Actions.post({ id: this.props.post.id });
   }
 
-  renderLabel(post) {
-    if (post.message.content_object !== null & post.message.content_object.is_important && post.message.is_actual) {
-      return(<LabelImportant/>);
-    } else if (!post.is_readed | (!post.is_readed && !post.message.is_actual)) {
-      return(<LabelNew/>);
-    }
-    return null;
-  }
-
   render() {
-    const { id, is_favorite } = this.props.post;
-    const { title, text, message_type, create_dt, author, comments_count } = this.props.post.message; // able to crash
+    const { post } = this.props;
+    const { text, create_dt, author, comments_count } = post.message; // able to
+
     return (
       <TouchableWithoutFeedback onPress={this.onPostPress}>
         <View>
           <CardSection >
             <View style={styles.rootViewStyle}>
               <PostHeader
-                id={id}
-                messageType={message_type}
-                title={title}
-                isFavorite={is_favorite}
+                post={post}
+                id={post.id}
               />
-              {this.renderLabel(this.props.post)}
               <View>
                 <TextCustom type={'t2_regular'} numberOfLines={4} >{text}</TextCustom>
               </View>

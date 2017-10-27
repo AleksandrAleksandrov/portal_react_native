@@ -1,8 +1,7 @@
 import React from 'react';
 import { View, TouchableWithoutFeedback } from 'react-native';
 import { connect } from 'react-redux';
-import { TextCustom } from './TextCustom';
-import { CustomIcons } from './CustomIcons';
+import { TextCustom, CustomIcons, LabelImportant, LabelNew } from './';
 import { onStarPressed } from '../../actions';
 
 const styles = {
@@ -46,39 +45,52 @@ const styles = {
   },
 };
 
-// ({ id, messageType, title, isFavorite, dispatch, pressedStarId }) => means this.props......
-const PostHeader = ({ id, messageType, title, isFavorite, dispatch, pressedStarId }) => {
-  onStarPress = () => {
-    if (pressedStarId[id] === undefined) {
-      dispatch(onStarPressed(id, !isFavorite));
-    }
-  };
-  return (
+const renderLabel = (post) => {
+  if (post.message.content_object !== null & post.message.content_object.is_important && post.message.is_actual) {
+    return (<LabelImportant />);
+  } else if (!post.is_readed | (!post.is_readed && !post.message.is_actual)) {
+    return (<LabelNew />);
+  }
+  return null;
+};
+
+const PostHeader = ({ post, id, pressedStarId, onStarPressed }) => (
+  <View>
     <View style={styles.headerViewStyle}>
       <View style={styles.textViewWrapper}>
-        {CustomIcons.getPostIcon(messageType)}
+        {CustomIcons.getPostIcon(post.message.message_type)}
         <TextCustom
           type={'t1_light'}
           style={styles.titleTextStyle}
           numberOfLines={3}
         >
-          {title}
+          {post.message.title}
         </TextCustom>
       </View>
       <View style={styles.starViewWrapper}>
-        <TouchableWithoutFeedback onPress={this.onStarPress}>
-          {CustomIcons.getStart(isFavorite)}
+        <TouchableWithoutFeedback onPress={() => {
+          if (pressedStarId[id] === undefined) {
+            onStarPressed(id, !post.is_favorite);
+          }
+        }}
+        >
+          {CustomIcons.getStart(post.is_favorite)}
         </TouchableWithoutFeedback>
       </View>
     </View>
-  );
-};
+    {renderLabel(post)}
+  </View>
+);
+
 
 const mapStateToProps = (state) => {
-  const { post, error, pressedStarId } = state.postsList;
+  const { pressedStarId } = state.postsList;
 
-  return { post, error, pressedStarId };
+  return { pressedStarId };
 };
 
+const mapDispatchToProps = (dispatch) => ({
+  onStarPressed: (id, isFavourite) => { dispatch(onStarPressed(id, isFavourite)); },
+});
 
-export default connect(mapStateToProps)(PostHeader);
+export default connect(mapStateToProps, mapDispatchToProps)(PostHeader);
