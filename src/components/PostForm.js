@@ -1,17 +1,35 @@
 import React, { Component, PropTypes as PT } from 'react';
-import { Text, View, ScrollView, FlatList } from 'react-native';
+import { connect } from 'react-redux';
+import { View, ScrollView, FlatList } from 'react-native';
+import _ from 'lodash';
+import Moment from 'moment';
+import { NavigationBar } from '@shoutem/ui';
 import { CardSection, PostFooter, TextCustom } from './common';
 import PostHeader from './common/PostHeader';
 import { CommentItem } from './CommentItem';
-import { connect } from 'react-redux';
 import {
   POLL,
   EVENT,
 } from '../Constants';
+import { color } from '../constants/color';
 import { getComments, setAsRead } from '../actions';
-import _ from 'lodash';
-import { NavigationBar } from '@shoutem/ui';
 import { navigationBarHeight } from '../constants/StyleConstants';
+
+const styles = {
+  navigationBarWrapper: {
+    width: 'auto',
+    height: navigationBarHeight,
+    backgroundColor: color.primary,
+  },
+  bodyView: {
+    flexDirection: 'column',
+    flex: 4,
+  },
+  textStyle: {
+    marginTop: 10,
+    marginBottom: 10,
+  },
+};
 
 class PostForm extends Component {
   componentWillMount() {
@@ -59,47 +77,82 @@ class PostForm extends Component {
     // onPress: () => {},
   };
 
+  navigationBar = (title) => {
+    return (
+      <View style={styles.navigationBarWrapper}>
+        <NavigationBar
+          hasHistory
+          styleName="clear"
+          navigateBack={this.props.navigation.goBack}
+          title={<TextCustom type={'labelText'} numberOfLines={1}>{title}</TextCustom>}
+        />
+      </View>
+    );
+  };
+
+  pollEndDate = (date) => {
+    const { textStyle } = styles;
+    return (
+      <TextCustom style={textStyle} type={'t2_regular'}>
+        Голосование открыто до {Moment(date).format('DD.MM.YYYY')} вкючительно.
+      </TextCustom>
+    );
+  };
+
+  renderPollInfo = (type, contentObject) => {
+    const { textStyle } = styles;
+    if (type === EVENT) {
+      return (
+        <View>
+          <TextCustom style={textStyle} type={'t2_regular'}>
+            Место проведения: {contentObject.location}
+          </TextCustom>
+          <TextCustom style={textStyle} type={'t2_regular'}>
+            Время проведения: {Moment(contentObject.date_time).format('DD.MM.YYYY kk:mm')}
+          </TextCustom>
+          {this.pollEndDate(contentObject.poll_end_date)}
+        </View>
+      );
+    } else if (type === POLL) {
+      return (
+        <View>
+          {this.pollEndDate(contentObject.poll_end_date)}
+        </View>
+      );
+    }
+  };
+
   render() {
     const { post, comments } = this.props;
-    const { title, text, create_dt, author, comments_count } = post.message; // able to crash
+    const { title, text, create_dt, author, comments_count, message_type, content_object } = post.message; // able to crash
 
-    // const r = Post.objects('Post').filtered(`id == ${post.id}`); // r[0].message.text get message's text
-
-    console.log('render', comments);
     return (
       <View>
-        <View style={{ width: 'auto', height: navigationBarHeight, backgroundColor: '#2BA0F3' }}>
-          <NavigationBar
-            hasHistory
-            styleName="clear"
-            navigateBack={this.props.navigation.goBack}
-            title={<TextCustom type={'labelText'} numberOfLines={1}>{title}</TextCustom>}
-          />
-        </View>
-      <ScrollView style={{marginBottom: navigationBarHeight}}>
-        <CardSection>
-          <View style={{ flexDirection: 'column', flex: 4 }}>
-            <PostHeader
-              post={post}
-              id={post.id}
+        {this.navigationBar(title)}
+        <ScrollView style={{ marginBottom: navigationBarHeight }}>
+          <CardSection>
+            <View style={styles.bodyView}>
+              <PostHeader
+                post={post}
+                id={post.id}
+              />
+              <TextCustom type={'t2_regular'}>{text}</TextCustom>
+              {this.renderPollInfo(message_type, content_object)}
+              <PostFooter
+                author={author}
+                createDate={create_dt}
+                commentsCount={comments_count}
+              />
+            </View>
+          </CardSection>
+          <CardSection>
+            <FlatList
+              data={comments ? comments : []}
+              renderItem={({item}) => <CommentItem comment={item} />}
+              keyExtractor={item => item.id}
             />
-            <Text>{text}</Text>
-            <PostFooter
-              author={author}
-              createDate={create_dt}
-              commentsCount={comments_count}
-            />
-          </View>
-        </CardSection>
-        <CardSection>
-          <FlatList
-            data={comments ? comments : []}
-            renderItem={({item}) => <CommentItem comment={item} />}
-            keyExtractor={item => item.id}
-          />
-        </CardSection>
-      </ScrollView>
-
+          </CardSection>
+        </ScrollView>
       </View>
     );
   }

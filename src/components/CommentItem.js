@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Text, View, TouchableWithoutFeedback, Image } from 'react-native';
-import { CardSection, PostIcon, TextCustom, PostFooter, Avatar } from './common';
 import Moment from 'moment';
+import { CardSection, PostIcon, TextCustom, PostFooter, Avatar } from './common';
 
 const styles = {
   titleTextStyle: {
@@ -48,13 +48,13 @@ class CommentItem extends Component {
     const { text, create_dt } = this.props.comment;
     const { first_name, last_name, photo_thumbnail, photo } = this.props.comment.user;
     return (
-        <CardSection >
-          <Avatar
-            thumbnail={photo_thumbnail}
-            photo={photo}
-            size={80}
-          />
-          <View style={{ flexDirection: 'column', flex: 1, }}>
+      <CardSection >
+        <Avatar
+          thumbnail={photo_thumbnail}
+          photo={photo}
+          size={80}
+        />
+        <View style={{ flexDirection: 'column', flex: 1, }}>
           <View style={styles.starViewWrapper}>
             <View style={styles.authorView}>
               <TextCustom type={'name'}>{first_name} {last_name}</TextCustom>
@@ -63,11 +63,11 @@ class CommentItem extends Component {
               <TextCustom type={'date'} numberOfLines={1}>{Moment(create_dt).format('kk:mm DD MMM YYYY')}</TextCustom>
             </View>
           </View>
-            <View>
-              <TextCustom type={'body'} >{text}</TextCustom>
-            </View>
+          <View>
+            <TextCustom type={'body'} >{text}</TextCustom>
           </View>
-        </CardSection>
+        </View>
+      </CardSection>
     );
   }
 }
