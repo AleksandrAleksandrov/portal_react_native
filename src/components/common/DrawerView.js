@@ -149,12 +149,12 @@ class DrawerView extends Component {
   };
 
   getAvatar = () => {
-    const { user, user: { photo, photo_thumbnail } } = this.props;
+    const { user: { photo, photo_thumbnail } } = this.props;
 
     return (
       <Avatar
-        thumbnail={user ? photo_thumbnail : DEFAULT_PHOTO}
-        photo={user ? photo : DEFAULT_PHOTO}
+        thumbnail={photo_thumbnail ? photo_thumbnail : DEFAULT_PHOTO}
+        photo={photo ? photo : DEFAULT_PHOTO}
         size={100}
       />
     );

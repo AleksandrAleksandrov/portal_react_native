@@ -8,7 +8,19 @@ import PropTypes from 'prop-types';
 import OneSignal from 'react-native-onesignal';
 import DrawerLayout from 'react-native-drawer-layout';
 
-import { getPosts, getMorePosts, refreshPosts, showFilterBy, setFavourite, getFilteredPosts, hideFilterBy, subscribeToNotifications, hideShowNotificationDialog, getPostsFromNotification, openDrawer } from '../actions';
+import {
+  getPosts,
+  getMorePosts,
+  refreshPosts,
+  showFilterBy,
+  setFavourite,
+  getFilteredPosts,
+  hideFilterBy,
+  subscribeToNotifications,
+  hideShowNotificationDialog,
+  getPostsFromNotification,
+  openDrawer,
+} from '../actions';
 import { CustomIcons, TextCustom, SmallSpinner, Spinner } from './common';
 import { color } from '../constants/color';
 import { navigationBarHeight } from '../constants/StyleConstants';
@@ -38,12 +50,6 @@ const styles = {
   },
 };
 
-const logOut = () => {
-  AsyncStorage.removeItem('token');
-  OneSignal.setSubscription(false);
-  Actions.login();
-};
-
 const showPushNotificationRequest = () => {
   const permissions = {
     alert: false,
@@ -52,7 +58,7 @@ const showPushNotificationRequest = () => {
   };
   OneSignal.requestPermissions(permissions);
   OneSignal.registerForPushNotifications();
-  this.dispatch.hideShowNotificationDialog();
+  this.props.hideShowNotificationDialog();
 };
 
 class PostsListForm extends Component {
@@ -79,7 +85,6 @@ class PostsListForm extends Component {
 
   onPressWriteNewPost = () => {
     Actions.newPostForm();
-    // logOut();
   }
 
   onPressFilterByFavourite() {
