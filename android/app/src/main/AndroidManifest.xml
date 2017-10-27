@@ -74,6 +74,10 @@
         </intent-filter>
       </activity>
       <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="35b0c85bdf41085c791a889050a54faceed08269" />
+        <!--<meta-data android:name="net.hockeyapp.android.appIdentifier" android:value="${HOCKEYAPP_APP_ID}" />-->
     </application>
 
 </manifest>

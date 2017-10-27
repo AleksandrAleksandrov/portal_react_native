@@ -8,10 +8,19 @@
  */
 
 #import "AppDelegate.h"
+//#import <RNCrashes/RNCrashes.h>
+//#import <RNAnalytics/RNAnalytics.h>
+//#import <RNMobileCenter/RNMobileCenter.h>
 
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
+#import <Fabric/Fabric.h>
+#import <Crashlytics/Crashlytics.h>
 
+@import HockeySDK;
+
+//#import <asl.h>
+//#import "RCTLog.h"
 
 @implementation AppDelegate
 
@@ -19,7 +28,16 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+  
+//  RCTSetLogThreshold(RCTLogLevelInfo);
+//  RCTSetLogFunction(CrashlyticsReactLogFunction);
   NSURL *jsCodeLocation;
+
+//  [RNCrashes registerWithCrashDelegate: [[RNCrashesDelegateAlwaysSend alloc] init]];  // Initialize Mobile Center crashes
+//
+//  [RNAnalytics registerWithInitiallyEnabled:true];  // Initialize Mobile Center analytics
+//
+//  [RNMobileCenter register];  // Initialize Mobile Center
   
   jsCodeLocation = [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index" fallbackResource:nil];
   
@@ -37,7 +55,54 @@
   self.oneSignal = [[RCTOneSignal alloc] initWithLaunchOptions:launchOptions
                                                          appId:@"a0de680f-fecf-4a6d-8d1d-b5016960e382"
                                                       settings:@{kOSSettingsKeyInFocusDisplayOption : @(OSNotificationDisplayTypeNotification), kOSSettingsKeyAutoPrompt : @YES}];
+  
+  [[BITHockeyManager sharedHockeyManager] configureWithIdentifier:@"8672c3ca44464dbc9728e0db77da1a1b"];
+  // Do some additional configuration if needed here
+  [[BITHockeyManager sharedHockeyManager] startManager];
+  [[BITHockeyManager sharedHockeyManager].authenticator
+   authenticateInstallation];
+  [Fabric with:@[[Crashlytics class]]];
   return YES;
 }
+
+//RCTLogFunction CrashlyticsReactLogFunction = ^(
+//                                               RCTLogLevel level,
+//                                               __unused RCTLogSource source,
+//                                               NSString *fileName,
+//                                               NSNumber *lineNumber,
+//                                               NSString *message
+//                                               )
+//{
+//  NSString *log = RCTFormatLog([NSDate date], level, fileName, lineNumber, message);
+//
+//#ifdef DEBUG
+//  fprintf(stderr, "%s\n", log.UTF8String);
+//  fflush(stderr);
+//#else
+//  CLS_LOG(@"REACT LOG: %s", log.UTF8String);
+//#endif
+//
+//  int aslLevel;
+//  switch(level) {
+//    case RCTLogLevelTrace:
+//      aslLevel = ASL_LEVEL_DEBUG;
+//      break;
+//    case RCTLogLevelInfo:
+//      aslLevel = ASL_LEVEL_NOTICE;
+//      break;
+//    case RCTLogLevelWarning:
+//      aslLevel = ASL_LEVEL_WARNING;
+//      break;
+//    case RCTLogLevelError:
+//      aslLevel = ASL_LEVEL_ERR;
+//      break;
+//    case RCTLogLevelFatal:
+//      aslLevel = ASL_LEVEL_CRIT;
+//      break;
+//  }
+//  asl_log(NULL, NULL, aslLevel, "%s", message.UTF8String);
+//
+//
+//};
 
 @end

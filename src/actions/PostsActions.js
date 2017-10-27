@@ -95,7 +95,7 @@ export const startRefresh = () => {
 
 export const refreshPosts = () => (dispatch) => {
   dispatch(startRefresh());
-  serviceREST.getPosts(null)
+  serviceREST.getPosts()
     .then((response) => {
       dispatch(getPostsSuccess(response.data));
       dispatch(setNextPage(response.data.next));
@@ -128,7 +128,6 @@ export const getPostsFromNotification = () => (dispatch) => {
 export const getPosts = () => (dispatch) => {
   dispatch(getUser());
   dispatch(setPostsAreLoading());
-  
   serviceREST.getPosts()
   .then((response) => {
     // console.warn(response);
@@ -139,7 +138,7 @@ export const getPosts = () => (dispatch) => {
     //   dispatch(setPostsAreLoading(null));
     // }
     
-    dispatch(setNextPage(response.data.next));
+    // dispatch(setNextPage(response.data.next));
   })
   .catch((error) => {
     console.warn(error);

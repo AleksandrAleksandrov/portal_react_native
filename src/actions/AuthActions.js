@@ -93,12 +93,12 @@ const loginUserFail = payload => (dispatch) => {
 };
 
 const loginUserSuccess = (user) => {
-  AsyncStorage.setItem(TOKEN, user.key);
+  // AsyncStorage.setItem(TOKEN, user.key);
   Actions.postsList();
   return {
     type: LOGIN_USER_SECCESS,
     payload: user,
-    token: user.key,
+    // token: user.key,
   };
 };
 

@@ -75,7 +75,7 @@ export default (state = INITIAL_STATE, action) => {
         ...state,
         ...INITIAL_STATE,
         user: action.payload,
-        token: action.token,
+        // token: action.token,
         loading: false,
       };
     case LOGIN_USER_FAIL:

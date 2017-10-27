@@ -65,8 +65,8 @@ export const postLogin = (data) => {
     api.post(AUTH, data)
       .then((response) => {
         if (response.ok) {
-          setToken(response.data.user.token);
-          setTokenToHeaders(response.data.user.token);
+          setToken(response.data.key);
+          setTokenToHeaders(response.data.key);
           resolve(response);
         } else {
           reject(response.data ? response.data.detail : 'Не удалось подключится к серверу');
