@@ -24,3 +24,4 @@ export const NOTIFICATION_TYPE_NEWS = 'news';
 
 // AsyncStorage
 export const TOKEN = 'token';
+export const MY_ID = 'my_id';

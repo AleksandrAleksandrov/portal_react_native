@@ -17,6 +17,7 @@ import {
   SET_ERROR,
   SHOW_NOTIFICATION_PERMISSION_DIALOG,
 } from './types';
+import { setMyId } from '../services/StorageHelper';
 import * as serviceREST from '../services/serviceREST';
 import {
   INVALID_EMAIL,
@@ -93,7 +94,8 @@ const loginUserFail = payload => (dispatch) => {
 };
 
 const loginUserSuccess = (user) => {
-  // AsyncStorage.setItem(TOKEN, user.key);
+  // console.warn('loginUserSuccess:', user);
+  setMyId(user.user.id);
   Actions.postsList();
   return {
     type: LOGIN_USER_SECCESS,

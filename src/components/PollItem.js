@@ -5,6 +5,7 @@ import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import {
   getTheme,
 } from 'react-native-material-kit';
+import { getMyId } from '../services/StorageHelper';
 import { Card } from './common/Card';
 import { voteFor } from '../actions/';
 import { TextCustom } from './common/index';
@@ -63,10 +64,12 @@ const styles = {
 
 class PollItem extends Component {
   onClick = (id) => {
-    if (!this.props.votingInProgress) {
-      console.warn('onClick', this.props.votingInProgress);
-      this.props.voteFor(id);
-    }
+    getMyId().then((response, reject) => {
+      if (!this.props.votingInProgress) {
+        console.warn('onClick', this.props.votingInProgress);
+        this.props.voteFor(id);
+      }
+    });
   }
 
   getPercentage = (total, votes) => {
