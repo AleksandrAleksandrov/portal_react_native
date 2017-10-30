@@ -32,11 +32,21 @@ const styles = {
   },
 };
 
+let numberOfVotes;
+
 class PostForm extends Component {
   componentWillMount() {
     this.getComments();
     this.setAsRead();
+  }
 
+  componentDidMount() {
+    numberOfVotes = 0;
+    if (this.props.post.message.options) {
+      this.props.post.message.options.forEach((objectKey, index) => {
+        numberOfVotes += this.props.post.message.options[index].votes;
+      });
+    }
   }
 
   setAsRead() {
@@ -95,12 +105,11 @@ class PostForm extends Component {
   renderPollList = (options) => {
     // const { postsList, refreshing } = this.props;
     // const { postsListStyle } = styles;
-
     return (
       <FlatList
         // style={postsListStyle}
         data={options ? options : []}
-        renderItem={({ item }) => <PollItem option={item} />}
+        renderItem={({ item }) => <PollItem option={item} totalVotes={numberOfVotes} />}
         keyExtractor={item => item.id}
       />
     );
