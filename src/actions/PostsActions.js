@@ -23,6 +23,8 @@ import {
   SET_FILTER_BY_FAVOURITE,
   HIDE_NOTIFICATION_PERMISSION_DIALOG,
   SET_USER,
+  SET_VOTE_OPTIONS,
+  VOTE_FOR,
 } from './types';
 import { NOT_FOUND } from '../Constants';
 import * as serviceREST from '../services/serviceREST';
@@ -309,6 +311,33 @@ export const getFilteredPosts = (query) => (dispatch) => {
 export const hideShowNotificationDialog = () => {
   return {
     type: HIDE_NOTIFICATION_PERMISSION_DIALOG,
+  };
+};
+
+export const setVoteOptions = (voteOptions) => {
+  return {
+    type: SET_VOTE_OPTIONS,
+    voteOptions,
+  };
+};
+
+export const vote = () => {
+  return {
+    type: VOTE_FOR,
+  };
+};
+
+export const voteFor = (id) => (dispatch) => {
+  dispatch(vote());
+  serviceREST.voteFor(id)
+    .then((response) => {
+      dispatch(setVoteOptions(response.data.options));
+    })
+    .catch((error) => {
+      console.warn(error);
+    });
+  return {
+    type: VOTE_FOR,
   };
 };
 

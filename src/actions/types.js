@@ -56,3 +56,7 @@ export const SET_USER = 'set_user';
 // Drawer
 export const OPEN_DRAWER = 'open_drawer';
 export const CLOSE_DRAWER = 'close_drawer';
+
+// Vote options
+export const VOTE_FOR = 'vote_for';
+export const SET_VOTE_OPTIONS = 'set_vote_options';

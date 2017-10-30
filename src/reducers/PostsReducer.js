@@ -25,6 +25,8 @@ import {
   SET_USER,
   OPEN_DRAWER,
   CLOSE_DRAWER,
+  VOTE_FOR,
+  SET_VOTE_OPTIONS,
 } from '../actions/types';
 import {
   ADVERT,
@@ -66,6 +68,8 @@ const INITIAL_STATE = {
   filterByFavourite: false,
   filterSet: filter,
   showNotificationPermissionDialog: false,
+  voteOptions: null,
+  votingInProgress: false,
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -201,6 +205,18 @@ export default (state = INITIAL_STATE, action) => {
       return {
         ...state,
         user: action.payload,
+      };
+    case VOTE_FOR:
+      console.warn(VOTE_FOR);
+      return {
+        ...state,
+        votingInProgress: true,
+      };
+    case SET_VOTE_OPTIONS:
+      return {
+        ...state,
+        voteOptions: action.voteOptions,
+        votingInProgress: false,
       };
     default:
       return state;

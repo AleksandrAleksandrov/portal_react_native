@@ -9,6 +9,7 @@ import {
   USER_MESSAGE,
   PASSWORD_RESET,
   USER,
+  VOTE_FOR,
 } from '../ApiConstants';
 
 const api = create({
@@ -247,3 +248,23 @@ export const favourite = ({ id, isFavourite }) => {
   });
 };
 
+/**
+ * Vote for option
+ * @param id - option id
+ * @returns {Promise}
+ */
+export const voteFor = (id) => {
+  return new Promise((resolve, reject) => {
+    api.post(VOTE_FOR, { option: id })
+      .then((response) => {
+        if (response.ok) {
+          resolve(response);
+        } else {
+          reject(response);
+        }
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+};

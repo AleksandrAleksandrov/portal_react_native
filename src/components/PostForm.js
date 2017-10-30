@@ -7,6 +7,7 @@ import { NavigationBar } from '@shoutem/ui';
 import { CardSection, PostFooter, TextCustom } from './common';
 import PostHeader from './common/PostHeader';
 import { CommentItem } from './CommentItem';
+import PollItem from './PollItem';
 import {
   POLL,
   EVENT,
@@ -35,6 +36,7 @@ class PostForm extends Component {
   componentWillMount() {
     this.getComments();
     this.setAsRead();
+
   }
 
   setAsRead() {
@@ -90,6 +92,20 @@ class PostForm extends Component {
     );
   };
 
+  renderPollList = (options) => {
+    // const { postsList, refreshing } = this.props;
+    // const { postsListStyle } = styles;
+
+    return (
+      <FlatList
+        // style={postsListStyle}
+        data={options ? options : []}
+        renderItem={({ item }) => <PollItem option={item} />}
+        keyExtractor={item => item.id}
+      />
+    );
+  }
+
   pollEndDate = (date) => {
     const { textStyle } = styles;
     return (
@@ -123,8 +139,8 @@ class PostForm extends Component {
   };
 
   render() {
-    const { post, comments } = this.props;
-    const { title, text, create_dt, author, comments_count, message_type, content_object } = post.message; // able to crash
+    const { post, comments, voteOptions } = this.props;
+    const { title, text, create_dt, author, comments_count, message_type, content_object, options } = post.message; // able to crash
 
     return (
       <View>
@@ -138,6 +154,7 @@ class PostForm extends Component {
               />
               <TextCustom type={'t2_regular'}>{text}</TextCustom>
               {this.renderPollInfo(message_type, content_object)}
+              {this.renderPollList(voteOptions ? voteOptions : options)}
               <PostFooter
                 author={author}
                 createDate={create_dt}
@@ -148,7 +165,7 @@ class PostForm extends Component {
           <CardSection>
             <FlatList
               data={comments ? comments : []}
-              renderItem={({item}) => <CommentItem comment={item} />}
+              renderItem={({ item }) => <CommentItem comment={item} />}
               keyExtractor={item => item.id}
             />
           </CardSection>
@@ -159,11 +176,10 @@ class PostForm extends Component {
 }
 
 const mapStateToProps = (state, myProps) => ({
-
   post: _.find(state.postsList.results, (o) => { return o.id === myProps.id }),
   comments: state.postsList.comments,
   loadingCommentsInProgress: state.postsList.loadingCommentsInProgress,
-
+  voteOptions: state.postsList.voteOptions,
 });
 
 const mapDispatchToProps = dispatch => ({

@@ -6,4 +6,5 @@ export const color = {
   white: 'white',
   navigationBarText: 'white',
   drawerIconColor: 'gray',
+  textWhite: 'white',
 };
