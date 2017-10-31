@@ -31,6 +31,7 @@ import {
   SET_POLL_RESULT,
   FETCHING_VOTED_PEOPLE_IN_PROGRESS,
   SELECTED_POLL_RAW_INDEX,
+  SET_POLL_VALUE,
 } from '../actions/types';
 import {
   ADVERT,
@@ -78,6 +79,7 @@ const INITIAL_STATE = {
   fetchingVotedPeopleInProgress: false,
   pollResult: null, // People who voted
   selectedPollRawIndex: 0,
+  selectedPollTitle: '',
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -231,6 +233,11 @@ export default (state = INITIAL_STATE, action) => {
       return {
         ...state,
         selectedPollRawIndex: action.payload,
+      };
+    case SET_POLL_VALUE:
+      return {
+        ...state,
+        selectedPollTitle: action.payload,
       };
     case SET_POLL_RESULT:
       return {

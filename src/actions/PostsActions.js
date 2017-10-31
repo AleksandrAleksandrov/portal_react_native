@@ -30,6 +30,7 @@ import {
   SET_POLL_RESULT,
   FETCHING_VOTED_PEOPLE_IN_PROGRESS,
   SELECTED_POLL_RAW_INDEX,
+  SET_POLL_VALUE,
 } from './types';
 import { NOT_FOUND } from '../Constants';
 import * as serviceREST from '../services/serviceREST';
@@ -378,6 +379,13 @@ export const setSelectedPollRawIndexAction = (index) => {
   return {
     type: SELECTED_POLL_RAW_INDEX,
     payload: index,
+  };
+};
+
+export const setPollValueAction = (value) => {
+  return {
+    type: SET_POLL_VALUE,
+    payload: value,
   };
 };
 

@@ -20,7 +20,7 @@ const styles = {
 
 const Card = (props) => {
   return (
-    <View style={styles.containerStyle}>
+    <View style={[styles.containerStyle, props.style]}>
       {props.children}
     </View>
   );

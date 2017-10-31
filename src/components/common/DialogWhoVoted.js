@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { View, Modal, TouchableWithoutFeedback, Text, FlatList, ScrollView } from 'react-native';
-import { Card } from './';
+import { View, Modal, TouchableWithoutFeedback, FlatList, ScrollView } from 'react-native';
+import { MKButton } from 'react-native-material-kit';
+import { Card, TextCustom } from './';
 import PollResultItem from '../PollResultItem';
 import { CardSection } from './CardSection';
 
@@ -10,8 +11,8 @@ const styles = {
     justifyContent: 'center',
   },
   textStyle: {
-    margin: 20,
-    flexDirection: 'row',
+    justifyContent: 'center',
+    alignSelf: 'center',
   },
   containerStyle: {
     backgroundColor: 'rgba(0, 0, 0, 0.75)',
@@ -23,45 +24,60 @@ const styles = {
     padding: 10,
     backgroundColor: '#fff',
     justifyContent: 'flex-start',
-    flexDirection: 'row',
+    flexDirection: 'column',
     position: 'relative',
-  },
-  iconStyle: {
-    fontSize: 32,
-    marginRight: 10,
   },
 };
 
+const ColoredRaisedButton = MKButton.flatButton()
+  .build();
+
 class DialogWhoVoted extends Component {
 
+  button = (onPress) => {
+    return (
+      <ColoredRaisedButton onPress={onPress} >
+        <TextCustom type={'t3'} >
+          OK
+        </TextCustom>
+      </ColoredRaisedButton>
+    );
+  }
+
   render() {
-    const { showWhoVoted, pollResult, selectedPollRawIndex } = this.props;
-    const { textStyle } = styles;
+    const { showWhoVoted, pollResult, selectedPollRawIndex, selectedPollTitle, onDecline } = this.props;
+    const { textStyle, elementContainer } = styles;
     return (
 
       <Modal
         animationType="none"
         visible={showWhoVoted}
         transparent
-        onRequestClose={() => {}}>
+        supportedOrientations={['portrait', 'landscape']}
+        onRequestClose={() => {}}
+      >
 
-        <TouchableWithoutFeedback onPress={this.props.onDecline}>
+        <TouchableWithoutFeedback onPress={onDecline}>
           <View style={styles.containerStyle} >
             <TouchableWithoutFeedback onPress={() => {}} >
-              <View style={{ marginLeft: 30, marginRight: 30, }} >
-                <Card style={{ flexDirection: 'column', borderRadius: 10 }}>
-                  <CardSection style={{ flexDirection: 'column' }}>
-                    <Text>who voted </Text>
-                    <ScrollView>
-                      <FlatList
-                        numColumns={2}
-                        data={pollResult ? pollResult[selectedPollRawIndex].detail_votes : []}
-                        renderItem={({ item }) => <PollResultItem user={item} />}
-                        keyExtractor={item => item.user.id}
-                      />
-                    </ScrollView>
-
-                  </CardSection>
+              <View style={{ marginLeft: 30, marginRight: 30 }} >
+                <Card >
+                  <View style={elementContainer}>
+                    <TextCustom style={textStyle} >
+                      За "{selectedPollTitle}" проголосовало:
+                    </TextCustom>
+                    <View>
+                      <ScrollView>
+                        <FlatList
+                          numColumns={2}
+                          data={pollResult ? pollResult[selectedPollRawIndex].detail_votes : []}
+                          renderItem={({ item }) => <PollResultItem user={item} />}
+                          keyExtractor={item => item.user.id}
+                        />
+                      </ScrollView>
+                    </View>
+                    {this.button(onDecline)}
+                  </View>
                 </Card>
               </View>
             </TouchableWithoutFeedback>
@@ -76,6 +92,7 @@ const mapStateToProps = state => ({
   showWhoVoted: state.postsList.showWhoVoted,
   pollResult: state.postsList.pollResult,
   selectedPollRawIndex: state.postsList.selectedPollRawIndex,
+  selectedPollTitle: state.postsList.selectedPollTitle,
 });
 
 export default connect(mapStateToProps)(DialogWhoVoted);

@@ -2,14 +2,17 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { View, TouchableWithoutFeedback } from 'react-native';
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
-import {
-  getTheme,
-} from 'react-native-material-kit';
 import { getMyId } from '../services/StorageHelper';
 import { Card } from './common/Card';
-import { voteFor, showWhoVotedDialog, getPollResultsAction, setSelectedPollRawIndexAction } from '../actions/';
 import { TextCustom } from './common/index';
 import { color } from '../constants/color';
+import {
+  voteFor,
+  showWhoVotedDialog,
+  getPollResultsAction,
+  setSelectedPollRawIndexAction,
+  setPollValueAction
+} from '../actions/';
 
 const styles = {
   bodyTextStyle: {
@@ -79,8 +82,9 @@ class PollItem extends Component {
   }
 
   pollResults = () => {
-    const { showWhoVotedDialog, showWhoVoted, getPollResultsAction, messageId, index, setSelectedPollRawIndexAction } = this.props;
-    // console.warn(index);
+    const { showWhoVotedDialog, showWhoVoted, getPollResultsAction, messageId, index, setSelectedPollRawIndexAction, setPollValueAction, option: { value } } = this.props;
+    // console.warn('pollResults', value);
+    setPollValueAction(value);
     setSelectedPollRawIndexAction(index);
     getPollResultsAction(messageId);
     showWhoVotedDialog(!showWhoVoted);
@@ -131,6 +135,7 @@ const mapDispatchToProps = dispatch => ({
   showWhoVotedDialog: (isShow) => { dispatch(showWhoVotedDialog(isShow)); },
   getPollResultsAction: (messageId) => { dispatch(getPollResultsAction(messageId)); },
   setSelectedPollRawIndexAction: (index) => { dispatch(setSelectedPollRawIndexAction(index)); },
+  setPollValueAction: (value) => { dispatch(setPollValueAction(value)); },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(PollItem);

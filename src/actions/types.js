@@ -65,3 +65,4 @@ export const FETCH_POLL_RESULT = 'fetch_poll_result';
 export const FETCHING_VOTED_PEOPLE_IN_PROGRESS = 'fetching_voted_people_in_progress';
 export const SET_POLL_RESULT = 'set_poll_result';
 export const SELECTED_POLL_RAW_INDEX = 'selected_poll_raw_index';
+export const SET_POLL_VALUE = 'set_poll_value';
