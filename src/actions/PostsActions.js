@@ -25,6 +25,11 @@ import {
   SET_USER,
   SET_VOTE_OPTIONS,
   VOTE_FOR,
+  SHOW_WHO_VOTED_DIALOG,
+  FETCH_POLL_RESULT,
+  SET_POLL_RESULT,
+  FETCHING_VOTED_PEOPLE_IN_PROGRESS,
+  SELECTED_POLL_RAW_INDEX,
 } from './types';
 import { NOT_FOUND } from '../Constants';
 import * as serviceREST from '../services/serviceREST';
@@ -338,6 +343,41 @@ export const voteFor = (id) => (dispatch) => {
     });
   return {
     type: VOTE_FOR,
+  };
+};
+
+export const showWhoVotedDialog = (isShow) => {
+  return {
+    type: SHOW_WHO_VOTED_DIALOG,
+    payload: isShow,
+  };
+};
+
+const setPollResult = (pollResult) => {
+  return {
+    type: SET_POLL_RESULT,
+    payload: pollResult,
+  };
+};
+
+export const getPollResultsAction = (messageId) => (dispatch) => {
+  serviceREST.fetchPollResults(messageId)
+    .then((response) => {
+      dispatch(setPollResult(response.data.options));
+    })
+    .catch((error) => {
+      console.warn('getPollResultsAction', error);
+    });
+  return {
+    type: FETCHING_VOTED_PEOPLE_IN_PROGRESS,
+  };
+};
+
+export const setSelectedPollRawIndexAction = (index) => {
+  // console.warn('setSelectedPollRawIndexAction', index);
+  return {
+    type: SELECTED_POLL_RAW_INDEX,
+    payload: index,
   };
 };
 

@@ -7,13 +7,14 @@ import { NavigationBar } from '@shoutem/ui';
 import { CardSection, PostFooter, TextCustom } from './common';
 import PostHeader from './common/PostHeader';
 import { CommentItem } from './CommentItem';
+import DialogWhoVoted from './common/DialogWhoVoted';
 import PollItem from './PollItem';
 import {
   POLL,
   EVENT,
 } from '../Constants';
 import { color } from '../constants/color';
-import { getComments, setAsRead } from '../actions';
+import { getComments, setAsRead, showWhoVotedDialog } from '../actions';
 import { navigationBarHeight } from '../constants/StyleConstants';
 
 const styles = {
@@ -102,14 +103,14 @@ class PostForm extends Component {
     );
   };
 
-  renderPollList = (options) => {
+  renderPollList = (options, messageId) => {
     // const { postsList, refreshing } = this.props;
     // const { postsListStyle } = styles;
     return (
       <FlatList
         // style={postsListStyle}
         data={options ? options : []}
-        renderItem={({ item }) => <PollItem option={item} totalVotes={numberOfVotes} />}
+        renderItem={({ item, index }) => <PollItem option={item} totalVotes={numberOfVotes} messageId={messageId} index={index} />}
         keyExtractor={item => item.id}
       />
     );
@@ -148,7 +149,7 @@ class PostForm extends Component {
   };
 
   render() {
-    const { post, comments, voteOptions } = this.props;
+    const { post, comments, voteOptions, showWhoVotedDialog, showWhoVoted } = this.props;
     const { title, text, create_dt, author, comments_count, message_type, content_object, options } = post.message; // able to crash
 
     return (
@@ -163,7 +164,7 @@ class PostForm extends Component {
               />
               <TextCustom type={'t2_regular'}>{text}</TextCustom>
               {this.renderPollInfo(message_type, content_object)}
-              {this.renderPollList(voteOptions ? voteOptions : options)}
+              {this.renderPollList(voteOptions ? voteOptions : options, post.message.id)}
               <PostFooter
                 author={author}
                 createDate={create_dt}
@@ -178,6 +179,9 @@ class PostForm extends Component {
               keyExtractor={item => item.id}
             />
           </CardSection>
+          <DialogWhoVoted
+            onDecline={() => showWhoVotedDialog(!showWhoVoted)}
+          />
         </ScrollView>
       </View>
     );
@@ -189,11 +193,13 @@ const mapStateToProps = (state, myProps) => ({
   comments: state.postsList.comments,
   loadingCommentsInProgress: state.postsList.loadingCommentsInProgress,
   voteOptions: state.postsList.voteOptions,
+  showWhoVoted: state.postsList.showWhoVoted,
 });
 
 const mapDispatchToProps = dispatch => ({
   dispatch,
   getComments: (messageId) => { dispatch(getComments(messageId)); },
+  showWhoVotedDialog: (isShow) => { dispatch(showWhoVotedDialog(isShow)); },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(PostForm);

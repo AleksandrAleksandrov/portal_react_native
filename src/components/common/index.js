@@ -19,6 +19,7 @@ export * from './LabelNew';
 export * from './Toolbar';
 export * from './PopupMenu';
 export * from './DialogFilterBy';
+export * from './DialogWhoVoted';
 export * from './TouchableFilterBy';
 export * from './CheckBoxCustom';
 export * from './DrawerView';

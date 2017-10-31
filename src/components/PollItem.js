@@ -7,7 +7,7 @@ import {
 } from 'react-native-material-kit';
 import { getMyId } from '../services/StorageHelper';
 import { Card } from './common/Card';
-import { voteFor } from '../actions/';
+import { voteFor, showWhoVotedDialog, getPollResultsAction, setSelectedPollRawIndexAction } from '../actions/';
 import { TextCustom } from './common/index';
 import { color } from '../constants/color';
 
@@ -78,6 +78,14 @@ class PollItem extends Component {
     );
   }
 
+  pollResults = () => {
+    const { showWhoVotedDialog, showWhoVoted, getPollResultsAction, messageId, index, setSelectedPollRawIndexAction } = this.props;
+    // console.warn(index);
+    setSelectedPollRawIndexAction(index);
+    getPollResultsAction(messageId);
+    showWhoVotedDialog(!showWhoVoted);
+  }
+
   render() {
     const { counterWrapper, counterText, progressBar, valueTextWrapper, valueText, eyeStyle } = styles;
     const { option, totalVotes } = this.props;
@@ -104,7 +112,9 @@ class PollItem extends Component {
             </View>
 
           </TouchableWithoutFeedback>
-          <Icon name={'eye'} style={eyeStyle} />
+          <TouchableWithoutFeedback onPress={() => this.pollResults()}>
+            <Icon name={'eye'} style={eyeStyle} />
+          </TouchableWithoutFeedback>
         </View>
       </Card>
     );
@@ -113,11 +123,14 @@ class PollItem extends Component {
 
 const mapStateToProps = state => ({
   votingInProgress: state.postsList.votingInProgress,
+  showWhoVoted: state.postsList.showWhoVoted,
 });
 
 const mapDispatchToProps = dispatch => ({
-  dispatch,
   voteFor: (id) => { dispatch(voteFor(id)); },
+  showWhoVotedDialog: (isShow) => { dispatch(showWhoVotedDialog(isShow)); },
+  getPollResultsAction: (messageId) => { dispatch(getPollResultsAction(messageId)); },
+  setSelectedPollRawIndexAction: (index) => { dispatch(setSelectedPollRawIndexAction(index)); },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(PollItem);

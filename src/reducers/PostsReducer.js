@@ -27,6 +27,10 @@ import {
   CLOSE_DRAWER,
   VOTE_FOR,
   SET_VOTE_OPTIONS,
+  SHOW_WHO_VOTED_DIALOG,
+  SET_POLL_RESULT,
+  FETCHING_VOTED_PEOPLE_IN_PROGRESS,
+  SELECTED_POLL_RAW_INDEX,
 } from '../actions/types';
 import {
   ADVERT,
@@ -70,6 +74,10 @@ const INITIAL_STATE = {
   showNotificationPermissionDialog: false,
   voteOptions: null,
   votingInProgress: false,
+  showWhoVoted: false,
+  fetchingVotedPeopleInProgress: false,
+  pollResult: null, // People who voted
+  selectedPollRawIndex: 0,
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -217,6 +225,28 @@ export default (state = INITIAL_STATE, action) => {
         ...state,
         voteOptions: action.voteOptions,
         votingInProgress: false,
+      };
+    case SELECTED_POLL_RAW_INDEX:
+      // console.warn('SELECTED_POLL_RAW_INDEX', action.payload);
+      return {
+        ...state,
+        selectedPollRawIndex: action.payload,
+      };
+    case SET_POLL_RESULT:
+      return {
+        ...state,
+        pollResult: action.payload,
+        fetchingVotedPeopleInProgress: false,
+      };
+    case FETCHING_VOTED_PEOPLE_IN_PROGRESS:
+      return {
+        ...state,
+        fetchingVotedPeopleInProgress: true,
+      };
+    case SHOW_WHO_VOTED_DIALOG:
+      return {
+        ...state,
+        showWhoVoted: action.payload,
       };
     default:
       return state;

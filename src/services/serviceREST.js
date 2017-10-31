@@ -10,6 +10,7 @@ import {
   PASSWORD_RESET,
   USER,
   VOTE_FOR,
+  GET_POLL_RESULT,
 } from '../ApiConstants';
 
 const api = create({
@@ -256,6 +257,27 @@ export const favourite = ({ id, isFavourite }) => {
 export const voteFor = (id) => {
   return new Promise((resolve, reject) => {
     api.post(VOTE_FOR, { option: id })
+      .then((response) => {
+        if (response.ok) {
+          resolve(response);
+        } else {
+          reject(response);
+        }
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+};
+
+/**
+ * Get poll results by message id.
+ * @param messageId
+ * @returns {Promise}
+ */
+export const fetchPollResults = (messageId) => {
+  return new Promise((resolve, reject) => {
+    api.get(`${MESSAGES}${messageId}${GET_POLL_RESULT}`)
       .then((response) => {
         if (response.ok) {
           resolve(response);

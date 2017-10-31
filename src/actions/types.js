@@ -60,3 +60,8 @@ export const CLOSE_DRAWER = 'close_drawer';
 // Vote options
 export const VOTE_FOR = 'vote_for';
 export const SET_VOTE_OPTIONS = 'set_vote_options';
+export const SHOW_WHO_VOTED_DIALOG = 'show_who_voted_dialog';
+export const FETCH_POLL_RESULT = 'fetch_poll_result';
+export const FETCHING_VOTED_PEOPLE_IN_PROGRESS = 'fetching_voted_people_in_progress';
+export const SET_POLL_RESULT = 'set_poll_result';
+export const SELECTED_POLL_RAW_INDEX = 'selected_poll_raw_index';
