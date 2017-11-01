@@ -5,6 +5,7 @@ import { MKButton } from 'react-native-material-kit';
 import { Card, TextCustom } from './';
 import PollResultItem from '../PollResultItem';
 import { CardSection } from './CardSection';
+import Orientation from 'react-native-orientation';
 
 const styles = {
   cardSectionStyle: {
@@ -33,6 +34,10 @@ const ColoredRaisedButton = MKButton.flatButton()
   .build();
 
 class DialogWhoVoted extends Component {
+  constructor() {
+    super();
+    this.state = { numberOfColumn: 3 };
+  }
 
   button = (onPress) => {
     return (
@@ -42,6 +47,11 @@ class DialogWhoVoted extends Component {
         </TextCustom>
       </ColoredRaisedButton>
     );
+  }
+
+  onLayout = (event) => {
+    const num = parseInt(event.nativeEvent.layout.width / 80, 10);
+    this.setState({ numberOfColumn: num });
   }
 
   render() {
@@ -61,18 +71,20 @@ class DialogWhoVoted extends Component {
           <View style={styles.containerStyle} >
             <TouchableWithoutFeedback onPress={() => {}} >
               <View style={{ marginLeft: 30, marginRight: 30 }} >
-                <Card >
+                <Card onLayout={(event) => this.onLayout(event)} >
                   <View style={elementContainer}>
                     <TextCustom style={textStyle} >
-                      За "{selectedPollTitle}" проголосовало:
+                      За "{selectedPollTitle}" проголосовало: {pollResult ? pollResult[selectedPollRawIndex].votes : ''}
                     </TextCustom>
                     <View>
                       <ScrollView>
                         <FlatList
-                          numColumns={2}
+                          style={{ alignSelf: 'center' }}
+                          numColumns={this.state.numberOfColumn}
                           data={pollResult ? pollResult[selectedPollRawIndex].detail_votes : []}
                           renderItem={({ item }) => <PollResultItem user={item} />}
                           keyExtractor={item => item.user.id}
+                          key={this.state.numberOfColumn}
                         />
                       </ScrollView>
                     </View>

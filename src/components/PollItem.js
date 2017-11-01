@@ -11,7 +11,7 @@ import {
   showWhoVotedDialog,
   getPollResultsAction,
   setSelectedPollRawIndexAction,
-  setPollValueAction
+  setPollValueAction,
 } from '../actions/';
 
 const styles = {

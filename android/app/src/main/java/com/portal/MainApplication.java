@@ -5,6 +5,7 @@ import android.app.Application;
 import com.BV.LinearGradient.LinearGradientPackage;
 import com.crashlytics.android.Crashlytics;
 import com.facebook.react.ReactApplication;
+import com.github.yamill.orientation.OrientationPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
@@ -33,6 +34,7 @@ public class MainApplication extends Application implements ReactApplication {
       return Arrays.<ReactPackage>asList(
               new FabricPackage(),
           new MainReactPackage(),
+            new OrientationPackage(),
             new ReactNativeOneSignalPackage(),
             new PhotoViewPackage(),
             new RNSharePackage(),

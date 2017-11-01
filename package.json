@@ -28,6 +28,7 @@
 		"react-native-menu": "^0.23.0",
 		"react-native-onesignal": "^3.0.6",
 		"react-native-option-select": "^1.0.4",
+		"react-native-orientation": "^3.1.0",
 		"react-native-paginated-listview": "^1.0.2",
 		"react-native-progressive-image": "^1.0.4",
 		"react-native-router-flux": "^4.0.0-beta.21",
