@@ -82,7 +82,16 @@ class PollItem extends Component {
   }
 
   pollResults = () => {
-    const { showWhoVotedDialog, showWhoVoted, getPollResultsAction, messageId, index, setSelectedPollRawIndexAction, setPollValueAction, option: { value } } = this.props;
+    const {
+      showWhoVotedDialog,
+      showWhoVoted,
+      getPollResultsAction,
+      messageId,
+      index,
+      setSelectedPollRawIndexAction,
+      setPollValueAction,
+      option: { value }
+    } = this.props;
     // console.warn('pollResults', value);
     setPollValueAction(value);
     setSelectedPollRawIndexAction(index);

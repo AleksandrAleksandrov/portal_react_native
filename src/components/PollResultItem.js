@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { View } from 'react-native';
+import { View, TouchableOpacity } from 'react-native';
 import { Avatar } from './common/';
 
 const styles = {
@@ -14,13 +14,15 @@ class PollResultItem extends Component {
     const { user } = this.props;
     const { avatar } = styles;
     return (
-      <View style={avatar} >
-        <Avatar
-          thumbnail={user.user.photo_thumbnail}
-          photo={user.user.photo}
-          size={60}
-        />
-      </View>
+      <TouchableOpacity>
+        <View style={avatar} >
+          <Avatar
+            thumbnail={user.user.photo_thumbnail}
+            photo={user.user.photo}
+            size={60}
+          />
+        </View>
+      </TouchableOpacity>
     );
   }
 }

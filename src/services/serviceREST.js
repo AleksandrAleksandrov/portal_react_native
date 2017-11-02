@@ -71,6 +71,7 @@ export const postLogin = (data) => {
           setTokenToHeaders(response.data.key);
           resolve(response);
         } else {
+          console.warn('response', response);
           reject(response.data ? response.data.detail : 'Не удалось подключится к серверу');
         }
       })
