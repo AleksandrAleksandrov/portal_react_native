@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { View, Modal, TouchableWithoutFeedback, FlatList, ScrollView, Dimensions, TouchableOpacity } from 'react-native';
+import { View, Modal, TouchableWithoutFeedback, FlatList, Dimensions } from 'react-native';
 import { MKButton } from 'react-native-material-kit';
 import { Card, TextCustom } from './';
+import { color } from '../../constants/color';
 import PollResultItem from '../PollResultItem';
 import { CardSection } from './CardSection';
 import Orientation from 'react-native-orientation';
 import EStyleSheet from 'react-native-extended-stylesheet';
 
-const { width } = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 EStyleSheet.build({
   $width: width - 100,
 });
@@ -16,14 +17,27 @@ const styles = EStyleSheet.create({
   modalContainer: {
     backgroundColor: 'rgba(0, 0, 0, 0.75)',
     flex: 1,
+    // alignItems: 'center',
     justifyContent: 'center',
   },
   modalBody: {
-    flex: 1,
+    // flex: 1,
+    // height: height - 200,
+    marginTop: 40,
+    marginBottom: 40,
     marginLeft: 30,
     marginRight: 30,
-    backgroundColor: 'white',
+    // width: width - 60,
+    backgroundColor: color.white,
     borderRadius: 2,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  buttonStyle: {
+    // marginLeft: 5,
+    // marginRight: 5,
+    width: width - 60,
+    height: 40,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -50,7 +64,7 @@ class DialogWhoVoted extends Component {
 
   okButton = (onPress) => {
     return (
-      <ColoredRaisedButton onPress={onPress} style={{ flex: 1, height: 15 }} >
+      <ColoredRaisedButton onPress={onPress} style={styles.buttonStyle} >
         <TextCustom type={'t3'} >
           OK
         </TextCustom>
@@ -59,7 +73,13 @@ class DialogWhoVoted extends Component {
   }
 
   render() {
-    const { showWhoVoted, pollResult, selectedPollRawIndex, selectedPollTitle, onDecline } = this.props;
+    const {
+      showWhoVoted,
+      pollResult,
+      selectedPollRawIndex,
+      selectedPollTitle,
+      onDecline,
+    } = this.props;
     const { textStyle, modalContainer, modalBody } = styles;
     return (
 
@@ -89,7 +109,8 @@ class DialogWhoVoted extends Component {
                 keyExtractor={item => item.user.id}
                 key={this.state.numberOfColumn}
               />
-              {this.okButton(onDecline)}
+
+                {this.okButton(onDecline)}
             </Card>
           </View>
         </TouchableWithoutFeedback>
