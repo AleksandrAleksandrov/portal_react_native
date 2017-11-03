@@ -5,18 +5,20 @@ import android.app.Application;
 import com.BV.LinearGradient.LinearGradientPackage;
 import com.crashlytics.android.Crashlytics;
 import com.facebook.react.ReactApplication;
-import com.github.yamill.orientation.OrientationPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
 import com.geektime.rnonesignalandroid.ReactNativeOneSignalPackage;
 import com.github.xinthink.rnmk.ReactMaterialKitPackage;
+import com.github.yamill.orientation.OrientationPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.reactnative.photoview.PhotoViewPackage;
 import com.smixx.fabric.FabricPackage;
+
 import java.util.Arrays;
 import java.util.List;
+
 import cl.json.RNSharePackage;
 import io.fabric.sdk.android.Fabric;
 import io.realm.react.RealmReactPackage;
@@ -45,13 +47,13 @@ public class MainApplication extends Application implements ReactApplication {
       );
     }
 
-    @Override
+//    @Override
     protected String getJSMainModuleName() {
       return "index";
     }
   };
 
-  @Override
+//  @Override
   public ReactNativeHost getReactNativeHost() {
     return mReactNativeHost;
   }
