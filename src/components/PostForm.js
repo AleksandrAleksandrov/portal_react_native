@@ -21,7 +21,7 @@ const styles = {
   navigationBarWrapper: {
     width: 'auto',
     height: navigationBarHeight,
-    backgroundColor: color.primary,
+    backgroundColor: color.primaryDark,
   },
   bodyView: {
     flexDirection: 'column',
@@ -39,9 +39,6 @@ class PostForm extends Component {
   componentWillMount() {
     this.getComments();
     this.setAsRead();
-  }
-
-  componentDidMount() {
     numberOfVotes = 0;
     if (this.props.post.message.options) {
       this.props.post.message.options.forEach((objectKey, index) => {
@@ -103,14 +100,23 @@ class PostForm extends Component {
     );
   };
 
+  pollItem = (item, messageId, index) => {
+    return (
+      <PollItem
+        option={item}
+        totalVotes={numberOfVotes}
+        messageId={messageId}
+        index={index}
+      />
+    );
+  }
+
   renderPollList = (options, messageId) => {
-    // const { postsList, refreshing } = this.props;
-    // const { postsListStyle } = styles;
     return (
       <FlatList
         // style={postsListStyle}
         data={options ? options : []}
-        renderItem={({ item, index }) => <PollItem option={item} totalVotes={numberOfVotes} messageId={messageId} index={index} />}
+        renderItem={({ item, index }) => this.pollItem(item, messageId, index)}
         keyExtractor={item => item.id}
       />
     );

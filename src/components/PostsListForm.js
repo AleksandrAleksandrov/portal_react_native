@@ -40,7 +40,7 @@ const styles = {
   navigationBarWrapper: {
     width: 'auto',
     height: navigationBarHeight,
-    backgroundColor: color.primary,
+    backgroundColor: color.primaryDark,
   },
   navigationIconsWrapper: {
     flexDirection: 'row',
@@ -122,7 +122,7 @@ class PostsListForm extends Component {
     return (
       <View style={navigationBarWrapper}>
         <StatusBar
-          backgroundColor={color.primary}
+          backgroundColor={color.primaryDark}
           barStyle="light-content"
         />
         <NavigationBar

@@ -34,7 +34,7 @@ const styles = {
   },
   infoOfUserContainer: {
     height: 170,
-    backgroundColor: color.primary,
+    backgroundColor: color.primaryDark,
     justifyContent: 'center',
   },
   avatarContainer: {

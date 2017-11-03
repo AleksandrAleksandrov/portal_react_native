@@ -38,7 +38,7 @@ const styles = {
   navigationBarWrapper: {
     width: 'auto',
     height: navigationBarHeight,
-    backgroundColor: color.primary,
+    backgroundColor: color.primaryDark,
   },
 };
 

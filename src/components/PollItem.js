@@ -145,7 +145,7 @@ class PollItem extends Component {
   render() {
     const { progressBar, progressElement1, progressElement2 } = styles;
     const { option, totalVotes } = this.props;
-    console.warn('totalVotes:', totalVotes, ' option.votes:', option.votes, ' percent:', this.getPercentage(totalVotes, option.votes));
+
     return (
       <Card>
         <View style={styles.rootView} >
