@@ -56,7 +56,7 @@ class PostForm extends Component {
       return;
     }
 
-    this.props.dispatch(setAsRead(this.props.post.id));
+    this.props.setAsRead(this.props.post.id);
   }
 
   getComments() {
@@ -200,6 +200,7 @@ const mapDispatchToProps = dispatch => ({
   dispatch,
   getComments: (messageId) => { dispatch(getComments(messageId)); },
   showWhoVotedDialog: (isShow) => { dispatch(showWhoVotedDialog(isShow)); },
+  setAsRead: (postId) => { dispatch(setAsRead(postId)); },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(PostForm);

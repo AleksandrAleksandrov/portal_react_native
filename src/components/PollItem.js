@@ -32,20 +32,18 @@ const styles = {
   },
   progressBar: {
     flexDirection: 'row',
-
+    // alignItems: 'center',
     backgroundColor: color.primary,
     borderRadius: 1,
     flex: 1,
   },
-  valueTextWrapper: {
-    borderWidth: 1,
-    alignItems: 'center',
-    position: 'absolute',
-
+  progressElement1: {
+    backgroundColor: color.primary,
+    position: 'relative',
   },
-  valueText: {
-    flex: 1,
-    alignItems: 'center',
+  progressElement2: {
+    backgroundColor: color.white,
+    position: 'relative',
   },
   counterWrapper: {
     backgroundColor: color.myGreen,
@@ -62,6 +60,20 @@ const styles = {
     fontSize: 32,
     margin: 5,
     alignSelf: 'flex-end',
+  },
+  valueTextWrapper: {
+    flex: 1,
+    margin: 5,
+    alignSelf: 'center',
+    alignItems: 'center',
+    position: 'absolute',
+    justifyContent: 'center',
+  },
+  valueText: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    textAlign: 'center',
   },
 };
 
@@ -99,35 +111,53 @@ class PollItem extends Component {
     showWhoVotedDialog(!showWhoVoted);
   }
 
-  render() {
-    const { counterWrapper, counterText, progressBar, valueTextWrapper, valueText, eyeStyle } = styles;
-    const { option, totalVotes } = this.props;
+  eyeIcon = () => {
+    const { eyeStyle } = styles;
+    return (
+      <TouchableWithoutFeedback onPress={() => this.pollResults()}>
+        <Icon name={'eye'} style={eyeStyle} />
+      </TouchableWithoutFeedback>
+    );
+  }
 
+  voteCounter = () => {
+    const { option } = this.props;
+    const { counterWrapper, counterText } = styles;
+    return (
+      <View style={{ flexDirection: 'row', justifyContent: 'flex-end', flex: 1 }}>
+        <View style={counterWrapper} >
+          <TextCustom type={'t2_regular'} style={counterText} >{option.votes}</TextCustom>
+        </View>
+      </View>
+    );
+  }
+
+  optionValue = () => {
+    const { option } = this.props;
+    const { valueTextWrapper, valueText } = styles;
+    return (
+      <View style={valueTextWrapper} >
+        <TextCustom type={'t2_regular'} style={valueText} >{option.value}</TextCustom>
+      </View>
+    );
+  }
+
+  render() {
+    const { progressBar, progressElement1, progressElement2 } = styles;
+    const { option, totalVotes } = this.props;
+    console.warn('totalVotes:', totalVotes, ' option.votes:', option.votes, ' percent:', this.getPercentage(totalVotes, option.votes));
     return (
       <Card>
         <View style={styles.rootView} >
           <TouchableWithoutFeedback onPress={() => this.onClick(option.id)} >
-
             <View style={progressBar}>
-
-              <View style={{ position: 'relative', width: `${this.getPercentage(totalVotes, option.votes)}%`, backgroundColor: color.primary }} />
-              <View style={{ position: 'relative', width: `${100 - this.getPercentage(totalVotes, option.votes)}%`, backgroundColor: color.white }} />
-
-              <View style={valueTextWrapper} >
-                <TextCustom type={'t2_regular'} style={valueText} >{option.value}</TextCustom>
-              </View>
-              <View style={{ flexDirection: 'row', justifyContent: 'flex-end', flex: 1 }}>
-                <View style={counterWrapper} >
-                  <TextCustom type={'t2_regular'} style={counterText} >{option.votes}</TextCustom>
-                </View>
-              </View>
-
+              <View style={[progressElement1, { width: `${this.getPercentage(totalVotes, option.votes)}%` }]} />
+              <View style={[progressElement2, { width: `${100 - this.getPercentage(totalVotes, option.votes)}%` }]} />
+              {this.optionValue()}
+              {this.voteCounter()}
             </View>
-
           </TouchableWithoutFeedback>
-          <TouchableWithoutFeedback onPress={() => this.pollResults()}>
-            <Icon name={'eye'} style={eyeStyle} />
-          </TouchableWithoutFeedback>
+          {this.eyeIcon()}
         </View>
       </Card>
     );
