@@ -9,4 +9,5 @@ export const color = {
   textWhite: 'white',
   myGreen: 'green',
   materialGreen: '#00ab9c',
+  myGray: '#3f3c38',
 };

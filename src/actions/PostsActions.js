@@ -35,6 +35,7 @@ import {
   SENDING_COMMENT_IN_PROGRESS,
   COMMENT_SENT,
   COMMENT_SENT_FAIL,
+  SHOW_ALL_COMMENTS,
 } from './types';
 import { NOT_FOUND } from '../Constants';
 import * as serviceREST from '../services/serviceREST';
@@ -428,6 +429,12 @@ export const sendCommentAction = (messageId, text, callback) => (dispatch) => {
     .catch((error) => {
       dispatch(setCommentSentFailed());
     });
+};
+
+export const showAllCommentsAction = () => {
+  return {
+    type: SHOW_ALL_COMMENTS,
+  };
 };
 
 // const Post = {

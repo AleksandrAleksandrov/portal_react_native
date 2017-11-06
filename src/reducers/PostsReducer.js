@@ -18,6 +18,7 @@ import {
   SENDING_COMMENT_IN_PROGRESS,
   COMMENT_SENT,
   COMMENT_SENT_FAIL,
+  SHOW_ALL_COMMENTS,
   SHOW_SORT_BY_DIALOG,
   HIDE_SORT_BY_DIALOG,
   SET_SORT_BY_ADVERT,
@@ -71,6 +72,7 @@ const INITIAL_STATE = {
   loadingCommentsInProgress: false,
   sendingCommentInProgress: false,
   comments: [],
+  isShowAllComments: false,
   showSortBy: false,
   filterByAdvert: false,
   filterByPoll: false,
@@ -185,6 +187,11 @@ export default (state = INITIAL_STATE, action) => {
         ...state,
         sendingCommentInProgress: false,
         error: 'Не удалось отправить сообщение',
+      };
+    case SHOW_ALL_COMMENTS:
+      return {
+        ...state,
+        isShowAllComments: true,
       };
     case SHOW_SORT_BY_DIALOG:
       return {

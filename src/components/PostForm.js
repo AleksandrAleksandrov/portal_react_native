@@ -23,7 +23,10 @@ import {
   setAsRead,
   showWhoVotedDialog,
   sendCommentAction,
+  showAllCommentsAction,
 } from '../actions';
+
+const commentCount = 10;
 
 const sendIcon = require('../images/ic_send_white_24dp_2x.png');
 
@@ -31,6 +34,7 @@ const { width, height } = Dimensions.get('window');
 
 const styles = {
   rootViewStyle: {
+    backgroundColor: 'white',
     height,
   },
   navigationBarWrapper: {
@@ -78,12 +82,23 @@ const styles = {
     flex: 1,
     alignSelf: 'flex-start',
   },
+  showMoreCommentButton: {
+    height: 35,
+    margin: 5,
+    justifyContent: 'center',
+  },
+  showMoreCommentText: {
+    textAlign: 'center',
+  },
 };
 
 let numberOfVotes;
 
-const ColoredRaisedButton = MKButton.coloredButton()
+const SendCommentButton = MKButton.coloredButton()
   .withBackgroundColor(color.materialGreen)
+  .build();
+
+const ShowMoreCommentsButton = MKButton.button()
   .build();
 
 class PostForm extends Component {
@@ -225,7 +240,7 @@ class PostForm extends Component {
       return null;
     }
     return (
-      <ColoredRaisedButton
+      <SendCommentButton
         style={sendMaterialButton}
         enabled={!sendingCommentInProgress}
         onPress={() => this.sendMessage(post.message.id, this.state.comment)}
@@ -234,7 +249,7 @@ class PostForm extends Component {
           style={sendIconStyle}
           source={sendIcon}
         />
-      </ColoredRaisedButton>
+      </SendCommentButton>
     );
   };
 
@@ -252,6 +267,41 @@ class PostForm extends Component {
         { cancelable: false },
       )
     );
+  };
+
+  moreCommentButton = () => {
+    const { post, isShowAllComments } = this.props;
+    const { showMoreCommentButton, showMoreCommentText } = styles;
+
+    if (post.message.comments_count <= commentCount || isShowAllComments) {
+      return null;
+    }
+
+    return (
+      <ShowMoreCommentsButton
+        style={showMoreCommentButton}
+        onPress={() => this.props.showAllCommentsAction()}
+      >
+        <TextCustom
+          type={'t3'}
+          style={showMoreCommentText}
+        >
+          ПОКАЗАТЬ ЕЩЕ {post.message.comments_count - commentCount} КОММЕНТАРИЯ ИЗ {post.message.comments_count}
+        </TextCustom>
+      </ShowMoreCommentsButton>
+    );
+  };
+
+  getCommentArray = (comments) => {
+    const { isShowAllComments } = this.props;
+
+    if (!isShowAllComments && comments.length > commentCount) {
+      return (
+        _.chunk(comments, commentCount)[0]
+      );
+    }
+
+    return (comments);
   };
 
   render() {
@@ -293,9 +343,12 @@ class PostForm extends Component {
               />
             </View>
           </CardSection>
+          <View>
+            {this.moreCommentButton()}
+          </View>
           <CardSection>
             <FlatList
-              data={comments ? comments : []}
+              data={comments ? this.getCommentArray(comments) : []}
               renderItem={({ item }) => <CommentItem comment={item} />}
               keyExtractor={item => item.id}
             />
@@ -326,6 +379,7 @@ const mapStateToProps = (state, myProps) => ({
   voteOptions: state.postsList.voteOptions,
   showWhoVoted: state.postsList.showWhoVoted,
   sendingCommentInProgress: state.postsList.sendingCommentInProgress,
+  isShowAllComments: state.postsList.isShowAllComments,
   error: state.postsList.error,
 });
 
@@ -334,6 +388,7 @@ const mapDispatchToProps = dispatch => ({
   getComments: (messageId) => { dispatch(getComments(messageId)); },
   showWhoVotedDialog: (isShow) => { dispatch(showWhoVotedDialog(isShow)); },
   setAsRead: (postId) => { dispatch(setAsRead(postId)); },
+  showAllCommentsAction: () => { dispatch(showAllCommentsAction()); },
   sendCommentAction: (messageId, text, callback) => { dispatch(sendCommentAction(messageId, text, callback)); },
 });
 
