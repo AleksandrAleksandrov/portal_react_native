@@ -1,4 +1,5 @@
 import {
+  RESET_ERROR,
   POSTS_FETCH_SUCCESS,
   SET_POSTS_ARE_LOADING,
   GET_MORE_POSTS,
@@ -14,6 +15,9 @@ import {
   FINISH_REFRESH,
   SET_FETCHING_COMMENTS,
   SET_FETCHING_COMMENTS_FINISHED,
+  SENDING_COMMENT_IN_PROGRESS,
+  COMMENT_SENT,
+  COMMENT_SENT_FAIL,
   SHOW_SORT_BY_DIALOG,
   HIDE_SORT_BY_DIALOG,
   SET_SORT_BY_ADVERT,
@@ -63,8 +67,9 @@ const INITIAL_STATE = {
   newPost: {},
   post: {},
   pressedStarId: {},
-  error: '',
+  error: null,
   loadingCommentsInProgress: false,
+  sendingCommentInProgress: false,
   comments: [],
   showSortBy: false,
   filterByAdvert: false,
@@ -165,6 +170,22 @@ export default (state = INITIAL_STATE, action) => {
         comments: action.payload,
         loadingCommentsInProgress: false,
       };
+    case SENDING_COMMENT_IN_PROGRESS:
+      return {
+        ...state,
+        sendingCommentInProgress: true,
+      };
+    case COMMENT_SENT:
+      return {
+        ...state,
+        sendingCommentInProgress: false,
+      };
+    case COMMENT_SENT_FAIL:
+      return {
+        ...state,
+        sendingCommentInProgress: false,
+        error: 'Не удалось отправить сообщение',
+      };
     case SHOW_SORT_BY_DIALOG:
       return {
         ...state,
@@ -254,6 +275,11 @@ export default (state = INITIAL_STATE, action) => {
       return {
         ...state,
         showWhoVoted: action.payload,
+      };
+    case RESET_ERROR:
+      return {
+        ...state,
+        error: null,
       };
     default:
       return state;

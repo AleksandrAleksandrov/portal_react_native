@@ -1,9 +1,11 @@
 import React, { Component, PropTypes as PT } from 'react';
 import { connect } from 'react-redux';
-import { View, ScrollView, FlatList } from 'react-native';
+import { View, ScrollView, FlatList, TextInput, Dimensions, Keyboard, Image, Alert, StatusBar } from 'react-native';
 import _ from 'lodash';
 import Moment from 'moment';
 import { NavigationBar } from '@shoutem/ui';
+import KeyboardSpacer from 'react-native-keyboard-spacer';
+import { MKButton } from 'react-native-material-kit';
 import { CardSection, PostFooter, TextCustom } from './common';
 import PostHeader from './common/PostHeader';
 import { CommentItem } from './CommentItem';
@@ -14,10 +16,23 @@ import {
   EVENT,
 } from '../Constants';
 import { color } from '../constants/color';
-import { getComments, setAsRead, showWhoVotedDialog } from '../actions';
 import { navigationBarHeight } from '../constants/StyleConstants';
+import {
+  resetError,
+  getComments,
+  setAsRead,
+  showWhoVotedDialog,
+  sendCommentAction,
+} from '../actions';
+
+const sendIcon = require('../images/ic_send_white_24dp_2x.png');
+
+const { width, height } = Dimensions.get('window');
 
 const styles = {
+  rootViewStyle: {
+    height,
+  },
   navigationBarWrapper: {
     width: 'auto',
     height: navigationBarHeight,
@@ -31,9 +46,45 @@ const styles = {
     marginTop: 10,
     marginBottom: 10,
   },
+  commentWrapper: {
+    justifyContent: 'space-between',
+    flexDirection: 'row',
+    marginBottom: StatusBar.currentHeight,
+  },
+  sendButton: {
+    fontSize: 32,
+    color: color.primaryDark,
+    alignSelf: 'flex-end',
+  },
+  sendMaterialButton: {
+    width: 75,
+    borderRadius: 2,
+    alignItems: 'center',
+    justifyContent: 'center',
+    margin: 3,
+  },
+  sendIconStyle: {
+    alignItems: 'center',
+    alignSelf: 'center',
+    justifyContent: 'center',
+    width: 32,
+    height: 32,
+  },
+  commentInput: {
+    left: 0,
+    right: 0,
+    height: 45,
+    marginLeft: 5,
+    flex: 1,
+    alignSelf: 'flex-start',
+  },
 };
 
 let numberOfVotes;
+
+const ColoredRaisedButton = MKButton.coloredButton()
+  .withBackgroundColor(color.materialGreen)
+  .build();
 
 class PostForm extends Component {
   componentWillMount() {
@@ -45,6 +96,7 @@ class PostForm extends Component {
         numberOfVotes += this.props.post.message.options[index].votes;
       });
     }
+    this.state = { comment: '' };
   }
 
   setAsRead() {
@@ -154,14 +206,77 @@ class PostForm extends Component {
     }
   };
 
+  onCommentChanged = (comment) => {
+    this.setState({ comment });
+  };
+
+  sendMessage = (messageId, text) => {
+    this.props.sendCommentAction(messageId, text, () => {
+      this.setState({ comment: '' });
+      Keyboard.dismiss();
+    });
+  };
+
+  getSendButton = () => {
+    const { post, sendingCommentInProgress } = this.props;
+    const { sendMaterialButton, sendIconStyle } = styles;
+
+    if (this.state.comment.length === 0) {
+      return null;
+    }
+    return (
+      <ColoredRaisedButton
+        style={sendMaterialButton}
+        enabled={!sendingCommentInProgress}
+        onPress={() => this.sendMessage(post.message.id, this.state.comment)}
+      >
+        <Image
+          style={sendIconStyle}
+          source={sendIcon}
+        />
+      </ColoredRaisedButton>
+    );
+  };
+
+  showAlert = () => {
+    const { error } = this.props;
+
+    if (error === null) {
+      return null;
+    }
+    return (
+      Alert.alert(
+        null,
+        error,
+        [{ text: 'OK', onPress: () => resetError() }],
+        { cancelable: false },
+      )
+    );
+  };
+
   render() {
     const { post, comments, voteOptions, showWhoVotedDialog, showWhoVoted } = this.props;
-    const { title, text, create_dt, author, comments_count, message_type, content_object, options } = post.message; // able to crash
+    const {
+      title,
+      text,
+      create_dt,
+      author,
+      comments_count,
+      message_type,
+      content_object,
+      options
+    } = post.message; // able to crash
+    const {
+      rootViewStyle,
+      commentInput,
+      commentWrapper,
+    } = styles;
 
     return (
-      <View>
+      <View style={rootViewStyle}>
+        {this.showAlert}
         {this.navigationBar(title)}
-        <ScrollView style={{ marginBottom: navigationBarHeight }}>
+        <ScrollView >
           <CardSection>
             <View style={styles.bodyView}>
               <PostHeader
@@ -189,6 +304,16 @@ class PostForm extends Component {
             onDecline={() => showWhoVotedDialog(!showWhoVoted)}
           />
         </ScrollView>
+        <View style={[commentWrapper, { width }]}>
+          <TextInput
+            style={commentInput}
+            placeholder={'Текст комментария'}
+            onChangeText={textInputValue => this.onCommentChanged(textInputValue)}
+            value={this.state.comment}
+          />
+          {this.getSendButton()}
+        </View>
+        <KeyboardSpacer />
       </View>
     );
   }
@@ -200,13 +325,16 @@ const mapStateToProps = (state, myProps) => ({
   loadingCommentsInProgress: state.postsList.loadingCommentsInProgress,
   voteOptions: state.postsList.voteOptions,
   showWhoVoted: state.postsList.showWhoVoted,
+  sendingCommentInProgress: state.postsList.sendingCommentInProgress,
+  error: state.postsList.error,
 });
 
 const mapDispatchToProps = dispatch => ({
-  dispatch,
+  resetError: () => { dispatch(resetError()); },
   getComments: (messageId) => { dispatch(getComments(messageId)); },
   showWhoVotedDialog: (isShow) => { dispatch(showWhoVotedDialog(isShow)); },
   setAsRead: (postId) => { dispatch(setAsRead(postId)); },
+  sendCommentAction: (messageId, text, callback) => { dispatch(sendCommentAction(messageId, text, callback)); },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(PostForm);

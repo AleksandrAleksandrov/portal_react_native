@@ -1,5 +1,6 @@
 import DBHelper from '../models/DBHelper';
 import {
+  RESET_ERROR,
   POSTS_FETCH_SUCCESS,
   SET_POSTS_ARE_LOADING,
   SET_NEXT_PAGE,
@@ -31,9 +32,18 @@ import {
   FETCHING_VOTED_PEOPLE_IN_PROGRESS,
   SELECTED_POLL_RAW_INDEX,
   SET_POLL_VALUE,
+  SENDING_COMMENT_IN_PROGRESS,
+  COMMENT_SENT,
+  COMMENT_SENT_FAIL,
 } from './types';
 import { NOT_FOUND } from '../Constants';
 import * as serviceREST from '../services/serviceREST';
+
+export const resetError = () => {
+  return {
+    type: RESET_ERROR,
+  };
+};
 
 /**
  * Set user model to state.
@@ -229,7 +239,7 @@ export const setComments = (response) => {
   return {
     type: SET_FETCHING_COMMENTS_FINISHED,
     payload: response.data,
-  }
+  };
 };
 
 export const getComments = (messageId) => (dispatch) => {
@@ -387,6 +397,37 @@ export const setPollValueAction = (value) => {
     type: SET_POLL_VALUE,
     payload: value,
   };
+};
+
+const setCommentSent = () => {
+  return {
+    type: COMMENT_SENT,
+  };
+};
+
+const setCommentSentFailed = () => {
+  return {
+    type: COMMENT_SENT_FAIL,
+  };
+};
+
+const setSendingCommentInProgress = () => {
+  return {
+    type: SENDING_COMMENT_IN_PROGRESS,
+  };
+};
+
+export const sendCommentAction = (messageId, text, callback) => (dispatch) => {
+  dispatch(setSendingCommentInProgress());
+  serviceREST.sendComment(messageId, text)
+    .then((response) => {
+      dispatch(getComments(messageId));
+      callback();
+      dispatch(setCommentSent());
+    })
+    .catch((error) => {
+      dispatch(setCommentSentFailed());
+    });
 };
 
 // const Post = {

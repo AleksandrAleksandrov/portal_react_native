@@ -8,4 +8,5 @@ export const color = {
   drawerIconColor: 'gray',
   textWhite: 'white',
   myGreen: 'green',
+  materialGreen: '#00ab9c',
 };

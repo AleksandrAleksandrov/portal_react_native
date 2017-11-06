@@ -66,3 +66,11 @@ export const FETCHING_VOTED_PEOPLE_IN_PROGRESS = 'fetching_voted_people_in_progr
 export const SET_POLL_RESULT = 'set_poll_result';
 export const SELECTED_POLL_RAW_INDEX = 'selected_poll_raw_index';
 export const SET_POLL_VALUE = 'set_poll_value';
+
+// Comments
+export const SENDING_COMMENT_IN_PROGRESS = 'sending_comment_in_progress';
+export const COMMENT_SENT = 'comment_sent';
+export const COMMENT_SENT_FAIL = 'comment_sent_fail';
+
+// Error
+export const RESET_ERROR = 'reset_error';

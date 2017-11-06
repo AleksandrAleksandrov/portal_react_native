@@ -11,6 +11,8 @@ import {
   USER,
   VOTE_FOR,
   GET_POLL_RESULT,
+  FETCH_COMMENTS,
+  SEND_COMMENT,
 } from '../ApiConstants';
 
 const api = create({
@@ -213,10 +215,12 @@ export const setAsRead = (postId) => {
  * @returns {Promise}
  */
 export const getComments = (messageId) => {
+  console.warn('fetching all comments');
   return new Promise((resolve, reject) => {
     api.get(`${MESSAGES}${messageId}/comments/`)
       .then((response) => {
         if (response.ok) {
+          console.warn('fetched comments', response);
           resolve(response);
         } else {
           reject(response);
@@ -279,6 +283,28 @@ export const voteFor = (id) => {
 export const fetchPollResults = (messageId) => {
   return new Promise((resolve, reject) => {
     api.get(`${MESSAGES}${messageId}${GET_POLL_RESULT}`)
+      .then((response) => {
+        if (response.ok) {
+          resolve(response);
+        } else {
+          reject(response);
+        }
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+};
+
+/**
+ * Send comment for post.
+ * @param messageId
+ * @param text
+ * @returns {Promise}
+ */
+export const sendComment = (messageId, text) => {
+  return new Promise((resolve, reject) => {
+    api.post(SEND_COMMENT, { text, message: messageId })
       .then((response) => {
         if (response.ok) {
           resolve(response);

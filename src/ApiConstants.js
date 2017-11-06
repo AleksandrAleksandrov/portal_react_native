@@ -16,3 +16,7 @@ export const PASSWORD_RESET = '/api/auth/password/reset/';
 // Poll actions.
 export const VOTE_FOR = '/api/vote/';
 export const GET_POLL_RESULT = '/poll_results/';
+
+// Comments.
+export const SEND_COMMENT = '/api/comments/';
+export const FETCH_COMMENTS = '/comments/';
