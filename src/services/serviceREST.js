@@ -33,6 +33,7 @@ export const getExpand = (url) => {
         resolve(response.request.responseURL);
       })
       .catch((error) => {
+        console.warn('getExpandERRor', error);
         reject(error);
       });
   });
@@ -53,8 +54,12 @@ export const getLatLon = (url) => {
 
             coord[1] = found[0];
           }
-          resolve(coord);
+          if (!isNaN(coord[0]) & !isNaN(coord[1])) {
+            resolve(coord);
+          }
+          reject();
         }
+        reject();
       });
   });
 };

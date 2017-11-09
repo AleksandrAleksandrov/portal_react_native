@@ -94,7 +94,7 @@ const INITIAL_STATE = {
   latitude: null,
   longitude: null,
   getLatLonInProgress: false,
-  isLatLonValid: null,
+  isLatLonValid: true,
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -294,6 +294,7 @@ export default (state = INITIAL_STATE, action) => {
     case SET_LAT_LON:
       return {
         ...state,
+        isLatLonValid: true,
         getLatLonInProgress: false,
         latitude: Number(action.latitude),
         longitude: Number(action.longitude),
@@ -313,6 +314,7 @@ export default (state = INITIAL_STATE, action) => {
       return {
         ...state,
         isLatLonValid: action.payload,
+        getLatLonInProgress: false,
       };
     case RESET_ERROR:
       return {

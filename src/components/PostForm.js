@@ -359,10 +359,15 @@ class PostForm extends Component {
     );
   };
 
-  isLatLonValid = (isValid) => {
-    if (isValid) {
+  isLatLonValid = (isValid, getLatLonInProgress) => {
+    if (!isValid & !getLatLonInProgress) {
       return (
-        <TextCustom>no valid</TextCustom>
+        <TextCustom
+          type={'t1'}
+          style={{ fontSize: 28 }}
+        >
+          Ссылка на карту не валидна
+        </TextCustom>
       );
     }
   };
@@ -397,7 +402,7 @@ class PostForm extends Component {
           >
             {this.getMapPin()}
           </MapView>
-          {this.isLatLonValid(isLatLonValid)}
+          {this.isLatLonValid(isLatLonValid, getLatLonInProgress)}
           {this.getSpinner(getLatLonInProgress)}
         </View>
       );
