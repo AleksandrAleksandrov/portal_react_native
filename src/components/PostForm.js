@@ -1,6 +1,18 @@
 import React, { Component, PropTypes as PT } from 'react';
 import { connect } from 'react-redux';
-import { View, ScrollView, FlatList, TextInput, Dimensions, Keyboard, Image, Alert, StatusBar, ActivityIndicator } from 'react-native';
+import {
+  View,
+  ScrollView,
+  FlatList,
+  TextInput,
+  Dimensions,
+  Keyboard,
+  Image,
+  Alert,
+  StatusBar,
+  Platform,
+  PermissionsAndroid
+} from 'react-native';
 import _ from 'lodash';
 import Moment from 'moment';
 import MapView from 'react-native-maps';
@@ -118,6 +130,21 @@ const styles = {
 
 let numberOfVotes;
 
+async function requestCameraPermission() {
+  try {
+    const granted = await PermissionsAndroid.request(
+      PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION,
+    )
+    if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+      console.log('You can use the location');
+    } else {
+      console.log('Location permission denied');
+    }
+  } catch (err) {
+    console.warn(err);
+  }
+}
+
 const SendCommentButton = MKButton.coloredButton()
   .withBackgroundColor(color.materialGreen)
   .build();
@@ -143,6 +170,14 @@ class PostForm extends Component {
       });
     }
     this.state = { comment: '' };
+  }
+
+  componentDidMount() {
+    if (Platform.OS === 'android') {
+      requestCameraPermission().then((response) => {
+
+      });
+    }
   }
 
   setAsRead() {
