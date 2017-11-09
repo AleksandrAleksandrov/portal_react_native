@@ -37,6 +37,10 @@ import {
   FETCHING_VOTED_PEOPLE_IN_PROGRESS,
   SELECTED_POLL_RAW_INDEX,
   SET_POLL_VALUE,
+  SET_LAT_LON,
+  GET_LAT_LON_IN_PROGRESS,
+  RESET_LAT_LON,
+  SET_IS_LAT_LON_VALID,
 } from '../actions/types';
 import {
   ADVERT,
@@ -87,6 +91,10 @@ const INITIAL_STATE = {
   pollResult: null, // People who voted
   selectedPollRawIndex: 0,
   selectedPollTitle: '',
+  latitude: null,
+  longitude: null,
+  getLatLonInProgress: false,
+  isLatLonValid: null,
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -282,6 +290,29 @@ export default (state = INITIAL_STATE, action) => {
       return {
         ...state,
         showWhoVoted: action.payload,
+      };
+    case SET_LAT_LON:
+      return {
+        ...state,
+        getLatLonInProgress: false,
+        latitude: Number(action.latitude),
+        longitude: Number(action.longitude),
+      };
+    case GET_LAT_LON_IN_PROGRESS:
+      return {
+        ...state,
+        getLatLonInProgress: true,
+      };
+    case RESET_LAT_LON:
+      return {
+        ...state,
+        latitude: null,
+        longitude: null,
+      };
+    case SET_IS_LAT_LON_VALID:
+      return {
+        ...state,
+        isLatLonValid: action.payload,
       };
     case RESET_ERROR:
       return {

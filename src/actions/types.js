@@ -73,5 +73,11 @@ export const COMMENT_SENT = 'comment_sent';
 export const COMMENT_SENT_FAIL = 'comment_sent_fail';
 export const SHOW_ALL_COMMENTS = 'show_all_comments';
 
+// Map
+export const SET_LAT_LON = 'set_lat_lon';
+export const GET_LAT_LON_IN_PROGRESS = 'get_lat_lon_in_progress';
+export const RESET_LAT_LON = 'reset_lat_lon';
+export const SET_IS_LAT_LON_VALID = 'set_is_lat_lon_valid';
+
 // Error
 export const RESET_ERROR = 'reset_error';

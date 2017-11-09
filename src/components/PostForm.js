@@ -1,12 +1,16 @@
 import React, { Component, PropTypes as PT } from 'react';
 import { connect } from 'react-redux';
-import { View, ScrollView, FlatList, TextInput, Dimensions, Keyboard, Image, Alert, StatusBar } from 'react-native';
+import { View, ScrollView, FlatList, TextInput, Dimensions, Keyboard, Image, Alert, StatusBar, ActivityIndicator } from 'react-native';
 import _ from 'lodash';
 import Moment from 'moment';
+import MapView from 'react-native-maps';
 import { NavigationBar } from '@shoutem/ui';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 import { MKButton } from 'react-native-material-kit';
-import { CardSection, PostFooter, TextCustom } from './common';
+import openMap from '../utils/Map';
+// import { setKey, expand } from 'react-native-google-shortener';
+import { getExpand, getLatLon } from '../services/serviceREST';
+import { CardSection, PostFooter, TextCustom, Spinner } from './common';
 import PostHeader from './common/PostHeader';
 import { CommentItem } from './CommentItem';
 import DialogWhoVoted from './common/DialogWhoVoted';
@@ -24,6 +28,8 @@ import {
   showWhoVotedDialog,
   sendCommentAction,
   showAllCommentsAction,
+  getLatLonAction,
+  resetLatLon,
 } from '../actions';
 
 const commentCount = 10;
@@ -90,6 +96,24 @@ const styles = {
   showMoreCommentText: {
     textAlign: 'center',
   },
+  mapContainer: {
+    width: width - 10,
+    height: 200,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  mapStyle: {
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+  },
+  mapSpinner: {
+    alignSelf: 'center',
+    justifyContent: 'center',
+    position: 'relative',
+  },
 };
 
 let numberOfVotes;
@@ -103,8 +127,15 @@ const ShowMoreCommentsButton = MKButton.button()
 
 class PostForm extends Component {
   componentWillMount() {
+    this.props.resetLatLon();
     this.getComments();
     this.setAsRead();
+    const { post: { message } } = this.props;
+
+    if (message.message_type === EVENT & message.content_object.location_url !== '') {
+      this.props.getLatLonAction(message.content_object.location_url);
+    }
+
     numberOfVotes = 0;
     if (this.props.post.message.options) {
       this.props.post.message.options.forEach((objectKey, index) => {
@@ -304,6 +335,75 @@ class PostForm extends Component {
     return (comments);
   };
 
+  getSpinner = (getLatLonInProgress) => {
+    if (getLatLonInProgress) {
+      return (<Spinner style={styles.mapSpinner} size={'large'} />);
+    }
+    return null;
+  };
+
+  getMapPin = () => {
+    const { latitude, longitude } = this.props;
+
+    if (latitude === null || longitude === null) {
+      return null;
+    }
+
+    return (
+      <MapView.Marker
+        coordinate={{
+          latitude,
+          longitude,
+        }}
+      />
+    );
+  };
+
+  isLatLonValid = (isValid) => {
+    if (isValid) {
+      return (
+        <TextCustom>no valid</TextCustom>
+      );
+    }
+  };
+
+  open = (latitude, longitude) => {
+    openMap({ latitude, longitude });
+  };
+
+  getMap = () => {
+    const { mapStyle, mapSpinner, mapContainer } = styles;
+    const { isLatLonValid, getLatLonInProgress, latitude, longitude, post: { message } } = this.props;
+
+    if (message.message_type === EVENT & message.content_object.location_url !== '') {
+      return (
+        <View style={mapContainer} >
+          <MapView
+            style={mapStyle}
+            onPress={() => this.open(latitude, longitude)}
+            showsUserLocation={true}
+            // initialRegion={{
+            //   latitude: 42.834171,
+            //   longitude: 30.12526,
+            //   latitudeDelta: 0.0922,
+            //   longitudeDelta: 0.0421,
+            // }}
+            initialRegion={{
+              latitude: latitude ? latitude : 47.834171,
+              longitude: longitude ? longitude : 35.12526,
+              latitudeDelta: 0.0922,
+              longitudeDelta: 0.0421,
+            }}
+          >
+            {this.getMapPin()}
+          </MapView>
+          {this.isLatLonValid(isLatLonValid)}
+          {this.getSpinner(getLatLonInProgress)}
+        </View>
+      );
+    }
+  };
+
   render() {
     const { post, comments, voteOptions, showWhoVotedDialog, showWhoVoted } = this.props;
     const {
@@ -314,7 +414,7 @@ class PostForm extends Component {
       comments_count,
       message_type,
       content_object,
-      options
+      options,
     } = post.message; // able to crash
     const {
       rootViewStyle,
@@ -334,6 +434,7 @@ class PostForm extends Component {
                 id={post.id}
               />
               <TextCustom type={'t2_regular'}>{text}</TextCustom>
+              {this.getMap()}
               {this.renderPollInfo(message_type, content_object)}
               {this.renderPollList(voteOptions ? voteOptions : options, post.message.id)}
               <PostFooter
@@ -373,6 +474,10 @@ class PostForm extends Component {
 }
 
 const mapStateToProps = (state, myProps) => ({
+  getLatLonInProgress: state.postsList.getLatLonInProgress,
+  latitude: state.postsList.latitude,
+  longitude: state.postsList.longitude,
+  isLatLonValid: state.postsList.isLatLonValid,
   post: _.find(state.postsList.results, (o) => { return o.id === myProps.id }),
   comments: state.postsList.comments,
   loadingCommentsInProgress: state.postsList.loadingCommentsInProgress,
@@ -390,6 +495,8 @@ const mapDispatchToProps = dispatch => ({
   setAsRead: (postId) => { dispatch(setAsRead(postId)); },
   showAllCommentsAction: () => { dispatch(showAllCommentsAction()); },
   sendCommentAction: (messageId, text, callback) => { dispatch(sendCommentAction(messageId, text, callback)); },
+  getLatLonAction: (url) => { dispatch(getLatLonAction(url)); },
+  resetLatLon: () => { dispatch(resetLatLon()); },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(PostForm);

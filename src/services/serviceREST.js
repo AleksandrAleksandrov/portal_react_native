@@ -1,4 +1,5 @@
 import { create } from 'apisauce';
+import axios from 'axios';
 import { setToken } from './StorageHelper';
 import { createQuery } from '../utils/StringUtils';
 import {
@@ -23,6 +24,40 @@ const api = create({
   },
   timeout: 10000,
 });
+
+export const getExpand = (url) => {
+  return new Promise((resolve, reject) => {
+    axios.get(url)
+      .then((response) => {
+        // getLatLon(response.request.responseURL);
+        resolve(response.request.responseURL);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+};
+
+export const getLatLon = (url) => {
+  return new Promise((resolve, reject) => {
+    getExpand(url)
+      .then((response) => {
+        let latLon;
+        let parts = response.split('!3d');
+        if (parts.length >= 2) {
+          let coord = parts[1].split('!4d');
+          if (isNaN(coord[1])) {
+            const ll = coord[1];
+            const re = '?';
+            const found = ll.split(re);
+
+            coord[1] = found[0];
+          }
+          resolve(coord);
+        }
+      });
+  });
+};
 
 /**
  * Set token to every header that go with requests

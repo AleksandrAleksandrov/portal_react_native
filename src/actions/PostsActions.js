@@ -36,6 +36,10 @@ import {
   COMMENT_SENT,
   COMMENT_SENT_FAIL,
   SHOW_ALL_COMMENTS,
+  SET_LAT_LON,
+  GET_LAT_LON_IN_PROGRESS,
+  RESET_LAT_LON,
+  SET_IS_LAT_LON_VALID,
 } from './types';
 import { NOT_FOUND } from '../Constants';
 import * as serviceREST from '../services/serviceREST';
@@ -431,10 +435,32 @@ export const sendCommentAction = (messageId, text, callback) => (dispatch) => {
     });
 };
 
-export const showAllCommentsAction = () => {
+export const showAllCommentsAction = () => ({ type: SHOW_ALL_COMMENTS });
+
+export const setLatLonAction = (latitude, longitude) => {
   return {
-    type: SHOW_ALL_COMMENTS,
+    type: SET_LAT_LON,
+    latitude,
+    longitude,
   };
+};
+
+export const resetLatLon = () => ({ type: RESET_LAT_LON });
+
+export const setLatLonIsValid = (isValid) => ({ type: SET_IS_LAT_LON_VALID, payload: isValid });
+
+const setGettingLatLonInProgress = () => ({ type: GET_LAT_LON_IN_PROGRESS });
+
+export const getLatLonAction = (url) => (dispatch) => {
+  dispatch(setGettingLatLonInProgress());
+  serviceREST.getLatLon(url)
+    .then((response) => {
+      dispatch(setLatLonAction(response[0], response[1]));
+    })
+    .catch((error) => {
+      console.warn('getLatLonActionERROR', error);
+      dispatch(setLatLonIsValid(false));
+    });
 };
 
 // const Post = {
