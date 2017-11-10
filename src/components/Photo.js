@@ -35,39 +35,22 @@ const styles = {
   },
 };
 
-class AlbumItem extends Component {
-  onAlbumPress = (album) => {
-    Actions.album({ album });
-  }
+class Photo extends Component {
+
   render() {
-    const { album } = this.props;
+    const { photo } = this.props;
     const { rootView, image, textWrapper, icon, textStyle } = styles;
 
     return (
-      <TouchableWithoutFeedback onPress={() => this.onAlbumPress(album)}>
-        <View style={[theme.cardStyle, rootView]}>
-          <ProgressiveImage
-            style={[theme.cardImageStyle]}
-            thumbnailSource={{ uri: album.temp_cover.thumbnail }}
-            imageSource={{ uri: album.temp_cover.preview }}
-          />
-          <View style={textWrapper}>
-            <TextCustom
-              style={textStyle}
-            >
-              {album.title}
-            </TextCustom>
-            <View>
-              <Icon
-                name={'users'}
-                style={icon}
-              />
-            </View>
-          </View>
-        </View>
-      </TouchableWithoutFeedback>
+      <View style={[theme.cardStyle, rootView]}>
+        <ProgressiveImage
+          style={[theme.cardImageStyle]}
+          // thumbnailSource={{ uri: photo.thumbnail }}
+          imageSource={{ uri: photo.thumbnail }}
+        />
+      </View>
     );
   }
 }
 
-export default AlbumItem;
+export default Photo;

@@ -83,6 +83,9 @@ export const SET_IS_LAT_LON_VALID = 'set_is_lat_lon_valid';
 export const FETCH_ALBUM_LIST = 'fetch_album_list';
 export const SET_ALBUM_LIST = 'set_album_list';
 export const SET_REFRESH_STATUS = 'set_refresh_status';
+export const SET_PHOTOS_FOR_ALBUM = 'set_photos_for_album';
+export const FETCH_PHOTOS_FOR_ALBUM = 'fetch_photos_for_album';
+export const RESET_PHOTOS = 'reset_photos';
 
 // Error
 export const RESET_ERROR = 'reset_error';

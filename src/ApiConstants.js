@@ -23,3 +23,4 @@ export const FETCH_COMMENTS = '/comments/';
 
 // Photos
 export const FETCH_ALBUMS = '/api/albums/';
+export const FETCH_PHOTOS_FROM_ALBUM = '/content/';

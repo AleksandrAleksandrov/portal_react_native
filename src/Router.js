@@ -4,6 +4,7 @@ import StartScreen from './components/StartScreen';
 import LoginForm from './components/LoginForm';
 import PostsListForm from './components/PostsListForm';
 import AlbumsList from './components/AlbumsList';
+import Album from './components/Album';
 import PostForm from './components/PostForm';
 import NewPostForm from './components/NewPostForm';
 
@@ -57,6 +58,12 @@ const RouterComponent = () => (
         hideNavBar={true}
         animation={'fade'}
         type={'replace'}
+      />
+      <Scene
+        key={'album'}
+        component={Album}
+        hideNavBar={true}
+        animation={'fade'}
       />
     </Scene>
   </Router>);

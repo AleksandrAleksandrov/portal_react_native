@@ -15,6 +15,7 @@ import {
   FETCH_COMMENTS,
   SEND_COMMENT,
   FETCH_ALBUMS,
+  FETCH_PHOTOS_FROM_ALBUM
 } from '../ApiConstants';
 
 const api = create({
@@ -366,6 +367,27 @@ export const sendComment = (messageId, text) => {
 export const fetchAlbums = () => {
   return new Promise((resolve, reject) => {
     api.get(FETCH_ALBUMS)
+      .then((response) => {
+        if (response.ok) {
+          resolve(response);
+        } else {
+          reject(response);
+        }
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+};
+
+/**
+ * Fetch all photos from album.
+ * @param albumId
+ * @returns {Promise}
+ */
+export const fetchPhotosFromAlbum = (albumId) => {
+  return new Promise((resolve, reject) => {
+    api.get(`${FETCH_ALBUMS}${albumId}${FETCH_PHOTOS_FROM_ALBUM}`)
       .then((response) => {
         if (response.ok) {
           resolve(response);
