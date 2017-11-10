@@ -67,7 +67,7 @@ class DrawerView extends Component {
   }
 
   onGallery = () => {
-
+    Actions.albums();
   }
 
   onVacation = () => {

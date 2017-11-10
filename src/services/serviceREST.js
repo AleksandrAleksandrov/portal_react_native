@@ -14,6 +14,7 @@ import {
   GET_POLL_RESULT,
   FETCH_COMMENTS,
   SEND_COMMENT,
+  FETCH_ALBUMS,
 } from '../ApiConstants';
 
 const api = create({
@@ -345,6 +346,26 @@ export const fetchPollResults = (messageId) => {
 export const sendComment = (messageId, text) => {
   return new Promise((resolve, reject) => {
     api.post(SEND_COMMENT, { text, message: messageId })
+      .then((response) => {
+        if (response.ok) {
+          resolve(response);
+        } else {
+          reject(response);
+        }
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+};
+
+/**
+ * Fetch list of albums.
+ * @returns {Promise}
+ */
+export const fetchAlbums = () => {
+  return new Promise((resolve, reject) => {
+    api.get(FETCH_ALBUMS)
       .then((response) => {
         if (response.ok) {
           resolve(response);

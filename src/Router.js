@@ -2,10 +2,10 @@ import React from 'react';
 import { Scene, Router } from 'react-native-router-flux';
 import StartScreen from './components/StartScreen';
 import LoginForm from './components/LoginForm';
-import TestLogin from './components/TestLogin';
 import PostsListForm from './components/PostsListForm';
+import AlbumsList from './components/AlbumsList';
 import PostForm from './components/PostForm';
-import NewPostForm from './components/NewPostForm'
+import NewPostForm from './components/NewPostForm';
 
 const styles = {
   rootRouterStyle: {
@@ -50,6 +50,13 @@ const RouterComponent = () => (
         key="post"
         component={PostForm}
         hideNavBar={true}
+      />
+      <Scene
+        key={'albums'}
+        component={AlbumsList}
+        hideNavBar={true}
+        animation={'fade'}
+        type={'replace'}
       />
     </Scene>
   </Router>);

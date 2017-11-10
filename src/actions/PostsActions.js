@@ -72,7 +72,7 @@ const getUser = () => (dispatch) => {
     })
     .catch((error) => {
 
-  });
+    });
 };
 
 const getPostsSuccess = (data) => {

@@ -3,11 +3,13 @@ import { reducer as formReducer } from 'redux-form';
 import AuthReducer from './AuthReducer';
 import PostsReducer from './PostsReducer';
 import ReducerNetworkMonitor from './ReducerNetworkMonitor';
+import PhotosReducer from './PhotosReducer';
 
 
 export default combineReducers({
   auth: AuthReducer,
   postsList: PostsReducer,
   networkReducer: ReducerNetworkMonitor,
+  photo: PhotosReducer,
   form: formReducer,
 });

@@ -7,7 +7,7 @@ export const color = {
   navigationBarText: 'white',
   drawerIconColor: 'gray',
   textWhite: 'white',
-  myGreen: 'green',
+  myGreen: '#26af4f',
   materialGreen: '#00ab9c',
   myGray: '#3f3c38',
 };

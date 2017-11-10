@@ -79,5 +79,10 @@ export const GET_LAT_LON_IN_PROGRESS = 'get_lat_lon_in_progress';
 export const RESET_LAT_LON = 'reset_lat_lon';
 export const SET_IS_LAT_LON_VALID = 'set_is_lat_lon_valid';
 
+// Photos
+export const FETCH_ALBUM_LIST = 'fetch_album_list';
+export const SET_ALBUM_LIST = 'set_album_list';
+export const SET_REFRESH_STATUS = 'set_refresh_status';
+
 // Error
 export const RESET_ERROR = 'reset_error';

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View, TouchableWithoutFeedback } from 'react-native';
 import { Actions } from 'react-native-router-flux';
-import { CardSection, PostIcon, TextCustom, PostFooter } from './common';
+import { CardSection, TextCustom, PostFooter } from './common';
 import PostHeader from './common/PostHeader';
 
 const styles = {

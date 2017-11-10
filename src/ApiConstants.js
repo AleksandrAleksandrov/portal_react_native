@@ -1,5 +1,5 @@
-// export const URL = 'https://www.portal.light-it.net';
-export const URL = 'https://portal-dev.light-it.loc';
+export const URL = 'https://www.portal.light-it.net';
+// export const URL = 'https://portal-dev.light-it.loc';
 
 export const DEFAULT_PHOTO = 'https://www.portal.light-it.net/images/cam.png';
 
@@ -20,3 +20,6 @@ export const GET_POLL_RESULT = '/poll_results/';
 // Comments.
 export const SEND_COMMENT = '/api/comments/';
 export const FETCH_COMMENTS = '/comments/';
+
+// Photos
+export const FETCH_ALBUMS = '/api/albums/';
