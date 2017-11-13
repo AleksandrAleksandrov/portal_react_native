@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { View, FlatList } from 'react-native';
+import { View, FlatList, Modal } from 'react-native';
 import { NavigationBar } from '@shoutem/ui';
+import ImageViewer from 'react-native-image-zoom-viewer';
 import { TextCustom, Spinner } from './common/';
 import Photo from './Photo';
 import { navigationBarHeight } from '../constants/StyleConstants';
@@ -9,6 +10,7 @@ import { color } from '../constants/color';
 import {
   fetchPhotosFromAlbumAction,
   resetPhotosAction,
+  showHideFullScreenPhotosAction,
 } from '../actions';
 
 const styles = {
@@ -25,17 +27,12 @@ const styles = {
 class Album extends Component {
   constructor() {
     super();
-    this.state = { numOfColumn: 2 };
+    this.state = { numOfColumn: 2, openedPhotoIndex: 1 };
   }
 
   componentWillMount() {
     this.props.resetPhotosAction();
     this.props.fetchPhotosFromAlbumAction(this.props.album.id);
-  }
-
-  componentDidMount() {
-
-    // this.list.scrollToIndex(10);
   }
 
   navigationBar = (title) => {
@@ -67,9 +64,32 @@ class Album extends Component {
     return null;
   };
 
+  onCloseFullScreenPhotos = () => {
+    const { showHideFullScreenPhotosAction } = this.props;
+
+    showHideFullScreenPhotosAction(false);
+  }
+
+  full = (urls, isFullScreenPhotos, isTransparent, fullScreenPhotoIndex) => {
+    if (urls !== undefined && urls.length > 0) {
+      return (
+        <Modal
+          visible={isFullScreenPhotos}
+          transparent={isTransparent}
+        >
+          <ImageViewer
+            onCancel={() => this.onCloseFullScreenPhotos()}
+            imageUrls={urls}
+            index={fullScreenPhotoIndex}
+          />
+        </Modal>
+      );
+    }
+  };
+
   render() {
     const { postsListStyle } = styles;
-    const { photos, fetchingPhotosForAlbumInProgress } = this.props;
+    const { photos, fetchingPhotosForAlbumInProgress, urls, isFullScreenPhotos, fullScreenPhotoIndex } = this.props;
 
     return (
       <View onLayout={(event) => this.onLayout(event)}>
@@ -78,12 +98,14 @@ class Album extends Component {
           ref={(s) => this.list = s}
           style={postsListStyle}
           data={photos}
-          renderItem={({ item }) => <Photo photo={item} />}
+          renderItem={({ item, index }) => <Photo photo={item} index={index} />}
           keyExtractor={item => item.id}
           numColumns={this.state.numOfColumn}
           key={this.state.numOfColumn}
+
         />
         {this.getProgressBar(fetchingPhotosForAlbumInProgress)}
+        {this.full(urls, isFullScreenPhotos, true, fullScreenPhotoIndex)}
       </View>
     );
   }
@@ -92,11 +114,15 @@ class Album extends Component {
 const mapStateToProps = state => ({
   photos: state.photo.photos,
   fetchingPhotosForAlbumInProgress: state.photo.fetchingPhotosForAlbumInProgress,
+  urls: state.photo.urls,
+  isFullScreenPhotos: state.photo.isFullScreenPhotos,
+  fullScreenPhotoIndex: state.photo.fullScreenPhotoIndex,
 });
 
 const mapDispatchToProps = dispatch => ({
   fetchPhotosFromAlbumAction: (albumId) => { dispatch(fetchPhotosFromAlbumAction(albumId)); },
   resetPhotosAction: () => { dispatch(resetPhotosAction()); },
+  showHideFullScreenPhotosAction: (isShow) => { dispatch(showHideFullScreenPhotosAction(isShow)); },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Album);

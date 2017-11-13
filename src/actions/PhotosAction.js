@@ -5,6 +5,8 @@ import {
   SET_PHOTOS_FOR_ALBUM,
   FETCH_PHOTOS_FOR_ALBUM,
   RESET_PHOTOS,
+  SHOW_HIDE_FULL_SCREEN_PHOTOS,
+  SET_FULL_PHOTO_INDEX,
 } from './types';
 import * as serviceREST from '../services/serviceREST';
 
@@ -62,3 +64,13 @@ export const fetchPhotosFromAlbumAction = albumId => (dispatch) => {
 
     });
 };
+
+export const setFullPhotoIndexAction = index => ({
+  type: SET_FULL_PHOTO_INDEX,
+  payload: index,
+});
+
+export const showHideFullScreenPhotosAction = isShow => ({
+  type: SHOW_HIDE_FULL_SCREEN_PHOTOS,
+  payload: isShow,
+});

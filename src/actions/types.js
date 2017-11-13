@@ -86,6 +86,8 @@ export const SET_REFRESH_STATUS = 'set_refresh_status';
 export const SET_PHOTOS_FOR_ALBUM = 'set_photos_for_album';
 export const FETCH_PHOTOS_FOR_ALBUM = 'fetch_photos_for_album';
 export const RESET_PHOTOS = 'reset_photos';
+export const SHOW_HIDE_FULL_SCREEN_PHOTOS = 'show_hide_full_screen_photos';
+export const SET_FULL_PHOTO_INDEX = 'set_full_photo_index';
 
 // Error
 export const RESET_ERROR = 'reset_error';
