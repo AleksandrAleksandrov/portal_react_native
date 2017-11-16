@@ -110,11 +110,9 @@ const setNextPage = (data) => {
   };
 };
 
-export const startRefresh = () => {
-  return {
-    type: START_REFRESH,
-  };
-};
+export const startRefresh = () => ({ type: START_REFRESH });
+
+export const finishRefresh = () => ({ type: FINISH_REFRESH });
 
 export const refreshPosts = () => (dispatch) => {
   dispatch(startRefresh());
@@ -125,15 +123,9 @@ export const refreshPosts = () => (dispatch) => {
       dispatch(finishRefresh());
     })
     .catch((error) => {
-      console.warn(error);
+      console.warn('refreshPostsActionError:', error);
       dispatch(finishRefresh());
     });
-};
-
-export const finishRefresh = () => {
-  return {
-    type: FINISH_REFRESH,
-  };
 };
 
 export const getPostsFromNotification = () => (dispatch) => {
@@ -164,7 +156,7 @@ export const getPosts = () => (dispatch) => {
     // dispatch(setNextPage(response.data.next));
   })
   .catch((error) => {
-    console.warn(error);
+    console.warn('getPostsActionError', error);
   });
 };
 

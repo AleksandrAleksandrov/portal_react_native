@@ -1,5 +1,4 @@
 import {
-  FETCH_ALBUM_LIST,
   SET_ALBUM_LIST,
   SET_REFRESH_STATUS,
   SET_PHOTOS_FOR_ALBUM,
@@ -7,15 +6,14 @@ import {
   RESET_PHOTOS,
   SHOW_HIDE_FULL_SCREEN_PHOTOS,
   SET_FULL_PHOTO_INDEX,
+  SET_PHOTO_DOWNLOADING_STATUS,
 } from './types';
 import * as serviceREST from '../services/serviceREST';
 
-const setAlbumsAction = (albums) => {
-  return {
-    type: SET_ALBUM_LIST,
-    payload: albums,
-  };
-};
+const setAlbumsAction = albums => ({
+  type: SET_ALBUM_LIST,
+  payload: albums,
+});
 
 export const fetchAlbumsAction = () => (dispatch) => {
   serviceREST.fetchAlbums()
@@ -73,4 +71,9 @@ export const setFullPhotoIndexAction = index => ({
 export const showHideFullScreenPhotosAction = isShow => ({
   type: SHOW_HIDE_FULL_SCREEN_PHOTOS,
   payload: isShow,
+});
+
+export const downloadPhotoAction = isDownloading => ({
+  type: SET_PHOTO_DOWNLOADING_STATUS,
+  payload: isDownloading,
 });

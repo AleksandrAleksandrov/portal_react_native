@@ -147,6 +147,8 @@ repositories {
 }
 
 dependencies {
+    compile project(':react-native-fetch-blob')
+//    compile project(':react-native-fs')
     compile(project(':react-native-maps')) {
         exclude group: 'com.google.android.gms', module: 'play-services-base'
         exclude group: 'com.google.android.gms', module: 'play-services-maps'

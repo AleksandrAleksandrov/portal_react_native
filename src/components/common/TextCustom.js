@@ -64,6 +64,10 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
 
+  t4: {
+    fontSize: 12,
+  },
+
   date: {
     fontSize: 12,
   },

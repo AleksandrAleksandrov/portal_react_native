@@ -39,17 +39,38 @@ class AlbumItem extends Component {
   onAlbumPress = (album) => {
     Actions.album({ album });
   }
+
+  getIsOpenAlbumIcon = (isPublic) => {
+    const { icon } = styles;
+
+    if (isPublic) {
+      return (
+        <View>
+          <Icon
+            name={'users'}
+            style={icon}
+          />
+        </View>
+      );
+    }
+
+    return (null);
+  }
+
   render() {
-    const { album } = this.props;
-    const { rootView, image, textWrapper, icon, textStyle } = styles;
+    const {
+      album,
+      album: { temp_cover: { preview, thumbnail } },
+    } = this.props;
+    const { rootView, textWrapper, textStyle } = styles;
 
     return (
       <TouchableWithoutFeedback onPress={() => this.onAlbumPress(album)}>
         <View style={[theme.cardStyle, rootView]}>
           <ProgressiveImage
             style={[theme.cardImageStyle]}
-            thumbnailSource={{ uri: album.temp_cover.thumbnail }}
-            imageSource={{ uri: album.temp_cover.preview }}
+            thumbnailSource={{ uri: thumbnail }}
+            imageSource={{ uri: preview }}
           />
           <View style={textWrapper}>
             <TextCustom
@@ -57,12 +78,7 @@ class AlbumItem extends Component {
             >
               {album.title}
             </TextCustom>
-            <View>
-              <Icon
-                name={'users'}
-                style={icon}
-              />
-            </View>
+            {this.getIsOpenAlbumIcon(album.is_public)}
           </View>
         </View>
       </TouchableWithoutFeedback>

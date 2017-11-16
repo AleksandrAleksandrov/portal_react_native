@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { FlatList, RefreshControl, View, TouchableOpacity, Dimensions } from 'react-native';
+import { FlatList, RefreshControl, View, TouchableOpacity } from 'react-native';
 import { NavigationBar } from '@shoutem/ui';
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import { TextCustom, Spinner } from './common';
@@ -11,8 +11,6 @@ import {
   fetchAlbumsAction,
   refreshAlbumsAction,
 } from '../actions';
-
-const { width } = Dimensions.get('window');
 
 const styles = {
   navigationBarWrapper: {
@@ -40,6 +38,29 @@ class AlbumsList extends Component {
     this.props.fetchAlbumsAction();
   }
 
+  onLayout = (event) => {
+    const num = parseInt(event.nativeEvent.layout.width / 160, 10);
+    this.setState({ numOfColumn: num });
+  }
+
+  onRefreshAlbums = () => {
+    this.props.refreshAlbumsAction();
+  };
+
+  getInitialProgressBar = (fetchingAlbumsInProgress) => {
+    const { initProgressBarStyle } = styles;
+
+    if (fetchingAlbumsInProgress) {
+      return (
+        <Spinner
+          style={initProgressBarStyle}
+          size={'large'}
+        />
+      );
+    }
+    return null;
+  };
+
   navigationBar = (title) => {
     const { iconStyle } = styles;
 
@@ -49,10 +70,20 @@ class AlbumsList extends Component {
           hasHistory
           styleName={'clear'}
           navigateBack={this.props.navigation.goBack}
-          title={<TextCustom type={'labelText'} numberOfLines={1}>{title}</TextCustom>}
+          title={
+            <TextCustom
+              type={'labelText'}
+              numberOfLines={1}
+            >
+              {title}
+            </TextCustom>
+          }
           leftComponent={
             <TouchableOpacity onPress={() => this.openDrawer()}>
-              <Icon name={'bars'} style={iconStyle} />
+              <Icon
+                name={'bars'}
+                style={iconStyle}
+              />
             </TouchableOpacity>
           }
         />
@@ -60,31 +91,12 @@ class AlbumsList extends Component {
     );
   };
 
-  onLayout = (event) => {
-    const num = parseInt(event.nativeEvent.layout.width / 160, 10);
-    this.setState({ numOfColumn: num });
-  }
-
-  getInitialProgressBar = (fetchingAlbumsInProgress) => {
-    const { initProgressBarStyle } = styles;
-    if (fetchingAlbumsInProgress) {
-      return (
-        <Spinner style={initProgressBarStyle} size={'large'} />
-      );
-    }
-    return null;
-  };
-
-  onRefreshAlbums = () => {
-    this.props.refreshAlbumsAction();
-  };
-
   render() {
     const { albums, fetchingAlbumsInProgress, refreshingAlbumsInProgress } = this.props;
     const { postsListStyle } = styles;
 
     return (
-      <View onLayout={(event) => this.onLayout(event)}>
+      <View onLayout={event => this.onLayout(event)}>
         {this.navigationBar('Жизнь Light IT')}
         <FlatList
           style={postsListStyle}

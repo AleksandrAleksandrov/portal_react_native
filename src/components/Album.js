@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { View, FlatList, Modal } from 'react-native';
+import { Dimensions, View, FlatList } from 'react-native';
 import { NavigationBar } from '@shoutem/ui';
-import ImageViewer from 'react-native-image-zoom-viewer';
 import { TextCustom, Spinner } from './common/';
 import Photo from './Photo';
 import { navigationBarHeight } from '../constants/StyleConstants';
@@ -11,7 +10,10 @@ import {
   fetchPhotosFromAlbumAction,
   resetPhotosAction,
   showHideFullScreenPhotosAction,
+  setFullPhotoIndexAction,
+  downloadPhotoAction,
 } from '../actions';
+import ModalFullSizePhoto from './ModalFullSizePhoto';
 
 const styles = {
   navigationBarWrapper: {
@@ -21,6 +23,30 @@ const styles = {
   },
   postsListStyle: {
     marginBottom: navigationBarHeight,
+  },
+  iconStyle: {
+    fontSize: 24,
+    color: color.drawerIconColor,
+  },
+  downloadIconWrapper: {
+    padding: 10,
+    marginTop: 20,
+    alignSelf: 'flex-end',
+    margin: 10,
+  },
+  closeIconWrapper: {
+    padding: 10,
+    marginTop: 20,
+    alignSelf: 'flex-start',
+    margin: 10,
+  },
+  photosWrapper: {
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  fullImageStyle: {
+    flex: 1,
   },
 };
 
@@ -65,31 +91,21 @@ class Album extends Component {
   };
 
   onCloseFullScreenPhotos = () => {
-    const { showHideFullScreenPhotosAction } = this.props;
-
-    showHideFullScreenPhotosAction(false);
+    this.props.showHideFullScreenPhotosAction(false);
   }
 
-  full = (urls, isFullScreenPhotos, isTransparent, fullScreenPhotoIndex) => {
-    if (urls !== undefined && urls.length > 0) {
+  full = (urls, isFullScreenPhotos) => {
+    if (isFullScreenPhotos) {
       return (
-        <Modal
-          visible={isFullScreenPhotos}
-          transparent={isTransparent}
-        >
-          <ImageViewer
-            onCancel={() => this.onCloseFullScreenPhotos()}
-            imageUrls={urls}
-            index={fullScreenPhotoIndex}
-          />
-        </Modal>
+        <ModalFullSizePhoto title={this.props.album.title} />
       );
     }
+    return null;
   };
 
   render() {
     const { postsListStyle } = styles;
-    const { photos, fetchingPhotosForAlbumInProgress, urls, isFullScreenPhotos, fullScreenPhotoIndex } = this.props;
+    const { photos, fetchingPhotosForAlbumInProgress, urls, isFullScreenPhotos } = this.props;
 
     return (
       <View onLayout={(event) => this.onLayout(event)}>
@@ -102,10 +118,9 @@ class Album extends Component {
           keyExtractor={item => item.id}
           numColumns={this.state.numOfColumn}
           key={this.state.numOfColumn}
-
         />
         {this.getProgressBar(fetchingPhotosForAlbumInProgress)}
-        {this.full(urls, isFullScreenPhotos, true, fullScreenPhotoIndex)}
+        {this.full(urls, isFullScreenPhotos)}
       </View>
     );
   }
@@ -117,12 +132,15 @@ const mapStateToProps = state => ({
   urls: state.photo.urls,
   isFullScreenPhotos: state.photo.isFullScreenPhotos,
   fullScreenPhotoIndex: state.photo.fullScreenPhotoIndex,
+  photoDownloadingInProgress: state.photo.photoDownloadingInProgress,
 });
 
 const mapDispatchToProps = dispatch => ({
   fetchPhotosFromAlbumAction: (albumId) => { dispatch(fetchPhotosFromAlbumAction(albumId)); },
   resetPhotosAction: () => { dispatch(resetPhotosAction()); },
   showHideFullScreenPhotosAction: (isShow) => { dispatch(showHideFullScreenPhotosAction(isShow)); },
+  setFullPhotoIndexAction: (index) => { dispatch(setFullPhotoIndexAction(index)); },
+  downloadPhotoAction: (isDownloading) => { dispatch(downloadPhotoAction(isDownloading)); },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Album);

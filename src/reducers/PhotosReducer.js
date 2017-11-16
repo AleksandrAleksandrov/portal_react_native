@@ -7,17 +7,20 @@ import {
   RESET_PHOTOS,
   SHOW_HIDE_FULL_SCREEN_PHOTOS,
   SET_FULL_PHOTO_INDEX,
+  SET_PHOTO_DOWNLOADING_STATUS,
 } from '../actions/types';
 
 const INITIAL_STATE = {
   albums: {},
   fetchingAlbumsInProgress: false,
   refreshingAlbumsInProgress: false,
+  albumTitle: '',
   photos: [],
   fetchingPhotosForAlbumInProgress: false,
   urls: [],
   isFullScreenPhotos: false,
-  fullScreenPhotoIndex: null,
+  fullScreenPhotoIndex: 1,
+  photoDownloadingInProgress: false,
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -45,11 +48,9 @@ export default (state = INITIAL_STATE, action) => {
       };
     case SET_PHOTOS_FOR_ALBUM:
       const urlss = new Array();
-      action.payload.forEach((objectKey, index) => {
-        urlss.push({ url: objectKey.thumbnail });
+      action.payload.forEach((objectKey) => {
+        urlss.push({ url: objectKey.preview, file: objectKey.file });
       });
-      // console.warn('SET_PHOTOS_FOR_ALBUM', urlss);
-      // console.warn('SET_PHOTOS_FOR_ALBUM', action.payload);
       return {
         ...state,
         photos: action.payload,
@@ -70,6 +71,11 @@ export default (state = INITIAL_STATE, action) => {
       return {
         ...state,
         photos: [],
+      };
+    case SET_PHOTO_DOWNLOADING_STATUS:
+      return {
+        ...state,
+        photoDownloadingInProgress: action.payload,
       };
     default:
       return state;

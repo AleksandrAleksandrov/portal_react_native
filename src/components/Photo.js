@@ -1,12 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { View, TouchableWithoutFeedback } from 'react-native';
-import { Actions } from 'react-native-router-flux';
 import ProgressiveImage from 'react-native-progressive-image';
-import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import { getTheme } from 'react-native-material-kit';
 import { color } from '../constants/color';
-import { TextCustom } from './common';
 import { showHideFullScreenPhotosAction, setFullPhotoIndexAction } from '../actions';
 
 const theme = getTheme();
@@ -40,7 +37,12 @@ const styles = {
 class Photo extends Component {
 
   onPhotoPressed = (index) => {
-    const { setFullPhotoIndexAction, showHideFullScreenPhotosAction, isFullScreenPhotos } = this.props;
+    const {
+      setFullPhotoIndexAction,
+      showHideFullScreenPhotosAction,
+      isFullScreenPhotos,
+    } = this.props;
+
     setFullPhotoIndexAction(index);
     showHideFullScreenPhotosAction(!isFullScreenPhotos);
   }
