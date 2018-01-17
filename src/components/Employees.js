@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { View, TouchableOpacity } from 'react-native';
+import { View, FlatList, TouchableOpacity } from 'react-native';
 import { NavigationBar } from '@shoutem/ui';
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import DrawerLayout from 'react-native-drawer-layout';
@@ -12,6 +12,7 @@ import { color } from '../constants/color';
 import {
   fetchUsersAction,
 } from '../actions';
+import UserItem from './UserItem';
 
 const styles = {
   navigationBarWrapper: {
@@ -24,11 +25,24 @@ const styles = {
     margin: 10,
     color: color.white,
   },
+  postsListStyle: {
+    marginBottom: navigationBarHeight,
+  },
 };
 
 class Employees extends Component {
+  constructor() {
+    super();
+    this.state = { numOfColumn: 2 };
+  }
+
   componentDidMount() {
     this.props.fetchUsersAction();
+  }
+
+  onLayout = (event) => {
+    const num = parseInt(event.nativeEvent.layout.width / 160, 10);
+    this.setState({ numOfColumn: num });
   }
 
   nav = (
@@ -71,15 +85,24 @@ class Employees extends Component {
 
   render() {
     const { users } = this.props;
+    const { postsListStyle } = styles;
+
     return (
       <DrawerLayout
         drawerWidth={300}
         ref={(_drawer) => this.drawer = _drawer}
         renderNavigationView={() => this.nav}
       >
-        <View>
+        <View onLayout={event => this.onLayout(event)}>
           {this.navigationBar('Сотрудники')}
-          <TextCustom>Employees</TextCustom>
+          <FlatList
+            style={postsListStyle}
+            data={users}
+            numColumns={this.state.numOfColumn}
+            renderItem={({ item }) => <UserItem user={item} />}
+            keyExtractor={item => item.id}
+            key={this.state.numOfColumn}
+          />
         </View>
       </DrawerLayout>
     );
