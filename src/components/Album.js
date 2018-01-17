@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Dimensions, View, FlatList } from 'react-native';
+import { View, FlatList, TouchableOpacity } from 'react-native';
 import { NavigationBar } from '@shoutem/ui';
+import ImagePicker from 'react-native-image-picker';
+import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import { TextCustom, Spinner } from './common/';
 import Photo from './Photo';
 import { navigationBarHeight } from '../constants/StyleConstants';
@@ -12,6 +14,7 @@ import {
   showHideFullScreenPhotosAction,
   setFullPhotoIndexAction,
   downloadPhotoAction,
+  uploadFileToAlbumAction,
 } from '../actions';
 import ModalFullSizePhoto from './ModalFullSizePhoto';
 
@@ -23,10 +26,6 @@ const styles = {
   },
   postsListStyle: {
     marginBottom: navigationBarHeight,
-  },
-  iconStyle: {
-    fontSize: 24,
-    color: color.drawerIconColor,
   },
   downloadIconWrapper: {
     padding: 10,
@@ -48,6 +47,22 @@ const styles = {
   fullImageStyle: {
     flex: 1,
   },
+  iconStyle: {
+    fontSize: 24,
+    margin: 10,
+    color: color.white,
+  },
+};
+
+const options = {
+  title: 'Select Avatar',
+  customButtons: [
+    { name: 'fb', title: 'Choose Photo from Facebook' },
+  ],
+  storageOptions: {
+    skipBackup: true,
+    path: 'images',
+  },
 };
 
 class Album extends Component {
@@ -61,14 +76,65 @@ class Album extends Component {
     this.props.fetchPhotosFromAlbumAction(this.props.album.id);
   }
 
+  openUploadPicker = () => {
+    ImagePicker.showImagePicker(options, (response) => {
+      console.log('Response = ', response);
+
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+      } else if (response.customButton) {
+        console.log('User tapped custom button: ', response.customButton);
+      } else {
+        const source = { uri: response.uri };
+        this.props.uploadFileToAlbumAction(this.props.album.id, response.uri);
+
+        // You can also display the image using data:
+        // let source = { uri: 'data:image/jpeg;base64,' + response.data };
+        console.warn('ImagePicker', source);
+      }
+    });
+  }
+
+  getUploadButtons = () => {
+    const { album, photosUploadingIsInProgress } = this.props;
+
+    if (album.is_public & !photosUploadingIsInProgress) {
+      return (
+        <TouchableOpacity onPress={() => this.openUploadPicker()}>
+          <Icon
+            name={'camera'}
+            style={styles.iconStyle}
+          />
+        </TouchableOpacity>
+      );
+    } else if (photosUploadingIsInProgress) {
+      return (
+        <Spinner size={'small'} />
+      );
+    }
+
+    return null;
+  }
+
   navigationBar = (title) => {
+    const { navigationBarWrapper } = styles;
     return (
-      <View style={styles.navigationBarWrapper}>
+      <View style={navigationBarWrapper}>
         <NavigationBar
           hasHistory
           styleName={'clear'}
           navigateBack={this.props.navigation.goBack}
-          title={<TextCustom type={'labelText'} numberOfLines={1}>{title}</TextCustom>}
+          title={
+            <TextCustom
+              type={'labelText'}
+              numberOfLines={1}
+            >
+              {title}
+            </TextCustom>
+          }
+          rightComponent={this.getUploadButtons()}
         />
       </View>
     );
@@ -133,6 +199,7 @@ const mapStateToProps = state => ({
   isFullScreenPhotos: state.photo.isFullScreenPhotos,
   fullScreenPhotoIndex: state.photo.fullScreenPhotoIndex,
   photoDownloadingInProgress: state.photo.photoDownloadingInProgress,
+  photosUploadingIsInProgress: state.photo.photosUploadingIsInProgress,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -141,6 +208,7 @@ const mapDispatchToProps = dispatch => ({
   showHideFullScreenPhotosAction: (isShow) => { dispatch(showHideFullScreenPhotosAction(isShow)); },
   setFullPhotoIndexAction: (index) => { dispatch(setFullPhotoIndexAction(index)); },
   downloadPhotoAction: (isDownloading) => { dispatch(downloadPhotoAction(isDownloading)); },
+  uploadFileToAlbumAction: (albumId, uri) => { dispatch(uploadFileToAlbumAction(albumId, uri)); },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Album);

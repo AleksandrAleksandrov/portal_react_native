@@ -8,6 +8,7 @@ import {
   SHOW_HIDE_FULL_SCREEN_PHOTOS,
   SET_FULL_PHOTO_INDEX,
   SET_PHOTO_DOWNLOADING_STATUS,
+  SET_UPLOAD_FILE_TO_ALBUM_STATUS,
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -21,6 +22,7 @@ const INITIAL_STATE = {
   isFullScreenPhotos: false,
   fullScreenPhotoIndex: 1,
   photoDownloadingInProgress: false,
+  photosUploadingIsInProgress: false,
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -76,6 +78,11 @@ export default (state = INITIAL_STATE, action) => {
       return {
         ...state,
         photoDownloadingInProgress: action.payload,
+      };
+    case SET_UPLOAD_FILE_TO_ALBUM_STATUS:
+      return {
+        ...state,
+        photosUploadingIsInProgress: action.payload,
       };
     default:
       return state;

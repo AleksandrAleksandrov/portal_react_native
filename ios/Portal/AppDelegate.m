@@ -16,6 +16,7 @@
 #import <React/RCTRootView.h>
 #import <Fabric/Fabric.h>
 #import <Crashlytics/Crashlytics.h>
+//#import "SplashScreen.h"
 
 @import HockeySDK;
 
@@ -28,7 +29,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-  
+//  [SplashScreen show];
 //  RCTSetLogThreshold(RCTLogLevelInfo);
 //  RCTSetLogFunction(CrashlyticsReactLogFunction);
   NSURL *jsCodeLocation;

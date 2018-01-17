@@ -40,6 +40,7 @@ import {
   GET_LAT_LON_IN_PROGRESS,
   RESET_LAT_LON,
   SET_IS_LAT_LON_VALID,
+  SET_POSTS,
 } from './types';
 import { NOT_FOUND } from '../Constants';
 import * as serviceREST from '../services/serviceREST';
@@ -74,6 +75,11 @@ const getUser = () => (dispatch) => {
 
     });
 };
+
+export const setPostsAction = posts => ({
+  type: SET_POSTS,
+  payload: posts,
+});
 
 const getPostsSuccess = (data) => {
   return {
@@ -146,8 +152,8 @@ export const getPosts = () => (dispatch) => {
   serviceREST.getPosts()
   .then((response) => {
     // console.warn(response);
-    // DBHelper.clearPosts();
-    // DBHelper.writePostsToDB(response.data.results);
+    DBHelper.clearPosts();
+    DBHelper.writePostsToDB(response.data.results);
     dispatch(getPostsSuccess(response.data));
     // if (!url) {
     //   dispatch(setPostsAreLoading(null));

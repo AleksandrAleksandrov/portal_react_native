@@ -1,5 +1,5 @@
-export const URL = 'https://www.portal.light-it.net';
-// export const URL = 'https://portal-dev.light-it.loc';
+// export const URL = 'https://www.portal.light-it.net';
+export const URL = 'https://portal-dev.light-it.loc';
 
 export const DEFAULT_PHOTO = 'https://www.portal.light-it.net/images/cam.png';
 
@@ -24,3 +24,7 @@ export const FETCH_COMMENTS = '/comments/';
 // Photos
 export const FETCH_ALBUMS = '/api/albums/';
 export const FETCH_PHOTOS_FROM_ALBUM = '/content/';
+
+// Album
+export const ALBUMS_API = '/api/albums/';
+export const CONTENT_API = '/content/';

@@ -1,5 +1,6 @@
 import { create } from 'apisauce';
 import axios from 'axios';
+import RNFetchBlob from 'react-native-fetch-blob';
 import { setToken } from './StorageHelper';
 import { createQuery } from '../utils/StringUtils';
 import {
@@ -15,7 +16,9 @@ import {
   FETCH_COMMENTS,
   SEND_COMMENT,
   FETCH_ALBUMS,
-  FETCH_PHOTOS_FROM_ALBUM
+  FETCH_PHOTOS_FROM_ALBUM,
+  ALBUMS_API,
+  CONTENT_API,
 } from '../ApiConstants';
 
 const api = create({
@@ -396,6 +399,34 @@ export const fetchPhotosFromAlbum = (albumId) => {
         }
       })
       .catch((error) => {
+        reject(error);
+      });
+  });
+};
+
+/**
+ * Upload file to specific album
+ * @param albumId
+ * @param uri
+ * @returns {Promise}
+ */
+export const uploadFileToAlbum = (albumId, uri) => {
+  const data = new FormData();
+  data.append('picture', { uri, type: 'image/jpg' });
+
+  return new Promise((resolve, reject) => {
+    api.post(`${ALBUMS_API}${albumId}${CONTENT_API}`, data)
+      .then((response) => {
+        if (response.ok) {
+          console.warn('uploadFileToAlbum ok', response);
+          resolve(response);
+        } else {
+          console.warn('uploadFileToAlbum not ok', response);
+          reject(response);
+        }
+      })
+      .catch((error) => {
+        console.warn('uploadFileToAlbum error', error);
         reject(error);
       });
   });

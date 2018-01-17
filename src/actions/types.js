@@ -13,6 +13,7 @@ export const GET_MORE_POSTS = 'get_more_posts';
 export const SET_MORE_POSTS_IN_PROGRESS = 'set_more_posts_in_progress';
 export const ADD_MORE_POSTS_SUCCESS = 'add_more_posts_success';
 export const SET_POSTS_ARE_LOADING = 'set_posts_are_loading';
+export const SET_POSTS = 'set_posts';
 
 export const ON_STAR_PRESSED = 'on_star_pressed';
 export const ADDED_TO_FAVOURITE = 'added_to_favourite';
@@ -89,7 +90,9 @@ export const RESET_PHOTOS = 'reset_photos';
 export const SHOW_HIDE_FULL_SCREEN_PHOTOS = 'show_hide_full_screen_photos';
 export const SET_FULL_PHOTO_INDEX = 'set_full_photo_index';
 export const SET_PHOTO_DOWNLOADING_STATUS = 'set_photo_downloading_status';
-export const SET_CURRENT_ALBUM_TITLE = 'set_current_album_title';
+export const UPLOAD_FILE_TO_ALBUM = 'upload_file_to_album';
+export const SET_UPLOAD_FILE_TO_ALBUM_STATUS = 'set_upload_file_to_album_status';
+
 
 // Error
 export const RESET_ERROR = 'reset_error';

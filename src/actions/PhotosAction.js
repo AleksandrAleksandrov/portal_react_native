@@ -7,6 +7,8 @@ import {
   SHOW_HIDE_FULL_SCREEN_PHOTOS,
   SET_FULL_PHOTO_INDEX,
   SET_PHOTO_DOWNLOADING_STATUS,
+  SET_UPLOAD_FILE_TO_ALBUM_STATUS,
+  UPLOAD_FILE_TO_ALBUM,
 } from './types';
 import * as serviceREST from '../services/serviceREST';
 
@@ -51,17 +53,36 @@ const setPhotosForAlbumAction = photos => ({
   payload: photos,
 });
 
-export const fetchPhotosFromAlbumAction = albumId => (dispatch) => {
+export const fetchPhotosFromAlbumAction = albumId => async (dispatch) => {
   dispatch(setPhotosForAlbumStatusAction(true));
-  serviceREST.fetchPhotosFromAlbum(albumId)
-    .then((response) => {
-      dispatch(setPhotosForAlbumStatusAction(false));
-      dispatch(setPhotosForAlbumAction(response.data));
-    })
-    .catch((error) => {
+  try {
+    const response = await serviceREST.fetchPhotosFromAlbum(albumId);
+    dispatch(setPhotosForAlbumStatusAction(false));
+    dispatch(setPhotosForAlbumAction(response.data));
+  } catch (error) {
 
-    });
+  }
+
+    // .then((response) => {
+    //   dispatch(setPhotosForAlbumStatusAction(false));
+    //   dispatch(setPhotosForAlbumAction(response.data));
+    // })
+    // .catch((error) => {
+    //
+    // });
 };
+
+// export const fetchPhotosFromAlbumAction = albumId => (dispatch) => {
+//   dispatch(setPhotosForAlbumStatusAction(true));
+//   serviceREST.fetchPhotosFromAlbum(albumId)
+//     .then((response) => {
+//       dispatch(setPhotosForAlbumStatusAction(false));
+//       dispatch(setPhotosForAlbumAction(response.data));
+//     })
+//     .catch((error) => {
+//
+//     });
+// };
 
 export const setFullPhotoIndexAction = index => ({
   type: SET_FULL_PHOTO_INDEX,
@@ -77,3 +98,21 @@ export const downloadPhotoAction = isDownloading => ({
   type: SET_PHOTO_DOWNLOADING_STATUS,
   payload: isDownloading,
 });
+
+const setUploadFileStatus = isUploading => ({
+  type: SET_UPLOAD_FILE_TO_ALBUM_STATUS,
+  payload: isUploading,
+});
+
+export const uploadFileToAlbumAction = (albumId, uri) => (dispatch) => {
+  dispatch(setUploadFileStatus(true));
+  serviceREST.uploadFileToAlbum(albumId, uri)
+    .then((response) => {
+      console.warn('uploadFileToAlbumAction', response);
+      dispatch(setUploadFileStatus(false));
+    })
+    .catch((error) => {
+      console.warn('ErroruploadFileToAlbumAction', error);
+      dispatch(setUploadFileStatus(false));
+    });
+};

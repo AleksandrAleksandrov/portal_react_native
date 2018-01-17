@@ -7,6 +7,7 @@ import com.RNFetchBlob.RNFetchBlobPackage;
 import com.airbnb.android.react.maps.MapsPackage;
 import com.crashlytics.android.Crashlytics;
 import com.facebook.react.ReactApplication;
+import com.imagepicker.ImagePickerPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
@@ -38,6 +39,7 @@ public class MainApplication extends Application implements ReactApplication {
       return Arrays.<ReactPackage>asList(
               new FabricPackage(),
           new MainReactPackage(),
+            new ImagePickerPackage(),
             new RNFetchBlobPackage(),
             new MapsPackage(),
             new OrientationPackage(),

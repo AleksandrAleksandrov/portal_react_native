@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import { Actions } from 'react-native-router-flux';
-import { FlatList, View, RefreshControl, TouchableOpacity, StatusBar, AsyncStorage, Text, DrawerLayoutAndroid } from 'react-native';
+import Realm from 'realm';
+import { FlatList, View, RefreshControl, TouchableOpacity, StatusBar } from 'react-native';
 import { NavigationBar } from '@shoutem/ui';
 import { connect } from 'react-redux';
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import PropTypes from 'prop-types';
 import OneSignal from 'react-native-onesignal';
 import DrawerLayout from 'react-native-drawer-layout';
+import Post from '../models/Post';
 
 import {
   getPosts,
@@ -20,6 +22,7 @@ import {
   hideShowNotificationDialog,
   getPostsFromNotification,
   openDrawer,
+  setPostsAction,
 } from '../actions';
 import { CustomIcons, TextCustom, SmallSpinner, Spinner } from './common';
 import { color } from '../constants/color';
@@ -58,7 +61,7 @@ const showPushNotificationRequest = () => {
   };
   OneSignal.requestPermissions(permissions);
   OneSignal.registerForPushNotifications();
-  this.props.hideShowNotificationDialog();
+  // this.props.hideShowNotificationDialog();
 };
 
 class PostsListForm extends Component {
@@ -68,9 +71,17 @@ class PostsListForm extends Component {
   }
 
   componentWillMount() {
+    const realm = new Realm();
+    this.props.setPostsAction(Array.from(realm.objects('Post')));
+    setTimeout(() => {
+      if (this.props.postsList.length > 0) {
+        this.props.refreshPosts();
+      } else {
+        this.props.getPosts();
+      }
+    }, 10);
     OneSignal.addEventListener('received', this.onReceived.bind(this));
     OneSignal.inFocusDisplaying(2);
-    this.props.getPosts();
   }
 
   onReceived(notification) {
@@ -198,13 +209,13 @@ class PostsListForm extends Component {
   );
 
   render() {
-    const { postsAreLoading, showNotificationPermissionDialog } = this.props;
+    const { postsAreLoading, showNotificationPermissionDialog, postsList } = this.props;
 
     if (showNotificationPermissionDialog) {
       showPushNotificationRequest();
     }
 
-    if (postsAreLoading) {
+    if (postsAreLoading & postsList.length === 0) {
       return (<Spinner size={'large'} />);
     }
 
@@ -263,6 +274,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   dispatch,
   getPosts: () => { dispatch(getPosts()); },
+  setPostsAction: (posts) => { dispatch(setPostsAction(posts)); },
   getMorePosts: (url) => { dispatch(getMorePosts(url)); },
   refreshPosts: () => { dispatch(refreshPosts()); },
   getFilteredPosts: (filter) => { dispatch(getFilteredPosts(filter)); },

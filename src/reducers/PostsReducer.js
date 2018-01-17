@@ -1,6 +1,7 @@
 import {
   RESET_ERROR,
   POSTS_FETCH_SUCCESS,
+  SET_POSTS,
   SET_POSTS_ARE_LOADING,
   GET_MORE_POSTS,
   ADD_MORE_POSTS_SUCCESS,
@@ -105,6 +106,11 @@ export default (state = INITIAL_STATE, action) => {
         results: action.payload,
         nextPage: action.nextPage,
         postsAreLoading: false,
+      };
+    case SET_POSTS:
+      return {
+        ...state,
+        results: action.payload,
       };
     case SET_MORE_POSTS_IN_PROGRESS:
       return {
