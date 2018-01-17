@@ -55,7 +55,7 @@ const logOut = () => {
 class DrawerView extends Component {
 
   onNews = () => {
-
+    Actions.postsList();
   }
 
   onEmployees = () => {
