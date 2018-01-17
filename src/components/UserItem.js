@@ -5,6 +5,7 @@ import ProgressiveImage from 'react-native-progressive-image';
 import { getTheme } from 'react-native-material-kit';
 import { color } from '../constants/color';
 import { TextCustom } from './common';
+import { DEFAULT_PHOTO } from '../ApiConstants';
 
 const theme = getTheme();
 
@@ -40,6 +41,13 @@ class UserItem extends Component {
 
   }
 
+  getPicture = (url) => {
+    if (url != null) {
+      return url;
+    }
+    return DEFAULT_PHOTO;
+  }
+
   render() {
     const {
       user,
@@ -52,8 +60,8 @@ class UserItem extends Component {
         <View style={[theme.cardStyle, rootView]}>
           <ProgressiveImage
             style={[theme.cardImageStyle]}
-            thumbnailSource={{ uri: photo_thumbnail }}
-            imageSource={{ uri: photo }}
+            thumbnailSource={{ uri: this.getPicture(photo_thumbnail) }}
+            imageSource={{ uri: this.getPicture(photo) }}
           />
           <View style={textWrapper}>
             <TextCustom style={textStyle}>

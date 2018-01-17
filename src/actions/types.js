@@ -95,6 +95,7 @@ export const SET_UPLOAD_FILE_TO_ALBUM_STATUS = 'set_upload_file_to_album_status'
 
 // Users
 export const SET_USERS_LIST = 'set_user_list';
+export const SET_MORE_USERS_TO_LIST = 'set_more_users_to_list';
 
 
 // Error

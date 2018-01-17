@@ -452,3 +452,24 @@ export const fetchUsers = () => {
       });
   });
 };
+
+/**
+ * Fetch more users.
+ * @param url
+ * @returns {Promise}
+ */
+export const fetchMoreUsers = (url) => {
+  return new Promise((resolve, reject) => {
+    api.get(url)
+      .then((response) => {
+        if (response.ok) {
+          resolve(response);
+        } else {
+          reject(response);
+        }
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+};

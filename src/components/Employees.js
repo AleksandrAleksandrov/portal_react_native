@@ -11,6 +11,7 @@ import { navigationBarHeight } from '../constants/StyleConstants';
 import { color } from '../constants/color';
 import {
   fetchUsersAction,
+  fetchMoreUsersAction,
 } from '../actions';
 import UserItem from './UserItem';
 
@@ -83,6 +84,19 @@ class Employees extends Component {
     );
   };
 
+  paginate = () => {
+    const {
+      nextPage,
+      usersAreLoading,
+      loadingMoreUsersInProgress,
+      fetchMoreUsersAction,
+    } = this.props;
+
+    if ((!usersAreLoading && nextPage !== null) && !loadingMoreUsersInProgress) {
+      fetchMoreUsersAction(nextPage);
+    }
+  }
+
   render() {
     const { users } = this.props;
     const { postsListStyle } = styles;
@@ -101,6 +115,7 @@ class Employees extends Component {
             numColumns={this.state.numOfColumn}
             renderItem={({ item }) => <UserItem user={item} />}
             keyExtractor={item => item.id}
+            onEndReached={() => this.paginate()}
             key={this.state.numOfColumn}
           />
         </View>
@@ -111,10 +126,14 @@ class Employees extends Component {
 
 const mapStateToProps = state => ({
   users: state.users.users,
+  nextPage: state.users.nextPage,
+  usersAreLoading: state.users.loadingMoreUsersInProgress,
+  loadingMoreUsersInProgress: state.users.loadingMoreUsersInProgress,
 });
 
 const mapDispatchToProps = dispatch => ({
   fetchUsersAction: () => { dispatch(fetchUsersAction()); },
+  fetchMoreUsersAction: (url) => { dispatch(fetchMoreUsersAction(url)); },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Employees);
