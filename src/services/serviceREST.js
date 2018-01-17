@@ -433,14 +433,22 @@ export const uploadFileToAlbum = (albumId, uri) => {
   });
 };
 
+/**
+ * Fetching users list.
+ * @returns {Promise}
+ */
 export const fetchUsers = () => {
   return new Promise((resolve, reject) => {
     api.get(USERS_SEARCH_API)
       .then((response) => {
-        console.warn(response);
+        if (response.ok) {
+          resolve(response);
+        } else {
+          reject(response);
+        }
       })
       .catch((error) => {
-        console.warn(error);
+        reject(error);
       });
   });
 };

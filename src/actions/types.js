@@ -93,6 +93,9 @@ export const SET_PHOTO_DOWNLOADING_STATUS = 'set_photo_downloading_status';
 export const UPLOAD_FILE_TO_ALBUM = 'upload_file_to_album';
 export const SET_UPLOAD_FILE_TO_ALBUM_STATUS = 'set_upload_file_to_album_status';
 
+// Users
+export const SET_USERS_LIST = 'set_user_list';
+
 
 // Error
 export const RESET_ERROR = 'reset_error';

@@ -70,6 +70,7 @@ class Employees extends Component {
   };
 
   render() {
+    const { users } = this.props;
     return (
       <DrawerLayout
         drawerWidth={300}
@@ -86,7 +87,7 @@ class Employees extends Component {
 }
 
 const mapStateToProps = state => ({
-
+  users: state.users.users,
 });
 
 const mapDispatchToProps = dispatch => ({
