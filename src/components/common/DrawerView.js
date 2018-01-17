@@ -59,7 +59,7 @@ class DrawerView extends Component {
   }
 
   onEmployees = () => {
-
+    Actions.employees();
   }
 
   onBirthdays = () => {

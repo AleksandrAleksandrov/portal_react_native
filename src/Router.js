@@ -7,6 +7,7 @@ import AlbumsList from './components/AlbumsList';
 import Album from './components/Album';
 import PostForm from './components/PostForm';
 import NewPostForm from './components/NewPostForm';
+import Employees from './components/Employees';
 
 const styles = {
   rootRouterStyle: {
@@ -51,6 +52,13 @@ const RouterComponent = () => (
         key="post"
         component={PostForm}
         hideNavBar={true}
+      />
+      <Scene
+        key={'employees'}
+        component={Employees}
+        hideNavBar={true}
+        animation={'fade'}
+        type={'replace'}
       />
       <Scene
         key={'albums'}
