@@ -1,6 +1,8 @@
 import {
   SET_USERS_LIST,
   SET_MORE_USERS_TO_LIST,
+  SET_USERS_ARE_LOADING,
+  SET_MORE_USERS_ARE_LOADING,
 } from './types';
 
 import * as serviceREST from '../services/serviceREST';
@@ -17,7 +19,12 @@ const setMoreUsersAction = (users, nextPage) => ({
   nextPage,
 });
 
+const setUsersAreLoading = () => ({ type: SET_USERS_ARE_LOADING });
+
+const setMoreUsersAreLoading = () => ({ type: SET_MORE_USERS_ARE_LOADING });
+
 export const fetchUsersAction = () => (dispatch) => {
+  dispatch(setUsersAreLoading());
   serviceREST.fetchUsers()
     .then((response) => {
       dispatch(setUsersAction(response.data.results, response.data.next));
@@ -28,6 +35,7 @@ export const fetchUsersAction = () => (dispatch) => {
 };
 
 export const fetchMoreUsersAction = url => (dispatch) => {
+  dispatch(setMoreUsersAreLoading());
   serviceREST.fetchMoreUsers(url)
     .then((response) => {
       dispatch(setMoreUsersAction(response.data.results, response.data.next));

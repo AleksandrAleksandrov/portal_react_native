@@ -6,7 +6,7 @@ import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import DrawerLayout from 'react-native-drawer-layout';
 
 import DrawerView from './common/DrawerView';
-import { TextCustom } from './common';
+import { TextCustom, SmallSpinner, Spinner } from './common';
 import { navigationBarHeight } from '../constants/StyleConstants';
 import { color } from '../constants/color';
 import {
@@ -97,9 +97,22 @@ class Employees extends Component {
     }
   }
 
+  renderLastRow = () => {
+    const { loadingMoreUsersInProgress, users: { length } } = this.props;
+
+    if (!loadingMoreUsersInProgress || !length) {
+      return null;
+    }
+    return (<SmallSpinner size={'small'} />);
+  }
+
   render() {
-    const { users } = this.props;
+    const { users, usersAreLoading, loadingMoreUsersInProgress } = this.props;
     const { postsListStyle } = styles;
+
+    if (usersAreLoading & users.length === 0) {
+      return (<Spinner size={'large'} />);
+    }
 
     return (
       <DrawerLayout
@@ -117,6 +130,7 @@ class Employees extends Component {
             keyExtractor={item => item.id}
             onEndReached={() => this.paginate()}
             key={this.state.numOfColumn}
+            ListFooterComponent={() => this.renderLastRow()}
           />
         </View>
       </DrawerLayout>
@@ -127,7 +141,7 @@ class Employees extends Component {
 const mapStateToProps = state => ({
   users: state.users.users,
   nextPage: state.users.nextPage,
-  usersAreLoading: state.users.loadingMoreUsersInProgress,
+  usersAreLoading: state.users.usersAreLoading,
   loadingMoreUsersInProgress: state.users.loadingMoreUsersInProgress,
 });
 
