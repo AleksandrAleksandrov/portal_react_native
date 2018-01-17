@@ -4,6 +4,7 @@ import AuthReducer from './AuthReducer';
 import PostsReducer from './PostsReducer';
 import ReducerNetworkMonitor from './ReducerNetworkMonitor';
 import PhotosReducer from './PhotosReducer';
+import UsersReducer from './UsersReducer';
 
 
 export default combineReducers({
@@ -11,5 +12,6 @@ export default combineReducers({
   postsList: PostsReducer,
   networkReducer: ReducerNetworkMonitor,
   photo: PhotosReducer,
+  users: UsersReducer,
   form: formReducer,
 });

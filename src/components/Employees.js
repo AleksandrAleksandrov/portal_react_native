@@ -9,6 +9,9 @@ import DrawerView from './common/DrawerView';
 import { TextCustom } from './common';
 import { navigationBarHeight } from '../constants/StyleConstants';
 import { color } from '../constants/color';
+import {
+  fetchUsersAction,
+} from '../actions';
 
 const styles = {
   navigationBarWrapper: {
@@ -24,6 +27,9 @@ const styles = {
 };
 
 class Employees extends Component {
+  componentDidMount() {
+    this.props.fetchUsersAction();
+  }
 
   nav = (
     <DrawerView />
@@ -84,7 +90,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-
+  fetchUsersAction: () => { dispatch(fetchUsersAction()); },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Employees);

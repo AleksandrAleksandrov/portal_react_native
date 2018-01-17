@@ -19,6 +19,7 @@ import {
   FETCH_PHOTOS_FROM_ALBUM,
   ALBUMS_API,
   CONTENT_API,
+  USERS_SEARCH_API,
 } from '../ApiConstants';
 
 const api = create({
@@ -428,6 +429,18 @@ export const uploadFileToAlbum = (albumId, uri) => {
       .catch((error) => {
         console.warn('uploadFileToAlbum error', error);
         reject(error);
+      });
+  });
+};
+
+export const fetchUsers = () => {
+  return new Promise((resolve, reject) => {
+    api.get(USERS_SEARCH_API)
+      .then((response) => {
+        console.warn(response);
+      })
+      .catch((error) => {
+        console.warn(error);
       });
   });
 };

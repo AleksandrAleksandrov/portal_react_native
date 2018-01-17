@@ -28,3 +28,6 @@ export const FETCH_PHOTOS_FROM_ALBUM = '/content/';
 // Album
 export const ALBUMS_API = '/api/albums/';
 export const CONTENT_API = '/content/';
+
+// Employees
+export const USERS_SEARCH_API = '/api/users-search/';
