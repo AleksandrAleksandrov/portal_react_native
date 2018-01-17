@@ -70,7 +70,7 @@ class PostsListForm extends Component {
     this.openDrawer = this.openDrawer.bind(this);
   }
 
-  componentWillMount() {
+  componentDidMount() {
     const realm = new Realm();
     this.props.setPostsAction(Array.from(realm.objects('Post')));
     setTimeout(() => {

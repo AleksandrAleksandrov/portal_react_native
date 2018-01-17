@@ -34,7 +34,7 @@ class AlbumsList extends Component {
     this.state = { numOfColumn: 2 };
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.props.fetchAlbumsAction();
   }
 
