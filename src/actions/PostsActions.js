@@ -463,13 +463,14 @@ export const getLatLonAction = (url) => (dispatch) => {
     });
 };
 
-const setWeekBirthdays = (users) => ({
+const setWeekBirthdays = users => ({
   type: SET_WEEK_BIRTHDAYS,
   payload: users,
 });
 
-const setErrorWeekBirthdays = (error) => ({
+const setErrorWeekBirthdays = error => ({
   type: SET_ERROR_WEEK_BIRTHDAYS,
+  payload: error,
 });
 
 export const fetchWeekBirthdays = () => (dispatch) => {
