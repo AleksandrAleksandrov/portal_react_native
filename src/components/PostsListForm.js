@@ -225,6 +225,7 @@ class PostsListForm extends Component {
         </TextCustom>
         <FlatList
           horizontal
+          showsHorizontalScrollIndicator={false}
           data={weekBirthdays}
           renderItem={({ item }) => <WeekBirthdayItem user={item} />}
           keyExtractor={item => item.id}

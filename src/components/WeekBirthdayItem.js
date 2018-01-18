@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import { View, TouchableWithoutFeedback } from 'react-native';
+import { Platform, View, TouchableWithoutFeedback } from 'react-native';
 import Moment from 'moment';
 
 import { TextCustom, Avatar } from './common';
 import { DEFAULT_PHOTO } from '../ApiConstants';
+import { color } from '../constants/color';
 
 const styles = {
   titleTextStyle: {
@@ -47,6 +48,12 @@ const styles = {
     alignSelf: 'center',
     marginTop: 5,
   },
+  wrapperForAvatar: {
+    borderWidth: 2,
+    padding: 2,
+    borderColor: color.primary,
+    borderRadius: Platform.OS === 'ios' ? 84 / 2 : 84,
+  },
 };
 
 class WeekBirthdayItem extends Component {
@@ -57,20 +64,42 @@ class WeekBirthdayItem extends Component {
     return DEFAULT_PHOTO;
   }
 
+  getWrapperOfAvatar = (photoThumbnail, photo, birthDate) => {
+    const today = Moment();
+    const birth = Moment(birthDate);
+    const { wrapperForAvatar } = styles;
+    if (today.date() === birth.date()) {
+      return (
+        <View style={wrapperForAvatar}>
+          {this.getAvatar(photoThumbnail, photo)}
+        </View>
+      );
+    }
+    return (
+      this.getAvatar(photoThumbnail, photo)
+    );
+  }
+
+  getAvatar = (photoThumbnail, photo) => {
+    return (
+      <Avatar
+        thumbnail={this.getPicture(photoThumbnail)}
+        photo={this.getPicture(photo)}
+        size={80}
+      />
+    );
+  }
+
   render() {
-    const { birthday } = styles;
+    const { birthday, rootViewStyle } = styles;
     const {
       user: { photo_thumbnail, photo, birth_date },
     } = this.props;
 
     return (
       <TouchableWithoutFeedback onPress={this.onPostPress}>
-        <View style={styles.rootViewStyle}>
-          <Avatar
-            thumbnail={this.getPicture(photo_thumbnail)}
-            photo={this.getPicture(photo)}
-            size={80}
-          />
+        <View style={rootViewStyle}>
+          {this.getWrapperOfAvatar(photo_thumbnail, photo, birth_date)}
           <TextCustom
             type={'t3'}
             style={birthday}
