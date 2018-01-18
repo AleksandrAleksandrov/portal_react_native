@@ -1,3 +1,5 @@
+import Moment from 'moment';
+
 import {
   RESET_ERROR,
   POSTS_FETCH_SUCCESS,
@@ -53,6 +55,26 @@ import {
 } from '../Constants';
 
 const filter = new Set();
+
+const getSorted = users => {
+  const today = Moment();
+  let sorted = new Set();
+  let others = new Set();
+  for (i = 0; i < users.length; i++) {
+    const birth = Moment(users[i].birth_date);
+    if (today.date() === birth.date()) {
+      sorted.add(users[i]);
+    } else {
+      others.add(users[i]);
+    }
+  }
+
+  others.forEach(function(value, key) {
+    sorted.add(value);
+  });
+
+  return Array.from(sorted);
+};
 
 const createCurrentSet = (state, add, event) => {
   const set = state.filterSet;
@@ -333,7 +355,7 @@ export default (state = INITIAL_STATE, action) => {
     case SET_WEEK_BIRTHDAYS:
       return {
         ...state,
-        weekBirthdays: action.payload,
+        weekBirthdays: getSorted(action.payload),
       };
     case SET_ERROR_WEEK_BIRTHDAYS:
       console.warn('error fetchWeekBirthdays', action.payload);
