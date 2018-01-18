@@ -3,6 +3,8 @@ import {
   SET_MORE_USERS_TO_LIST,
   SET_USERS_ARE_LOADING,
   SET_MORE_USERS_ARE_LOADING,
+  SET_ERROR_MORE_USERS_LOADING,
+  SET_ERROR_USERS_LOADING,
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -10,6 +12,7 @@ const INITIAL_STATE = {
   nextPage: '',
   usersAreLoading: true,
   loadingMoreUsersInProgress: false,
+  error: '',
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -37,6 +40,18 @@ export default (state = INITIAL_STATE, action) => {
       return {
         ...state,
         postsAreLoading: true,
+      };
+    case SET_ERROR_MORE_USERS_LOADING:
+      return {
+        ...state,
+        error: '',
+        loadingMoreUsersInProgress: false,
+      };
+    case SET_ERROR_USERS_LOADING:
+      return {
+        ...state,
+        error: '',
+        usersAreLoading: false,
       };
     default:
       return state;

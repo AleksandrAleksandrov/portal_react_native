@@ -98,6 +98,8 @@ export const SET_USERS_LIST = 'set_user_list';
 export const SET_MORE_USERS_TO_LIST = 'set_more_users_to_list';
 export const SET_USERS_ARE_LOADING = 'set_users_are_loading';
 export const SET_MORE_USERS_ARE_LOADING = 'set_more_users_are_loading';
+export const SET_ERROR_USERS_LOADING = 'set_error_users_loading';
+export const SET_ERROR_MORE_USERS_LOADING = 'set_error_more_users_loading';
 
 
 // Error
