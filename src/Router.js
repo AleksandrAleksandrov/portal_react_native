@@ -8,6 +8,7 @@ import Album from './components/Album';
 import PostForm from './components/PostForm';
 import NewPostForm from './components/NewPostForm';
 import Employees from './components/Employees';
+import ProfileForm from './components/ProfileForm';
 
 const styles = {
   rootRouterStyle: {
@@ -59,6 +60,12 @@ const RouterComponent = () => (
         hideNavBar={true}
         animation={'fade'}
         type={'replace'}
+      />
+      <Scene
+        key={'profile'}
+        component={ProfileForm}
+        hideNavBar={true}
+        animation={'fade'}
       />
       <Scene
         key={'albums'}

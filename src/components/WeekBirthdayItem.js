@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Platform, View, TouchableWithoutFeedback } from 'react-native';
 import Moment from 'moment';
+import { Actions } from 'react-native-router-flux';
 
 import { TextCustom, Avatar } from './common';
 import { DEFAULT_PHOTO } from '../ApiConstants';
@@ -90,14 +91,19 @@ class WeekBirthdayItem extends Component {
     );
   }
 
+  onPress = user => {
+    Actions.profile({ user });
+  }
+
   render() {
     const { birthday, rootViewStyle } = styles;
     const {
+      user,
       user: { photo_thumbnail, photo, birth_date },
     } = this.props;
 
     return (
-      <TouchableWithoutFeedback onPress={this.onPostPress}>
+      <TouchableWithoutFeedback onPress={() => this.onPress(user)}>
         <View style={rootViewStyle}>
           {this.getWrapperOfAvatar(photo_thumbnail, photo, birth_date)}
           <TextCustom
