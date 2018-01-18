@@ -215,23 +215,26 @@ class PostsListForm extends Component {
   birthdaysOfTheWeek = () => {
     const { weekBirthdayTitle } = styles;
     const { weekBirthdays } = this.props;
-    return (
-      <View>
-        <TextCustom
-          type={'t3'}
-          style={weekBirthdayTitle}
-        >
-          Именинники недели:
-        </TextCustom>
-        <FlatList
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          data={weekBirthdays}
-          renderItem={({ item }) => <WeekBirthdayItem user={item} />}
-          keyExtractor={item => item.id}
-        />
-      </View>
-    );
+    if (weekBirthdays.length > 0) {
+      return (
+        <View>
+          <TextCustom
+            type={'t3'}
+            style={weekBirthdayTitle}
+          >
+            Именинники недели:
+          </TextCustom>
+          <FlatList
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            data={weekBirthdays}
+            renderItem={({ item }) => <WeekBirthdayItem user={item} />}
+            keyExtractor={item => item.id}
+          />
+        </View>
+      );
+    }
+    return null;
   }
 
   nav = (
