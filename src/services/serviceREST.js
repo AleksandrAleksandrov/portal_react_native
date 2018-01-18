@@ -20,6 +20,7 @@ import {
   ALBUMS_API,
   CONTENT_API,
   USERS_SEARCH_API,
+  WEEK_BIRTHDAYS,
 } from '../ApiConstants';
 
 const api = create({
@@ -461,6 +462,26 @@ export const fetchUsers = () => {
 export const fetchMoreUsers = (url) => {
   return new Promise((resolve, reject) => {
     api.get(url)
+      .then((response) => {
+        if (response.ok) {
+          resolve(response);
+        } else {
+          reject(response);
+        }
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+};
+
+/**
+ * Fetch users of the week.
+ * @returns {Promise}
+ */
+export const fetchWeekBirthdays = () => {
+  return new Promise((resolve, reject) => {
+    api.get(WEEK_BIRTHDAYS)
       .then((response) => {
         if (response.ok) {
           resolve(response);

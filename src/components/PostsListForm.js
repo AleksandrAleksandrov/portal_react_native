@@ -23,6 +23,7 @@ import {
   getPostsFromNotification,
   openDrawer,
   setPostsAction,
+  fetchWeekBirthdays,
 } from '../actions';
 import { CustomIcons, TextCustom, SmallSpinner, Spinner } from './common';
 import { color } from '../constants/color';
@@ -33,6 +34,7 @@ import DrawerView from './common/DrawerView';
 import {
   NOTIFICATION_TYPE_NEWS,
 } from '../Constants';
+import WeekBirthdayItem from './WeekBirthdayItem';
 
 const styles = {
   iconStyle: {
@@ -82,6 +84,7 @@ class PostsListForm extends Component {
     }, 10);
     OneSignal.addEventListener('received', this.onReceived.bind(this));
     OneSignal.inFocusDisplaying(2);
+    this.props.fetchWeekBirthdays();
   }
 
   onReceived(notification) {
@@ -168,6 +171,7 @@ class PostsListForm extends Component {
 
     return (
       <FlatList
+        ListHeaderComponent={() => this.birthdaysOfTheWeek()}
         style={postsListStyle}
         data={postsList}
         renderItem={({ item }) => <PostItem post={item} />}
@@ -202,6 +206,17 @@ class PostsListForm extends Component {
       return null;
     }
     return (<SmallSpinner size={'small'} />);
+  }
+
+  birthdaysOfTheWeek = () => {
+    const { weekBirthdays } = this.props;
+    return (
+      <FlatList
+        data={weekBirthdays}
+        renderItem={({ item }) => <WeekBirthdayItem user={item} />}
+        keyExtractor={item => item.id}
+      />
+    );
   }
 
   nav = (
@@ -269,6 +284,7 @@ const mapStateToProps = state => ({
   filterSet: state.postsList.filterSet,
   filterByFavourite: state.postsList.filterByFavourite,
   showNotificationPermissionDialog: state.postsList.showNotificationPermissionDialog,
+  weekBirthdays: state.postsList.weekBirthdays,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -283,6 +299,7 @@ const mapDispatchToProps = dispatch => ({
   subscribeToNotifications: (deviceId) => { dispatch(subscribeToNotifications(deviceId)); },
   hideShowNotificationDialog: () => { dispatch(hideShowNotificationDialog()); },
   getPostsFromNotification: () => { dispatch(getPostsFromNotification()); },
+  fetchWeekBirthdays: () => { dispatch(fetchWeekBirthdays()); },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(PostsListForm);

@@ -100,6 +100,8 @@ export const SET_USERS_ARE_LOADING = 'set_users_are_loading';
 export const SET_MORE_USERS_ARE_LOADING = 'set_more_users_are_loading';
 export const SET_ERROR_USERS_LOADING = 'set_error_users_loading';
 export const SET_ERROR_MORE_USERS_LOADING = 'set_error_more_users_loading';
+export const SET_WEEK_BIRTHDAYS = 'set_week_birthdays';
+export const SET_ERROR_WEEK_BIRTHDAYS = 'set_error_week_birthdays';
 
 
 // Error

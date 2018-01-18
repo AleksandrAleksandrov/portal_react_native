@@ -31,3 +31,4 @@ export const CONTENT_API = '/content/';
 
 // Employees
 export const USERS_SEARCH_API = '/api/users-search/';
+export const WEEK_BIRTHDAYS = '/api/week_birthdays/';

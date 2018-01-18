@@ -41,6 +41,8 @@ import {
   RESET_LAT_LON,
   SET_IS_LAT_LON_VALID,
   SET_POSTS,
+  SET_WEEK_BIRTHDAYS,
+  SET_ERROR_WEEK_BIRTHDAYS,
 } from './types';
 import { NOT_FOUND } from '../Constants';
 import * as serviceREST from '../services/serviceREST';
@@ -458,6 +460,25 @@ export const getLatLonAction = (url) => (dispatch) => {
     .catch((error) => {
       console.warn('getLatLonActionERROR', error);
       dispatch(setLatLonIsValid(false));
+    });
+};
+
+const setWeekBirthdays = (users) => ({
+  type: SET_WEEK_BIRTHDAYS,
+  payload: users,
+});
+
+const setErrorWeekBirthdays = (error) => ({
+  type: SET_ERROR_WEEK_BIRTHDAYS,
+});
+
+export const fetchWeekBirthdays = () => (dispatch) => {
+  serviceREST.fetchWeekBirthdays()
+    .then((response) => {
+      dispatch(setWeekBirthdays(response.data));
+    })
+    .catch((error) => {
+      dispatch(setErrorWeekBirthdays(error));
     });
 };
 

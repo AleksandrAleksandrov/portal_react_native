@@ -42,6 +42,8 @@ import {
   GET_LAT_LON_IN_PROGRESS,
   RESET_LAT_LON,
   SET_IS_LAT_LON_VALID,
+  SET_WEEK_BIRTHDAYS,
+  SET_ERROR_WEEK_BIRTHDAYS,
 } from '../actions/types';
 import {
   ADVERT,
@@ -96,6 +98,7 @@ const INITIAL_STATE = {
   longitude: null,
   getLatLonInProgress: false,
   isLatLonValid: true,
+  weekBirthdays: [],
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -326,6 +329,16 @@ export default (state = INITIAL_STATE, action) => {
       return {
         ...state,
         error: null,
+      };
+    case SET_WEEK_BIRTHDAYS:
+      return {
+        ...state,
+        weekBirthdays: action.payload,
+      };
+    case SET_ERROR_WEEK_BIRTHDAYS:
+      console.warn('error fetchWeekBirthdays', action.payload);
+      return {
+        ...state,
       };
     default:
       return state;
