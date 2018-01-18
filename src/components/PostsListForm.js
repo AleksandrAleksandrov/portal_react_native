@@ -53,6 +53,10 @@ const styles = {
   postsListStyle: {
     marginBottom: navigationBarHeight,
   },
+  weekBirthdayTitle: {
+    marginLeft: 10,
+    marginTop: 10,
+  },
 };
 
 const showPushNotificationRequest = () => {
@@ -209,13 +213,23 @@ class PostsListForm extends Component {
   }
 
   birthdaysOfTheWeek = () => {
+    const { weekBirthdayTitle } = styles;
     const { weekBirthdays } = this.props;
     return (
-      <FlatList
-        data={weekBirthdays}
-        renderItem={({ item }) => <WeekBirthdayItem user={item} />}
-        keyExtractor={item => item.id}
-      />
+      <View>
+        <TextCustom
+          type={'t3'}
+          style={weekBirthdayTitle}
+        >
+          Именинники недели:
+        </TextCustom>
+        <FlatList
+          horizontal
+          data={weekBirthdays}
+          renderItem={({ item }) => <WeekBirthdayItem user={item} />}
+          keyExtractor={item => item.id}
+        />
+      </View>
     );
   }
 
