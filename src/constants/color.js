@@ -12,4 +12,5 @@ export const color = {
   myGreen: '#26af4f',
   materialGreen: '#00ab9c',
   myGray: '#3f3c38',
+  skillItemColor: '#E4E4E4',
 };

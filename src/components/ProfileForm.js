@@ -10,6 +10,7 @@ import {
   DEFAULT_PHOTO,
 } from '../ApiConstants';
 import { InfoWithHint } from './common/InfoWithHint';
+import { KnowBlock } from './common/KnowBlock';
 
 const { width } = Dimensions.get('window');
 
@@ -39,7 +40,7 @@ class ProfileForm extends Component {
   renderContent = () => {
     const { user } = this.props;
     return (
-      <View>
+      <View style={{ backgroundColor: 'white' }}>
         <InfoWithHint
           hint={'Номер телефона'}
           text={user.phone_number}
@@ -52,6 +53,7 @@ class ProfileForm extends Component {
           hint={'Slack'}
           text={user.slack}
         />
+        <KnowBlock skills={user.skills_know} />
       </View>
     );
   };
