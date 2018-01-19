@@ -87,6 +87,10 @@ const styles = StyleSheet.create({
   sortBy: {
     fontSize: 18,
   },
+
+  hint: {
+    fontSize: 9,
+  },
 });
 
 class TextCustom extends PureComponent {

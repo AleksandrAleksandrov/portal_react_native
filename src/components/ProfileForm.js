@@ -9,6 +9,7 @@ import { color } from '../constants/color';
 import {
   DEFAULT_PHOTO,
 } from '../ApiConstants';
+import { InfoWithHint } from './common/InfoWithHint';
 
 const { width } = Dimensions.get('window');
 
@@ -35,23 +36,25 @@ class ProfileForm extends Component {
     return DEFAULT_PHOTO;
   }
 
-  renderContent = () => (
-    <View>
-      {new Array(20).fill().map((_, i) => (
-        <View
-          key={i}
-          style={{
-            backgroundColor: '#F5F5F5',
-            padding: 10,
-            borderBottomWidth: 1,
-            borderBottomColor: '#E5E5E5',
-          }}
-        >
-          <Text>{`Item ${i + 1}`}</Text>
-        </View>
-      ))}
-    </View>
-  );
+  renderContent = () => {
+    const { user } = this.props;
+    return (
+      <View>
+        <InfoWithHint
+          hint={'Номер телефона'}
+          text={user.phone_number}
+        />
+        <InfoWithHint
+          hint={'email'}
+          text={user.email}
+        />
+        <InfoWithHint
+          hint={'Slack'}
+          text={user.slack}
+        />
+      </View>
+    );
+  };
 
   renderNavBar = () => {
     const { user } = this.props;
