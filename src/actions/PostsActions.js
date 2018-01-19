@@ -74,7 +74,7 @@ const getUser = () => (dispatch) => {
       dispatch(setUser(response));
     })
     .catch((error) => {
-
+      console.warn('getUser', error);
     });
 };
 
@@ -123,6 +123,7 @@ export const startRefresh = () => ({ type: START_REFRESH });
 export const finishRefresh = () => ({ type: FINISH_REFRESH });
 
 export const refreshPosts = () => (dispatch) => {
+  dispatch(getUser());
   dispatch(startRefresh());
   serviceREST.getPosts()
     .then((response) => {
@@ -149,6 +150,7 @@ export const getPostsFromNotification = () => (dispatch) => {
 
 // startfrom and count for pagination
 export const getPosts = () => (dispatch) => {
+  console.warn('getPosts');
   dispatch(getUser());
   dispatch(setPostsAreLoading());
   serviceREST.getPosts()

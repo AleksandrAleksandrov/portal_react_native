@@ -148,15 +148,26 @@ class DrawerView extends Component {
     return drawerList;
   };
 
+  onAvatarPress = user => {
+    Actions.profile({ user });
+  }
+
   getAvatar = () => {
-    const { user: { photo, photo_thumbnail } } = this.props;
+    const {
+      user,
+      user: { photo, photo_thumbnail },
+    } = this.props;
 
     return (
-      <Avatar
-        thumbnail={photo_thumbnail ? photo_thumbnail : DEFAULT_PHOTO}
-        photo={photo ? photo : DEFAULT_PHOTO}
-        size={100}
-      />
+      <TouchableWithoutFeedback onPress={() => this.onAvatarPress(user)}>
+        <View>
+          <Avatar
+            thumbnail={photo_thumbnail ? photo_thumbnail : DEFAULT_PHOTO}
+            photo={photo ? photo : DEFAULT_PHOTO}
+            size={100}
+          />
+        </View>
+      </TouchableWithoutFeedback>
     );
   }
 
