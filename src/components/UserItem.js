@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { View, TouchableWithoutFeedback } from 'react-native';
 import ProgressiveImage from 'react-native-progressive-image';
+import { Actions } from 'react-native-router-flux';
 
 import { getTheme } from 'react-native-material-kit';
 import { color } from '../constants/color';
@@ -38,7 +39,7 @@ const styles = {
 
 class UserItem extends Component {
   onEmployeePress = (user) => {
-
+    Actions.profile({ user });
   }
 
   getPicture = (url) => {
