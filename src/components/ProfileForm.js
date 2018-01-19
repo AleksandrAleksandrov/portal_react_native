@@ -11,6 +11,8 @@ import {
 } from '../ApiConstants';
 import { InfoWithHint } from './common/InfoWithHint';
 import { KnowBlock } from './common/KnowBlock';
+import { TextCustom } from './common/TextCustom';
+import { WordDivider } from './common/WordDivider';
 
 const { width } = Dimensions.get('window');
 
@@ -53,7 +55,13 @@ class ProfileForm extends Component {
           hint={'Slack'}
           text={user.slack}
         />
+        <WordDivider text={'Навыки'} />
+        <TextCustom type={'labelText'}>Знаю</TextCustom>
         <KnowBlock skills={user.skills_know} />
+        <TextCustom type={'labelText'}>Знаком</TextCustom>
+        <KnowBlock skills={user.skills_inform} />
+        <TextCustom type={'labelText'}>Увлечения</TextCustom>
+        <KnowBlock skills={user.hobbies} />
       </View>
     );
   };
